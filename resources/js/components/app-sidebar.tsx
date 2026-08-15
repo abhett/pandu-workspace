@@ -48,7 +48,7 @@ const mainNavItems: NavItem[] = [
 const workspaceNavItems: NavItem[] = [
     {
         title: 'Proyek',
-        href: '#',
+        href: '/projects',
         icon: FolderKanban,
     },
     {

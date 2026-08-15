@@ -29,7 +29,7 @@ class OrganizationMemberController extends Controller
             return redirect()->route('onboarding.create-organization');
         }
 
-        $organization = Organization::findOrFail($orgId);
+        $organization = Organization::where('id', (string) $orgId)->firstOrFail();
 
         // Fetch members with user info, roles, and teams
         $members = OrganizationMembership::with(['user.teams' => function ($q) use ($orgId) {
@@ -62,13 +62,15 @@ class OrganizationMemberController extends Controller
             ->whereNull('accepted_at')
             ->where('expires_at', '>', now())
             ->get()
-            ->map(fn (OrganizationInvitation $inv) => [
-                'id' => $inv->id,
-                'email' => $inv->email,
-                'role' => $inv->role,
-                'expires_at' => $inv->expires_at->diffForHumans(),
-                'created_at' => $inv->created_at->isoFormat('D MMM Y'),
-            ]);
+            ->map(function (OrganizationInvitation $inv) {
+                return [
+                    'id' => $inv->id,
+                    'email' => $inv->email,
+                    'role' => $inv->role,
+                    'expires_at' => $inv->expires_at ? $inv->expires_at->diffForHumans() : '',
+                    'created_at' => $inv->created_at ? $inv->created_at->isoFormat('D MMM Y') : '',
+                ];
+            });
 
         // Available roles for assignment
         $availableRoles = Role::where(function ($query) use ($orgId) {
@@ -115,7 +117,7 @@ class OrganizationMemberController extends Controller
     {
         $currentUser = $request->user();
         $orgId = session('current_organization_id') ?? $currentUser->memberships()->value('organization_id');
-        $organization = Organization::findOrFail($orgId);
+        $organization = Organization::where('id', (string) $orgId)->firstOrFail();
 
         if (! $currentUser->hasPermissionInOrganization($organization, 'members:invite')) {
             abort(403, 'Anda tidak memiliki hak akses untuk menambahkan anggota.');
@@ -190,7 +192,7 @@ class OrganizationMemberController extends Controller
     {
         $user = $request->user();
         $orgId = session('current_organization_id') ?? $user->memberships()->value('organization_id');
-        $organization = Organization::findOrFail($orgId);
+        $organization = Organization::where('id', (string) $orgId)->firstOrFail();
 
         if ($membership->organization_id !== $orgId) {
             abort(403, 'Akses tidak sah.');
@@ -233,7 +235,7 @@ class OrganizationMemberController extends Controller
     {
         $user = $request->user();
         $orgId = session('current_organization_id') ?? $user->memberships()->value('organization_id');
-        $organization = Organization::findOrFail($orgId);
+        $organization = Organization::where('id', (string) $orgId)->firstOrFail();
 
         if ($membership->organization_id !== $orgId) {
             abort(403, 'Akses tidak sah.');

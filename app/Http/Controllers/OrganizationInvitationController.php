@@ -20,7 +20,7 @@ class OrganizationInvitationController extends Controller
     {
         $user = $request->user();
         $orgId = session('current_organization_id') ?? $user->memberships()->value('organization_id');
-        $organization = Organization::findOrFail($orgId);
+        $organization = Organization::where('id', (string) $orgId)->firstOrFail();
 
         if (! $user->hasPermissionInOrganization($organization, 'members:invite')) {
             abort(403, 'Anda tidak memiliki hak akses untuk mengundang anggota.');
@@ -97,7 +97,7 @@ class OrganizationInvitationController extends Controller
     {
         $user = $request->user();
         $orgId = session('current_organization_id') ?? $user->memberships()->value('organization_id');
-        $organization = Organization::findOrFail($orgId);
+        $organization = Organization::where('id', (string) $orgId)->firstOrFail();
 
         if ($invitation->organization_id !== $orgId) {
             abort(403, 'Akses tidak sah.');
@@ -124,7 +124,7 @@ class OrganizationInvitationController extends Controller
             return redirect()->route('onboarding.create-organization');
         }
 
-        $organization = Organization::findOrFail($orgId);
+        $organization = Organization::where('id', (string) $orgId)->firstOrFail();
         $inviteCode = 'org-'.substr(md5($organization->id), 0, 8);
 
         return Inertia::render('onboarding/invite-members', [

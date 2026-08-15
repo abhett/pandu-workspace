@@ -31,6 +31,7 @@ use Illuminate\Support\Str;
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property mixed $pivot
  */
 #[Fillable(['name', 'email', 'password', 'status', 'locale', 'timezone', 'last_login_at'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
@@ -143,6 +144,28 @@ class User extends Authenticatable
     }
 
     /**
+     * Get all project memberships for the user.
+     *
+     * @return HasMany<ProjectMember, $this>
+     */
+    public function projectMemberships(): HasMany
+    {
+        return $this->hasMany(ProjectMember::class);
+    }
+
+    /**
+     * Get all projects the user belongs to.
+     *
+     * @return BelongsToMany<Project, $this>
+     */
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'project_members')
+            ->withPivot(['id', 'role', 'joined_at'])
+            ->withTimestamps();
+    }
+
+    /**
      * Get the user's role in a specific organization.
      */
     public function roleInOrganization(Organization|string $organization): ?string
@@ -150,5 +173,16 @@ class User extends Authenticatable
         $orgId = $organization instanceof Organization ? $organization->id : $organization;
 
         return $this->memberships()->where('organization_id', $orgId)->value('role');
+    }
+
+    /**
+     * Get all tasks assigned to the user.
+     *
+     * @return BelongsToMany<Task, $this>
+     */
+    public function assignedTasks(): BelongsToMany
+    {
+        return $this->belongsToMany(Task::class, 'task_assignees')
+            ->withPivot(['assigned_at', 'assigned_by']);
     }
 }

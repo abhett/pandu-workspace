@@ -1,0 +1,2362 @@
+
+Blueprint yang sudah dibuat sudah kuat secara arsitektur dan spesifikasi. Nilai tambah terbesar sekarang bukan menambah teori, tetapi mengubahnya menjadi paket implementasi yang dapat langsung dijalankan, diuji, dan dikembangkan tim.
+Prioritas pengembangan berikutnya
+1. Buat “Production Starter Repository”
+Dokumen sebaiknya diturunkan menjadi repository awal yang minimal sudah memiliki:
+Laravel 13 modular monolith. 
+React 19 + TypeScript + Vite. 
+PostgreSQL dengan tenant context dan Row-Level Security. 
+Valkey/Redis, Horizon, scheduler, dan Reverb. 
+Docker Compose untuk development. 
+Login, MFA, organisasi, membership, role, dan permission. 
+Struktur modul Identity, Organization, Project, Work, Agile, AI, Audit. 
+OpenAPI awal dan collection API. 
+PHPUnit/Pest, Playwright, PHPStan/Larastan, ESLint, dan CI. 
+Seed data demo. 
+Kanban minimal yang dapat digeser secara real-time. 
+Laravel 13 memang mensyaratkan PHP 8.3 dan sekarang memiliki Laravel AI SDK resmi yang mendukung provider terpadu, agent, tool calling, structured output, embedding, failover, dan pengujian. 
+Hasil yang sebaiknya ditargetkan: developer cukup menjalankan satu perintah seperti:
+docker compose up -d
+kemudian bisa login, membuat organisasi, membuat project, membuat task, dan menggeser kartu Kanban.
+
+2. Tambahkan tiga proof-of-concept sebelum mengembangkan semua modul
+Saya menyarankan menguji tiga bagian paling berisiko lebih dahulu.
+POC A — Multi-tenancy dan keamanan
+Uji:
+Isolasi data antarorganisasi. 
+Laravel Policy dan PostgreSQL RLS. 
+Queue job yang membawa organization_id. 
+Admin organisasi tidak dapat membaca data organisasi lain. 
+Audit untuk akses gagal. 
+Pengujian menggunakan dua organisasi dan beberapa role. 
+Penting untuk memakai user database aplikasi terpisah dari pemilik tabel dan mempertimbangkan FORCE ROW LEVEL SECURITY, karena secara default pemilik tabel dapat dikecualikan dari penerapan policy RLS. 
+POC B — Kanban real-time dan concurrency
+Uji:
+Drag-and-drop antar-kolom. 
+Optimistic update. 
+Fractional ranking. 
+WIP limit. 
+Dua pengguna menggeser kartu yang sama. 
+version atau ETag/If-Match. 
+Reconciliation setelah WebSocket reconnect. 
+Rebalancing ranking. 
+Pengujian 500–1.000 kartu dalam satu board. 
+POC C — AI provider gateway
+Uji satu kasus sederhana:
+“Buat ringkasan status sprint berdasarkan task yang dapat saya akses.”
+Implementasikan dengan:
+OpenAI. 
+Gemini. 
+Ollama atau vLLM. 
+Provider dapat diganti oleh admin. 
+Structured JSON output. 
+RAG dengan permission filtering. 
+Citation ke task sumber. 
+Token dan biaya tercatat. 
+Fallback provider. 
+Mode local-only. 
+AI tetap read-only dalam POC. 
+Ini akan membuktikan bahwa abstraksi provider benar-benar bekerja sebelum banyak fitur AI dibangun.
+
+Modul produk yang masih layak ditambahkan
+3. Request intake dan service desk
+Ini merupakan peluang besar untuk membedakan produk dari task manager biasa.
+Tambahkan:
+Public/internal request form. 
+Customer portal. 
+Request type. 
+SLA policy. 
+Approval flow. 
+Triage queue. 
+Incident, service request, bug, dan change request. 
+Email-to-ticket. 
+Knowledge-base recommendation. 
+AI classification dan automatic routing. 
+Contohnya, pengguna non-teknis dapat mengirim permintaan melalui formulir tanpa harus menjadi anggota penuh project.
+
+4. Import dan migration center
+Aplikasi akan sulit diadopsi jika perusahaan harus memasukkan data secara manual.
+Sediakan importer untuk:
+Jira. 
+ClickUp. 
+Trello. 
+Asana. 
+CSV/Excel. 
+GitHub Issues. 
+GitLab Issues. 
+Importer sebaiknya memiliki:
+Dry run. 
+Mapping status, pengguna, label, sprint, dan custom field. 
+Validation report. 
+Resumable background job. 
+Duplicate detection. 
+Rollback batch. 
+Reconciliation report. 
+Attachment migration. 
+Comment and activity preservation. 
+Ini sangat penting untuk pilot pengguna nyata.
+
+5. Wiki, decision log, dan knowledge workspace
+Tambahkan modul dokumentasi ringan:
+Project wiki. 
+Product requirement. 
+Meeting notes. 
+Architecture Decision Record. 
+Decision log. 
+Retrospective notes. 
+Runbook. 
+Template dokumen. 
+Version history. 
+Mention dan komentar. 
+Hubungan dokumen dengan task, sprint, milestone, dan risk. 
+Modul ini juga menjadi sumber RAG yang lebih berkualitas daripada hanya mengambil deskripsi task dan komentar.
+
+6. Resource dan capacity management
+Scrum Master dan Project Manager akan mendapatkan manfaat besar dari:
+Kapasitas per sprint. 
+Hari kerja dan hari libur. 
+Planned versus available capacity. 
+Workload per tim. 
+Skill matrix. 
+Allocation lintas project. 
+Over-allocation warning. 
+Leave integration. 
+What-if planning. 
+Forecast penyelesaian. 
+Hindari menjadikan metrik ini sebagai “skor produktivitas individu”. Fokuskan pada kesehatan tim dan perencanaan kapasitas.
+
+7. Integration Hub
+Prioritaskan integrasi berikut:
+GitHub dan GitLab. 
+Slack atau Microsoft Teams. 
+Email. 
+Google Calendar atau Microsoft Calendar. 
+Webhook generik. 
+Sentry. 
+CI/CD providers. 
+Figma. 
+Cloud storage. 
+Gunakan pola connector dengan:
+OAuth. 
+Scoped permissions. 
+Per-organization credentials. 
+Signed webhook. 
+Idempotency ledger. 
+Retry dan dead-letter. 
+Rate-limit handling. 
+Field mapping. 
+Integration health dashboard. 
+
+Pengembangan AI yang saya sarankan
+8. Jangan hanya membuat chatbot
+AI sebaiknya muncul langsung di alur kerja pengguna.
+Fitur AI bernilai tinggi antara lain:
+Task decomposition. 
+Acceptance-criteria generator. 
+Sprint planning proposal. 
+Capacity-aware sprint suggestion. 
+Risk and dependency detection. 
+Duplicate-task detection. 
+Daily stand-up summary. 
+Sprint review summary. 
+Retrospective insight. 
+Meeting-to-task extraction. 
+Natural-language project search. 
+Release-note generator. 
+Executive portfolio summary. 
+Workflow automation builder dari bahasa alami. 
+Estimation assistant berbasis data historis. 
+Project health explanation. 
+AI tidak seharusnya menentukan performa atau promosi pegawai secara otomatis.
+
+9. Tambahkan internal AI gateway dan MCP layer
+Jangan membiarkan domain aplikasi berkomunikasi langsung dengan SDK setiap provider.
+Gunakan struktur:
+Domain Use Case
+      |
+AI Capability Gateway
+      |
+Policy + Routing + Budget + Redaction
+      |
+Provider Adapter
+      |
+OpenAI / Gemini / Ollama / vLLM
+Interface sebaiknya berdasarkan kemampuan:
+interface AiCapability
+{
+    public function execute(AiRequest $request): AiResult;
+}
+Bukan berdasarkan vendor:
+// Hindari domain code seperti ini
+$openAI-&gt;chat(...);
+OpenAI saat ini merekomendasikan Responses API untuk fitur platform terbaru dan telah menyediakan tool serta remote MCP. Gemini juga memiliki function calling, structured output, tool orchestration, serta Interactions API. Karena API vendor terus berkembang, abstraction layer harus tetap berada di tingkat capability, bukan endpoint vendor. 
+MCP dapat dipakai untuk connector eksternal, tetapi harus melalui:
+Tool allow-list. 
+Organization authorization. 
+Credential broker. 
+Approval policy. 
+Input/output validation. 
+Egress restriction. 
+Audit lengkap. 
+Timeout dan quota. 
+Jangan memberikan model akses langsung ke MCP server yang tidak dipercaya.
+
+10. Pisahkan local AI untuk development dan production
+Rekomendasi praktis:
+Ollama: development, laptop, demo, single-node, atau organisasi kecil. 
+vLLM: server GPU production, concurrency lebih tinggi, batching, dan multi-user. 
+External API: kebutuhan model premium atau kapasitas elastis. 
+Ollama mendukung structured output, tool calling, embeddings, streaming, dan sebagian kompatibilitas OpenAI. vLLM menyediakan OpenAI-compatible server serta structured output dan tool calling. 
+Model lokal juga perlu memiliki registry:
+model
+model_version
+runtime
+quantization
+context_window
+capabilities
+hardware_requirement
+license
+security_status
+evaluation_score
+deployment_status
+
+11. Tambahkan AI evaluation platform
+Jangan mengevaluasi AI hanya berdasarkan tombol suka/tidak suka.
+Buat dataset evaluasi untuk:
+Ketepatan ringkasan sprint. 
+Kelengkapan acceptance criteria. 
+Citation correctness. 
+Hallucination. 
+Permission leakage. 
+Prompt injection. 
+Tool argument correctness. 
+Invalid JSON. 
+Cost. 
+Latency. 
+Provider fallback. 
+Bahasa Indonesia dan Inggris. 
+Setiap perubahan prompt atau model harus melewati regression evaluation.
+Tambahkan pula:
+Prompt versioning. 
+A/B evaluation. 
+Shadow traffic. 
+Golden dataset. 
+Human review queue. 
+Model scorecard. 
+Per-use-case quality threshold. 
+AI kill switch. 
+
+Keamanan yang perlu diperluas
+12. Petakan kontrol ke ASVS dan AISVS
+Blueprint sudah memiliki keamanan yang baik, tetapi sebaiknya setiap requirement keamanan diberi ID standar, misalnya:
+SEC-AUTH-001
+ASVS reference
+Threat addressed
+Implementation location
+Automated test
+Manual verification
+Evidence
+Owner
+Status
+Gunakan:
+OWASP ASVS 5.0 untuk aplikasi web. 
+OWASP API Security. 
+OWASP AISVS untuk komponen AI. 
+Threat modeling khusus tenant isolation. 
+Threat modeling khusus AI tools dan RAG. 
+OWASP telah merilis AISVS 1.0 pada 24 Juni 2026, sehingga sangat relevan untuk dijadikan verification baseline selain ASVS. 
+Tambahan kontrol enterprise yang layak:
+Passkeys/WebAuthn. 
+OIDC dan SAML. 
+SCIM provisioning. 
+Device/session management. 
+Break-glass account. 
+Just-in-time privileged access. 
+Audit-log export. 
+Immutable audit archive. 
+Customer-managed encryption key sebagai fitur enterprise. 
+Data residency policy. 
+Legal hold. 
+Tenant-specific retention. 
+
+13. Jangan gunakan MinIO Community sebagai pilihan produksi baru
+Blueprint saat ini tepat karena memilih abstraksi S3 dan menjadikan SeaweedFS sebagai salah satu baseline.
+Pada 25 April 2026, repository MinIO Community diarsipkan. Distribusi komunitas juga berubah menjadi source-only dengan lisensi AGPLv3 dan binary historis tidak lagi dipelihara. Karena itu saya tidak menyarankan MinIO Community untuk deployment produksi baru. 
+Pilihan yang lebih masuk akal:
+Development: LocalStack atau SeaweedFS single node. 
+Self-hosted production: SeaweedFS atau Garage setelah compatibility test. 
+Cloud production: AWS S3, Cloudflare R2, Backblaze B2, atau layanan S3-compatible lain. 
+Selalu pertahankan Laravel Filesystem abstraction. 
+SeaweedFS masih aktif, berlisensi Apache 2.0, dan menyediakan API S3-compatible. 
+Namun, jangan mengasumsikan semua implementasi S3 mendukung seluruh fitur AWS S3. Buat compatibility test untuk:
+Multipart upload. 
+Presigned URL. 
+Versioning. 
+Lifecycle. 
+Object lock. 
+Encryption. 
+Checksum. 
+Range request. 
+CORS. 
+Event notification. 
+
+Aspek bisnis yang perlu diputuskan
+14. Tentukan model distribusi sejak awal
+Pilih salah satu atau kombinasinya:
+SaaS multi-tenant. 
+Dedicated tenant. 
+Self-hosted community. 
+Self-hosted enterprise. 
+Air-gapped enterprise. 
+Keputusan ini memengaruhi:
+Arsitektur tenant. 
+Update mechanism. 
+Licensing. 
+Telemetry. 
+Support. 
+Backup. 
+AI provider. 
+Secret management. 
+Billing. 
+Release cadence. 
+Untuk produk ini, diferensiasi yang paling menarik menurut saya adalah:
+Work management dengan AI yang dapat dikontrol, dapat memakai model lokal, dan aman untuk data organisasi.
+Jangan mencoba mengalahkan Jira dan ClickUp dalam jumlah fitur pada rilis pertama. Fokuskan keunggulan pada:
+Scrum Master workspace yang benar-benar membantu. 
+AI provider-neutral. 
+Local/private AI. 
+Approval sebelum AI melakukan perubahan. 
+Bahasa Indonesia yang baik. 
+Instalasi self-hosted yang mudah. 
+Migrasi dari Jira/ClickUp. 
+Keamanan tenant yang dapat dibuktikan. 
+
+Urutan pengembangan yang paling realistis
+P0 — Wajib sebelum fitur bertambah
+Starter repository. 
+Tenant isolation POC. 
+Draggable Kanban POC. 
+AI gateway POC. 
+Full OpenAPI. 
+Migration dan seeder. 
+CI/security baseline. 
+Jira/CSV importer minimal. 
+P1 — Membuat produk layak digunakan
+Sprint lifecycle. 
+Scrum Master workspace. 
+Files dan collaboration. 
+Notification center. 
+Wiki/decision log. 
+Reporting. 
+AI summaries dan project Q&amp;A. 
+Integration hub dasar. 
+P2 — Membuat produk layak dijual
+Service desk/customer portal. 
+SSO dan SCIM. 
+Billing, plans, quota, dan metering. 
+Portfolio dan resource planning. 
+Advanced automation. 
+AI tools dengan approval. 
+Self-hosted installer dan upgrade system. 
+Compliance evidence pack. 
+Rekomendasi terpenting
+Jangan langsung mengerjakan roadmap 26 sprint secara linear. Bangun dahulu satu vertical slice lengkap:
+Login
+→ organisasi
+→ project
+→ task
+→ draggable Kanban
+→ real-time
+→ audit
+→ AI sprint summary
+→ deployment staging
+Vertical slice tersebut akan menguji hampir semua keputusan kritis: authentication, tenancy, database, queue, WebSocket, React state, AI routing, audit, observability, dan deployment. Setelah slice ini stabil, modul lain dapat dikembangkan dengan pola yang sama.
+Langkah awal implementasi Work Management System
+Saya menyarankan membangun aplikasi sebagai modular monolith terlebih dahulu:
+Laravel 13
+├── React + TypeScript + Inertia
+├── PostgreSQL
+├── Redis
+├── Horizon
+├── Reverb WebSocket
+├── Laravel AI SDK
+└── S3-compatible storage
+Laravel 13 membutuhkan minimal PHP 8.3. Starter kit React resminya sudah menggunakan React 19, TypeScript, Inertia 3, Tailwind 4, Vite, dan shadcn/ui, sehingga tidak perlu membuat frontend React terpisah pada tahap awal. 
+Target vertical slice pertama:
+Register/Login
+→ membuat organisasi
+→ membuat project
+→ membuat task
+→ menampilkan Kanban
+→ menggeser task
+→ update real-time
+→ audit log
+→ ringkasan sprint dengan AI
+
+1. Siapkan development environment
+Untuk Windows
+Gunakan:
+Windows 11
+Docker Desktop
+WSL2 Ubuntu
+Git
+VS Code
+Simpan source code di filesystem Linux WSL, misalnya:
+~/projects/ai-work-management
+Jangan menyimpan project aktif di:
+/mnt/c/...
+karena akses file Docker dan Node biasanya lebih lambat.
+Laravel Sail mendukung Linux, macOS, dan Windows melalui WSL2. Sail menyediakan lingkungan Docker sehingga versi PHP, PostgreSQL, Redis, dan service lain konsisten di seluruh komputer developer. 
+Periksa instalasi
+git --version
+docker --version
+docker compose version
+php --version
+composer --version
+node --version
+npm --version
+PHP lokal hanya diperlukan untuk membuat project dan memasang Sail. Setelah itu, sebagian besar perintah akan dijalankan melalui container.
+
+2. Instal Laravel 13
+Perbarui Laravel installer:
+composer global require laravel/installer
+composer global update laravel/installer
+Pastikan direktori Composer global ada di PATH.
+Kemudian buat project:
+cd ~/projects
+laravel new ai-work-management
+Saat installer memberikan pilihan, gunakan:
+Starter kit       : React
+Authentication    : Laravel built-in authentication
+Testing framework : Pest
+Database          : PostgreSQL
+Laravel installer resmi menggunakan perintah laravel new, sedangkan starter kit React memberikan autentikasi backend dan frontend siap pakai. 
+Masuk ke direktori:
+cd ai-work-management
+Periksa versi:
+php artisan --version
+Hasilnya harus menunjukkan Laravel Framework 13.x.
+
+3. Instal Laravel Sail
+Pasang Sail:
+composer require laravel/sail --dev
+Jalankan instalasi:
+php artisan sail:install
+Pilih service:
+pgsql
+redis
+mailpit
+Untuk tahap pertama, jangan memasukkan terlalu banyak service. Object storage, search engine, dan monitoring dapat ditambahkan setelah fungsi dasar berjalan.
+Jalankan container:
+./vendor/bin/sail up -d
+Laravel Sail menggunakan file compose.yaml di root project dan menyediakan wrapper untuk menjalankan PHP, Composer, Artisan, dan Node di dalam container. 
+Buat alias agar perintah lebih singkat:
+echo "alias sail='sh \$([ -f sail ] &amp;&amp; echo sail || echo vendor/bin/sail)'" &gt;&gt; ~/.bashrc
+source ~/.bashrc
+Sekarang gunakan:
+sail up -d
+sail php --version
+sail artisan --version
+
+4. Konfigurasi environment
+Buka .env dan sesuaikan:
+APP_NAME="AI Work Management"
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
+APP_LOCALE=id
+APP_FALLBACK_LOCALE=en
+APP_FAKER_LOCALE=id_ID
+DB_CONNECTION=pgsql
+DB_HOST=pgsql
+DB_PORT=5432
+DB_DATABASE=ai_work_management
+DB_USERNAME=sail
+DB_PASSWORD=password
+SESSION_DRIVER=redis
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=true
+CACHE_STORE=redis
+QUEUE_CONNECTION=redis
+REDIS_CLIENT=phpredis
+REDIS_HOST=redis
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+FILESYSTEM_DISK=local
+MAIL_MAILER=smtp
+MAIL_HOST=mailpit
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="noreply@workmanagement.test"
+MAIL_FROM_NAME="${APP_NAME}"
+Generate application key bila belum tersedia:
+sail artisan key:generate
+Jangan pernah memasukkan .env ke Git. Laravel juga secara resmi memperingatkan bahwa file tersebut dapat berisi credential dan secret sensitif. 
+
+5. Instal frontend dependency
+Jalankan:
+sail npm install
+sail npm run build
+Untuk development:
+sail npm run dev
+Akses aplikasi:
+http://localhost
+Pastikan halaman Laravel atau halaman login starter kit tampil.
+
+6. Jalankan database migration awal
+Jalankan:
+sail artisan migrate
+Periksa koneksi PostgreSQL:
+sail artisan db:show
+Atau masuk langsung:
+sail psql
+Buat commit pertama:
+git init
+git add .
+git commit -m "chore: initialize Laravel 13 React application"
+Definition of done tahap instalasi
+Tahap instalasi dianggap berhasil ketika:
+[ ] Container Laravel berjalan
+[ ] PostgreSQL dapat diakses
+[ ] Redis dapat diakses
+[ ] Halaman login tampil
+[ ] User dapat register
+[ ] User dapat login dan logout
+[ ] Email development tampil di Mailpit
+[ ] npm run build berhasil
+[ ] php artisan test berhasil
+Mailpit biasanya dapat dibuka melalui port yang tercantum dalam compose.yaml.
+
+7. Tentukan struktur modular
+Jangan meletakkan seluruh business logic di controller.
+Gunakan struktur berikut:
+app/
+├── Domain/
+│   ├── Identity/
+│   ├── Organization/
+│   ├── Project/
+│   ├── Work/
+│   ├── Agile/
+│   ├── Collaboration/
+│   ├── Notification/
+│   ├── Automation/
+│   ├── AI/
+│   └── Audit/
+├── Http/
+│   ├── Controllers/
+│   ├── Middleware/
+│   ├── Requests/
+│   └── Resources/
+├── Jobs/
+├── Events/
+├── Listeners/
+├── Policies/
+└── Providers/
+Contoh isi modul:
+app/Domain/Work/
+├── Actions/
+│   ├── CreateTask.php
+│   ├── UpdateTask.php
+│   └── MoveTask.php
+├── Data/
+│   └── MoveTaskData.php
+├── Models/
+│   └── Task.php
+├── Events/
+│   └── TaskMoved.php
+├── Exceptions/
+└── Services/
+Gunakan pola:
+Controller
+→ Form Request
+→ Action
+→ Model/Database
+→ Event
+→ Listener/Queue
+Contoh controller:
+&lt;?php
+namespace App\Http\Controllers\Work;
+use App\Domain\Work\Actions\CreateTask;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Work\StoreTaskRequest;
+use App\Models\Project;
+use Illuminate\Http\RedirectResponse;
+final class TaskController extends Controller
+{
+    public function store(
+        StoreTaskRequest $request,
+        Project $project,
+        CreateTask $action,
+    ): RedirectResponse {
+        $this-&gt;authorize('createTask', $project);
+        $action-&gt;execute(
+            project: $project,
+            actor: $request-&gt;user(),
+            attributes: $request-&gt;validated(),
+        );
+        return back()-&gt;with('success', 'Task berhasil dibuat.');
+    }
+}
+
+8. Buat model inti
+Jangan membuat semua 50 tabel sekaligus. Mulai dari vertical slice pertama.
+Jalankan:
+sail artisan make:model Organization -mf
+sail artisan make:model OrganizationMember -mf
+sail artisan make:model Project -mf
+sail artisan make:model WorkflowStatus -mf
+sail artisan make:model Board -mf
+sail artisan make:model BoardColumn -mf
+sail artisan make:model Task -mf
+sail artisan make:model Sprint -mf
+sail artisan make:model TaskActivity -mf
+sail artisan make:model AuditLog -mf
+Tabel tahap pertama
+organizations
+id
+uuid
+name
+slug
+owner_id
+status
+settings JSONB
+created_at
+updated_at
+deleted_at
+organization_members
+id
+organization_id
+user_id
+role
+status
+joined_at
+created_at
+updated_at
+Tambahkan unique constraint:
+organization_id + user_id
+projects
+id
+uuid
+organization_id
+key
+name
+description
+methodology
+status
+owner_id
+settings JSONB
+created_at
+updated_at
+deleted_at
+Tambahkan unique constraint:
+organization_id + key
+workflow_statuses
+id
+uuid
+organization_id
+project_id
+name
+category
+color
+position
+is_done
+created_at
+updated_at
+Kategori status:
+backlog
+todo
+in_progress
+review
+done
+cancelled
+boards
+id
+uuid
+organization_id
+project_id
+name
+type
+settings JSONB
+created_at
+updated_at
+board_columns
+id
+board_id
+workflow_status_id
+name
+position
+wip_limit
+created_at
+updated_at
+tasks
+id
+uuid
+organization_id
+project_id
+status_id
+sprint_id nullable
+parent_id nullable
+task_number
+title
+description
+task_type
+priority
+reporter_id
+assignee_id nullable
+rank NUMERIC(30,15)
+story_points nullable
+version unsigned integer
+started_at nullable
+due_at nullable
+completed_at nullable
+created_at
+updated_at
+deleted_at
+Tambahkan index minimal:
+organization_id
+project_id
+status_id
+assignee_id
+sprint_id
+project_id + status_id + rank
+organization_id + updated_at
+Gunakan JSONB hanya untuk pengaturan fleksibel. Field yang sering dicari, difilter, atau diurutkan tetap harus menjadi kolom normal.
+
+9. Buat migration dengan constraint
+Contoh migration organisasi:
+Schema::create('organizations', function (Blueprint $table): void {
+    $table-&gt;id();
+    $table-&gt;uuid('uuid')-&gt;unique();
+    $table-&gt;foreignId('owner_id')
+        -&gt;constrained('users')
+        -&gt;restrictOnDelete();
+    $table-&gt;string('name', 150);
+    $table-&gt;string('slug', 100)-&gt;unique();
+    $table-&gt;string('status', 30)-&gt;default('active');
+    $table-&gt;jsonb('settings')-&gt;default('{}');
+    $table-&gt;timestamps();
+    $table-&gt;softDeletes();
+});
+Contoh migration task:
+Schema::create('tasks', function (Blueprint $table): void {
+    $table-&gt;id();
+    $table-&gt;uuid('uuid')-&gt;unique();
+    $table-&gt;foreignId('organization_id')
+        -&gt;constrained()
+        -&gt;cascadeOnDelete();
+    $table-&gt;foreignId('project_id')
+        -&gt;constrained()
+        -&gt;cascadeOnDelete();
+    $table-&gt;foreignId('status_id')
+        -&gt;constrained('workflow_statuses')
+        -&gt;restrictOnDelete();
+    $table-&gt;foreignId('sprint_id')
+        -&gt;nullable()
+        -&gt;constrained()
+        -&gt;nullOnDelete();
+    $table-&gt;foreignId('parent_id')
+        -&gt;nullable()
+        -&gt;constrained('tasks')
+        -&gt;nullOnDelete();
+    $table-&gt;unsignedBigInteger('task_number');
+    $table-&gt;string('title', 255);
+    $table-&gt;text('description')-&gt;nullable();
+    $table-&gt;string('task_type', 30)-&gt;default('task');
+    $table-&gt;string('priority', 20)-&gt;default('medium');
+    $table-&gt;foreignId('reporter_id')
+        -&gt;constrained('users')
+        -&gt;restrictOnDelete();
+    $table-&gt;foreignId('assignee_id')
+        -&gt;nullable()
+        -&gt;constrained('users')
+        -&gt;nullOnDelete();
+    $table-&gt;decimal('rank', 30, 15)-&gt;default(1024);
+    $table-&gt;unsignedInteger('version')-&gt;default(1);
+    $table-&gt;unsignedSmallInteger('story_points')-&gt;nullable();
+    $table-&gt;timestampTz('started_at')-&gt;nullable();
+    $table-&gt;timestampTz('due_at')-&gt;nullable();
+    $table-&gt;timestampTz('completed_at')-&gt;nullable();
+    $table-&gt;timestampsTz();
+    $table-&gt;softDeletesTz();
+    $table-&gt;unique(['project_id', 'task_number']);
+    $table-&gt;index(['project_id', 'status_id', 'rank']);
+    $table-&gt;index(['organization_id', 'updated_at']);
+});
+Jalankan:
+sail artisan migrate:fresh
+Setelah migrasi stabil:
+git add .
+git commit -m "feat: add organization project board and task schema"
+
+10. Buat seeder data awal
+Jalankan:
+sail artisan make:seeder DemoOrganizationSeeder
+sail artisan make:seeder RolePermissionSeeder
+sail artisan make:seeder WorkflowStatusSeeder
+Seeder harus membuat:
+User demo
+Organisasi demo
+Project DEMO
+Board Kanban
+Status Backlog
+Status To Do
+Status In Progress
+Status Review
+Status Done
+Beberapa task
+Contoh status:
+$statuses = [
+    ['name' =&gt; 'Backlog', 'category' =&gt; 'backlog', 'position' =&gt; 1000],
+    ['name' =&gt; 'To Do', 'category' =&gt; 'todo', 'position' =&gt; 2000],
+    ['name' =&gt; 'In Progress', 'category' =&gt; 'in_progress', 'position' =&gt; 3000],
+    ['name' =&gt; 'Review', 'category' =&gt; 'review', 'position' =&gt; 4000],
+    ['name' =&gt; 'Done', 'category' =&gt; 'done', 'position' =&gt; 5000],
+];
+Jalankan:
+sail artisan db:seed
+Atau:
+sail artisan migrate:fresh --seed
+
+11. Implementasikan organisasi dan tenant context
+Gunakan URL berbasis organisasi:
+/o/{organization:slug}/projects
+/o/{organization:slug}/projects/{project}
+/o/{organization:slug}/projects/{project}/board
+Buat middleware:
+sail artisan make:middleware ResolveOrganization
+Tanggung jawab middleware:
+Mengambil organisasi dari parameter URL. 
+Memastikan user merupakan anggota organisasi. 
+Menyimpan organisasi aktif ke request/container. 
+Mengaktifkan tenant ID untuk permission. 
+Menolak akses dengan HTTP 403 bila bukan anggota. 
+Contoh sederhananya:
+&lt;?php
+namespace App\Http\Middleware;
+use App\Models\Organization;
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+final class ResolveOrganization
+{
+    public function handle(Request $request, Closure $next): Response
+    {
+        /** @var Organization $organization */
+        $organization = $request-&gt;route('organization');
+        $isMember = $organization-&gt;members()
+            -&gt;whereKey($request-&gt;user()-&gt;id)
+            -&gt;wherePivot('status', 'active')
+            -&gt;exists();
+        abort_unless($isMember, 403);
+        app()-&gt;instance(Organization::class, $organization);
+        return $next($request);
+    }
+}
+Route:
+Route::middleware(['auth', 'verified'])
+    -&gt;prefix('o/{organization:slug}')
+    -&gt;scopeBindings()
+    -&gt;group(function (): void {
+        Route::middleware(ResolveOrganization::class)-&gt;group(function (): void {
+            Route::get('/projects', [ProjectController::class, 'index']);
+            Route::get('/projects/{project}', [ProjectController::class, 'show']);
+        });
+    });
+Gunakan scoped binding agar project harus berasal dari organisasi aktif.
+
+12. Instal role dan permission
+Gunakan Spatie Laravel Permission dengan mode teams sehingga role dapat berbeda di setiap organisasi.
+sail composer require spatie/laravel-permission
+sail artisan vendor:publish \
+  --provider="Spatie\Permission\PermissionServiceProvider"
+Sebelum menjalankan migration package, ubah config/permission.php:
+'teams' =&gt; true,
+'column_names' =&gt; [
+    'team_foreign_key' =&gt; 'organization_id',
+],
+Lalu:
+sail artisan optimize:clear
+sail artisan migrate
+Tambahkan trait pada User:
+use Spatie\Permission\Traits\HasRoles;
+class User extends Authenticatable
+{
+    use HasRoles;
+}
+Pada middleware organisasi:
+setPermissionsTeamId($organization-&gt;id);
+$request-&gt;user()
+    -&gt;unsetRelation('roles')
+    -&gt;unsetRelation('permissions');
+Mode teams harus diaktifkan sebelum migration package dijalankan. Ketika organisasi aktif berubah, team ID permission juga harus diperbarui melalui middleware. 
+Role awal:
+organization-owner
+organization-admin
+project-manager
+scrum-master
+member
+viewer
+Permission awal:
+organization.manage
+member.invite
+member.manage
+project.create
+project.view
+project.update
+project.delete
+task.create
+task.view
+task.update
+task.delete
+task.assign
+task.move
+sprint.manage
+board.configure
+report.view
+ai.use
+ai.configure
+audit.view
+Tetap gunakan Laravel Policy untuk menggabungkan permission dan aturan domain. Dokumentasi Spatie juga merekomendasikan Model Policies sebagai tempat utama aturan akses aplikasi. 
+
+13. Implementasikan Project dan Task CRUD
+Buat resource:
+sail artisan make:controller ProjectController --resource
+sail artisan make:controller TaskController --resource
+sail artisan make:request Project/StoreProjectRequest
+sail artisan make:request Project/UpdateProjectRequest
+sail artisan make:request Work/StoreTaskRequest
+sail artisan make:request Work/UpdateTaskRequest
+sail artisan make:policy ProjectPolicy --model=Project
+sail artisan make:policy TaskPolicy --model=Task
+Urutan implementasi:
+1. Daftar project
+2. Membuat project
+3. Detail project
+4. Membuat task
+5. Melihat task
+6. Mengubah task
+7. Assign task
+8. Menghapus task dengan soft delete
+Semua query harus menyertakan organisasi:
+$projects = Project::query()
+    -&gt;whereBelongsTo($organization)
+    -&gt;latest()
+    -&gt;paginate();
+Jangan menggunakan:
+Project::find($id);
+Gunakan:
+Project::query()
+    -&gt;whereBelongsTo($organization)
+    -&gt;findOrFail($id);
+
+14. Buat Kanban board
+Pasang drag-and-drop library:
+sail npm install @dnd-kit/react @dnd-kit/helpers
+Dokumentasi dnd kit saat ini menggunakan @dnd-kit/react, sedangkan package helper menyediakan utilitas untuk perpindahan sortable list dan optimistic sorting. 
+Struktur component:
+resources/js/pages/projects/board/
+├── index.tsx
+├── board.tsx
+├── board-column.tsx
+├── task-card.tsx
+├── task-drawer.tsx
+└── hooks/
+    ├── use-board.ts
+    └── use-task-move.ts
+Data response halaman board:
+export interface BoardPageProps {
+    project: Project;
+    board: Board;
+    columns: BoardColumn[];
+    tasksByStatus: Record&lt;number, Task[]&gt;;
+    permissions: {
+        moveTask: boolean;
+        createTask: boolean;
+        configureBoard: boolean;
+    };
+}
+Endpoint perpindahan task
+Gunakan endpoint khusus:
+PATCH /o/{organization}/projects/{project}/tasks/{task}/move
+Payload:
+{
+  "status_id": 4,
+  "before_task_id": 81,
+  "after_task_id": 93,
+  "expected_version": 7
+}
+Response:
+{
+  "data": {
+    "id": 72,
+    "status_id": 4,
+    "rank": "5632.000000000000000",
+    "version": 8
+  }
+}
+Jangan mengirim seluruh urutan board setiap kali satu kartu dipindahkan.
+
+15. Implementasikan ranking dan concurrency
+Gunakan gap awal:
+1024
+2048
+3072
+4096
+Perhitungan:
+Pindah ke awal:
+next_rank - 1024
+Pindah ke akhir:
+previous_rank + 1024
+Pindah di antara dua task:
+(previous_rank + next_rank) / 2
+Action MoveTask harus:
+Memulai database transaction. 
+Mengunci task yang dipindahkan. 
+Memvalidasi project dan organisasi. 
+Memeriksa expected_version. 
+Memeriksa permission. 
+Memeriksa WIP limit. 
+Menghitung rank. 
+Memperbarui status dan rank. 
+Menambah version. 
+Menulis audit log. 
+Broadcast event setelah commit. 
+Contoh inti:
+return DB::transaction(function () use ($task, $data, $actor): Task {
+    $lockedTask = Task::query()
+        -&gt;whereKey($task-&gt;id)
+        -&gt;lockForUpdate()
+        -&gt;firstOrFail();
+    if ($lockedTask-&gt;version !== $data-&gt;expectedVersion) {
+        throw new TaskVersionConflict();
+    }
+    $rank = $this-&gt;rankCalculator-&gt;calculate(
+        beforeTaskId: $data-&gt;beforeTaskId,
+        afterTaskId: $data-&gt;afterTaskId,
+    );
+    $lockedTask-&gt;update([
+        'status_id' =&gt; $data-&gt;statusId,
+        'rank' =&gt; $rank,
+        'version' =&gt; $lockedTask-&gt;version + 1,
+    ]);
+    TaskMoved::dispatch($lockedTask, $actor);
+    return $lockedTask-&gt;refresh();
+});
+Saat terjadi version conflict, kembalikan:
+409 Conflict
+Frontend harus membatalkan optimistic update dan memuat ulang board.
+
+16. Instal real-time WebSocket
+Jalankan:
+sail artisan install:broadcasting
+Perintah tersebut memasang konfigurasi broadcasting dan Laravel Reverb. Reverb adalah server WebSocket first-party Laravel yang terintegrasi dengan broadcasting Laravel. 
+Jalankan server Reverb:
+sail artisan reverb:start --debug
+Buat event:
+sail artisan make:event TaskMoved
+sail artisan make:event TaskCreated
+sail artisan make:event TaskUpdated
+sail artisan make:event TaskDeleted
+Channel private:
+Broadcast::channel(
+    'organizations.{organizationId}.projects.{projectId}',
+    function (User $user, int $organizationId, int $projectId): bool {
+        return $user-&gt;organizations()
+            -&gt;whereKey($organizationId)
+            -&gt;exists();
+    }
+);
+Event:
+final class TaskMoved implements ShouldBroadcastAfterCommit
+{
+    public function broadcastOn(): array
+    {
+        return [
+            new PrivateChannel(
+                "organizations.{$this-&gt;task-&gt;organization_id}" .
+                ".projects.{$this-&gt;task-&gt;project_id}"
+            ),
+        ];
+    }
+    public function broadcastAs(): string
+    {
+        return 'task.moved';
+    }
+}
+Frontend:
+window.Echo.private(
+    `organizations.${organizationId}.projects.${projectId}`,
+).listen('.task.moved', (event: TaskMovedEvent) =&gt; {
+    reconcileTask(event.task);
+});
+Jangan broadcast deskripsi sensitif atau seluruh model. Kirim field minimum yang diperlukan UI.
+
+17. Instal queue dan Horizon
+Jalankan:
+sail composer require laravel/horizon
+sail artisan horizon:install
+sail artisan migrate
+Pastikan:
+QUEUE_CONNECTION=redis
+Jalankan worker:
+sail artisan horizon
+Horizon memerlukan Redis sebagai queue backend serta menyediakan dashboard untuk throughput, runtime, dan failed jobs. 
+Pisahkan queue:
+default
+notifications
+emails
+webhooks
+imports
+exports
+ai-high
+ai-default
+ai-batch
+maintenance
+Contoh job:
+final class GenerateSprintSummary implements ShouldQueue
+{
+    public string $queue = 'ai-default';
+    public int $tries = 3;
+    public array $backoff = [30, 120, 300];
+    public int $timeout = 180;
+}
+Lindungi dashboard Horizon menggunakan Gate:
+Gate::define('viewHorizon', function (User $user): bool {
+    return $user-&gt;hasRole('organization-owner')
+        || $user-&gt;can('system.monitor');
+});
+
+18. Konfigurasi scheduler
+Tambahkan pada routes/console.php:
+use Illuminate\Support\Facades\Schedule;
+Schedule::command('horizon:snapshot')
+    -&gt;everyFiveMinutes();
+Schedule::command('tasks:mark-overdue')
+    -&gt;everyTenMinutes()
+    -&gt;withoutOverlapping();
+Schedule::command('notifications:send-digests')
+    -&gt;hourly()
+    -&gt;withoutOverlapping();
+Schedule::command('audit:archive')
+    -&gt;dailyAt('02:00')
+    -&gt;withoutOverlapping();
+Untuk local development:
+sail artisan schedule:work
+Di production hanya dibutuhkan satu cron yang menjalankan scheduler Laravel setiap menit. 
+
+19. Implementasikan audit log
+Jangan hanya mencatat aktivitas melalui log file.
+Tabel audit_logs:
+id
+organization_id
+actor_id nullable
+event
+auditable_type
+auditable_id
+request_id
+ip_address
+user_agent
+old_values JSONB
+new_values JSONB
+metadata JSONB
+created_at
+Event awal:
+auth.login
+auth.failed
+organization.created
+member.invited
+member.role_changed
+project.created
+project.updated
+task.created
+task.updated
+task.moved
+task.deleted
+sprint.started
+sprint.completed
+ai.requested
+ai.completed
+ai.failed
+ai.configuration_changed
+Jangan menyimpan:
+password
+session cookie
+authorization header
+API key
+full AI credential
+reset token
+MFA secret
+Gunakan request correlation ID untuk menghubungkan HTTP request, queue job, audit log, dan AI request.
+
+20. Implementasikan storage
+Pada tahap pertama gunakan:
+FILESYSTEM_DISK=local
+Jalankan:
+sail artisan storage:link
+Simpan file private menggunakan path:
+organizations/{organization_uuid}/projects/{project_uuid}/attachments/{uuid}
+Jangan menggunakan nama file pengguna sebagai nama storage final.
+Setelah upload dasar berjalan, instal adapter S3:
+sail composer require league/flysystem-aws-s3-v3 "^3.0" \
+    --with-all-dependencies
+Laravel Filesystem memungkinkan aplikasi berpindah dari local storage ke layanan S3-compatible tanpa mengubah API aplikasi; perbedaan utamanya berada pada credential dan endpoint storage. 
+Environment production:
+FILESYSTEM_DISK=s3
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=work-management
+AWS_ENDPOINT=
+AWS_USE_PATH_STYLE_ENDPOINT=true
+Untuk self-hosted development dapat menggunakan SeaweedFS yang menyediakan endpoint S3-compatible. 
+Namun, storage object sebaiknya baru ditambahkan setelah upload local, validasi MIME, permission, quota, dan antivirus workflow telah selesai.
+
+21. Instal API support
+Walaupun frontend utama menggunakan Inertia, siapkan API untuk mobile, integrasi, dan webhook.
+sail artisan install:api
+sail artisan migrate
+Perintah tersebut memasang Sanctum untuk autentikasi API. Untuk first-party frontend, tetap gunakan session cookie; token digunakan untuk mobile, personal access token, dan integrasi eksternal. 
+Struktur endpoint:
+/api/v1/me
+/api/v1/organizations
+/api/v1/organizations/{organization}/projects
+/api/v1/projects/{project}/tasks
+/api/v1/tasks/{task}
+/api/v1/tasks/{task}/move
+/api/v1/projects/{project}/sprints
+/api/v1/webhooks
+Gunakan:
+Route::prefix('v1')
+    -&gt;middleware(['auth:sanctum', 'throttle:api'])
+    -&gt;group(function (): void {
+        // API routes
+    });
+Tambahkan idempotency key untuk operasi penting:
+Idempotency-Key: 9c496460-3879-45ba-9097-7df57aa778cb
+
+22. Aktifkan PostgreSQL Row-Level Security
+Aktifkan setelah application-level tenant tests berjalan.
+Contoh policy untuk projects:
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE projects FORCE ROW LEVEL SECURITY;
+CREATE POLICY projects_tenant_policy
+ON projects
+FOR ALL
+USING (
+    organization_id = current_setting(
+        'app.current_organization_id',
+        true
+    )::bigint
+)
+WITH CHECK (
+    organization_id = current_setting(
+        'app.current_organization_id',
+        true
+    )::bigint
+);
+Lakukan juga pada:
+projects
+tasks
+boards
+board_columns
+sprints
+comments
+attachments
+audit_logs
+ai_usage_logs
+PostgreSQL menerapkan default-deny setelah RLS aktif tetapi tidak memiliki policy yang mengizinkan akses. Namun, pemilik tabel biasanya dapat melewati RLS, sehingga aplikasi production sebaiknya menggunakan database role yang berbeda dari pemilik schema serta menggunakan FORCE ROW LEVEL SECURITY. 
+Tambahkan tenant context dalam transaction:
+DB::select(
+    "select set_config('app.current_organization_id', ?, true)",
+    [(string) $organization-&gt;id],
+);
+Sebelum mengaktifkan RLS di production, buat pengujian khusus backup, migration, queue, scheduler, command, dan administrative operation.
+
+23. Instal Laravel AI SDK
+AI dikerjakan setelah project, task, permission, audit, dan queue berjalan.
+Jalankan:
+sail composer require laravel/ai
+sail artisan vendor:publish \
+  --provider="Laravel\Ai\AiServiceProvider"
+sail artisan migrate
+Laravel AI SDK menyediakan interface terpadu untuk OpenAI, Gemini, Ollama, OpenAI-compatible server, embeddings, structured output, tools, failover, dan testing. 
+Tambahkan .env:
+AI_DEFAULT_PROVIDER=openai
+
+OPENAI_API_KEY=
+GEMINI_API_KEY=
+
+OLLAMA_API_KEY=
+OPENAI_COMPATIBLE_API_KEY=
+OPENAI_COMPATIBLE_URL=
+Jangan menggunakan API key langsung dari .env sebagai satu-satunya konfigurasi produk. Buat tabel:
+ai_provider_configs
+id
+organization_id nullable
+provider
+name
+encrypted_credentials
+base_url nullable
+default_model
+enabled
+priority
+settings JSONB
+created_by
+created_at
+updated_at
+ai_usage_logs
+id
+organization_id
+user_id
+provider
+model
+capability
+request_id
+input_tokens
+output_tokens
+estimated_cost
+latency_ms
+status
+error_code
+metadata JSONB
+created_at
+Credential harus dienkripsi:
+protected function casts(): array
+{
+    return [
+        'encrypted_credentials' =&gt; 'encrypted:array',
+        'settings' =&gt; 'array',
+        'enabled' =&gt; 'boolean',
+    ];
+}
+
+24. Buat AI capability gateway
+Domain aplikasi tidak boleh memanggil OpenAI atau Gemini secara langsung.
+Interface:
+&lt;?php
+namespace App\Domain\AI\Contracts;
+interface AiCapability
+{
+    public function execute(AiRequest $request): AiResult;
+}
+Request:
+final readonly class AiRequest
+{
+    public function __construct(
+        public int $organizationId,
+        public int $userId,
+        public string $capability,
+        public array $context,
+        public array $options = [],
+    ) {
+    }
+}
+Struktur:
+SprintSummaryAction
+        ↓
+AiGateway
+        ↓
+ProviderResolver
+        ↓
+Policy + Budget + Redaction
+        ↓
+Laravel AI SDK
+        ↓
+OpenAI / Gemini / Ollama
+Fitur AI pertama cukup satu:
+Generate Sprint Summary
+AI menerima:
+Nama sprint
+Goal sprint
+Task yang dapat diakses user
+Status setiap task
+Blocker
+Perubahan penting
+AI mengembalikan structured output:
+{
+  "summary": "...",
+  "completed": [],
+  "in_progress": [],
+  "blocked": [],
+  "risks": [],
+  "recommendations": [],
+  "source_task_ids": []
+}
+Simpan sumber task yang digunakan agar hasil dapat ditelusuri.
+
+25. Tambahkan testing sejak awal
+Jalankan seluruh test:
+sail artisan test
+Test yang wajib dibuat lebih dahulu:
+AuthenticationTest
+OrganizationIsolationTest
+OrganizationMembershipTest
+ProjectPolicyTest
+TaskPolicyTest
+CreateTaskTest
+UpdateTaskTest
+MoveTaskTest
+TaskVersionConflictTest
+BoardWipLimitTest
+PrivateBroadcastChannelTest
+AiPermissionBoundaryTest
+AiProviderFallbackTest
+Contoh isolation test:
+it('prevents users from reading another organization project', function () {
+    $user = User::factory()-&gt;create();
+    $organizationA = Organization::factory()-&gt;create();
+    $organizationB = Organization::factory()-&gt;create();
+    $organizationA-&gt;members()-&gt;attach($user, [
+        'role' =&gt; 'member',
+        'status' =&gt; 'active',
+    ]);
+    $projectB = Project::factory()
+        -&gt;for($organizationB)
+        -&gt;create();
+    $this-&gt;actingAs($user)
+        -&gt;get("/o/{$organizationB-&gt;slug}/projects/{$projectB-&gt;id}")
+        -&gt;assertForbidden();
+});
+Test Kanban concurrency:
+User A membaca task version 4
+User B memindahkan task menjadi version 5
+User A mengirim expected_version 4
+Server mengembalikan 409
+
+26. Tambahkan quality gate
+Pasang static analysis:
+sail composer require --dev larastan/larastan
+Tambahkan script di composer.json:
+{
+  "scripts": {
+    "analyse": "phpstan analyse",
+    "test": "php artisan test",
+    "lint": "pint --test",
+    "check": [
+      "@lint",
+      "@analyse",
+      "@test"
+    ]
+  }
+}
+Frontend:
+sail npm run lint
+sail npm run build
+Quality gate minimum:
+PHP formatting lulus
+PHP static analysis lulus
+Backend tests lulus
+Frontend lint lulus
+TypeScript check lulus
+Production build lulus
+Migration fresh + seed lulus
+
+27. Tambahkan CI GitHub Actions
+File:
+.github/workflows/ci.yml
+Pipeline:
+Checkout
+→ Install PHP dependencies
+→ Install Node dependencies
+→ Start PostgreSQL dan Redis
+→ Run migrations
+→ Run Pint
+→ Run PHPStan
+→ Run Pest
+→ Run frontend lint
+→ Run TypeScript checking
+→ Run frontend build
+Jangan melakukan deployment ketika salah satu quality gate gagal.
+
+28. Urutan implementasi yang harus diikuti
+Sprint 0 — Foundation
+Laravel 13
+React starter kit
+Sail
+PostgreSQL
+Redis
+Mailpit
+Git
+CI dasar
+Coding conventions
+Sprint 1 — Identity dan Organization
+Register/login
+Email verification
+Organizations
+Membership
+Organization switcher
+Role dan permission
+Tenant isolation tests
+Sprint 2 — Project dan Task
+Project CRUD
+Workflow status
+Task CRUD
+Assignee
+Priority
+Task activity
+Audit log
+Sprint 3 — Kanban
+Board
+Board columns
+Drag-and-drop
+Fractional ranking
+WIP limit
+Optimistic update
+Concurrency control
+Sprint 4 — Real-time dan background jobs
+Reverb
+Private channels
+Horizon
+Notifications
+Scheduler
+Failed-job handling
+Sprint 5 — Scrum
+Backlog
+Sprint
+Sprint goal
+Sprint planning
+Capacity
+Start sprint
+Complete sprint
+Burndown data
+Scrum Master dashboard
+Sprint 6 — Files dan API
+Attachment upload
+S3-compatible storage
+Sanctum
+REST API v1
+Webhook
+Idempotency
+Rate limiting
+Sprint 7 — AI vertical slice
+Provider configuration
+OpenAI
+Gemini
+Ollama
+AI gateway
+Sprint summary
+Usage logging
+Budget limit
+Audit
+Structured output
+Sprint 8 — Hardening
+PostgreSQL RLS
+Security headers
+MFA
+Session management
+Backup
+Restore test
+Load test
+Prompt-injection test
+Permission-leak test
+
+Perintah startup harian
+Buka beberapa terminal:
+Terminal 1 — Docker
+sail up -d
+Terminal 2 — Frontend
+sail npm run dev
+Terminal 3 — Queue
+sail artisan horizon
+Terminal 4 — WebSocket
+sail artisan reverb:start
+Terminal 5 — Scheduler
+sail artisan schedule:work
+Jalankan pemeriksaan:
+sail artisan test
+sail npm run lint
+sail npm run build
+
+Milestone pertama yang harus dianggap selesai
+Jangan melanjutkan ke fitur AI sebelum alur berikut berjalan dengan benar:
+1. User register dan login.
+2. User membuat organisasi.
+3. User mengundang anggota.
+4. Admin memberikan role.
+5. User membuat project.
+6. User membuat task.
+7. Task muncul di Kanban.
+8. Task dapat digeser antarkolom.
+9. WIP limit berfungsi.
+10. Konflik perpindahan menghasilkan HTTP 409.
+11. Perubahan muncul real-time di browser lain.
+12. Semua perubahan tercatat di audit log.
+13. User organisasi A tidak dapat membaca data organisasi B.
+14. Queue, scheduler, dan WebSocket dapat direstart tanpa kehilangan data.
+15. Semua automated test lulus.
+Setelah milestone ini stabil, barulah implementasi dilanjutkan ke sprint, Scrum Master workspace, attachment, API eksternal, integrasi, dan AI multi-provider.
+Ada. Setelah instalasi, desain, dan vertical slice awal, saya menyarankan pengembangan difokuskan pada ketahanan arsitektur dan validasi produk, bukan langsung menambah banyak fitur.
+1. Tetapkan MVP dan fitur yang ditunda
+MVP pertama sebaiknya hanya mencakup:
+Autentikasi
+Organisasi dan anggota
+Role dan permission
+Project
+Task
+Workflow
+Kanban drag-and-drop
+Sprint
+Komentar
+Notifikasi
+Audit log
+AI sprint summary
+Tunda sementara:
+Billing lengkap
+Marketplace integrasi
+Gantt tingkat lanjut
+Service desk
+Resource planning kompleks
+Custom automation visual
+Puluhan AI agent
+Mobile native
+Microservices
+Tujuannya agar Anda memiliki produk yang benar-benar dapat diuji oleh pengguna, bukan banyak modul yang masing-masing belum matang.
+
+2. Pisahkan MVP, beta, dan enterprise
+Buat pembagian edisi sejak awal, walaupun billing belum dibangun.
+Community atau Basic
+Project dan task. 
+Kanban. 
+Sprint. 
+Komentar. 
+File. 
+AI lokal. 
+Basic reports. 
+Professional
+Multi-provider AI. 
+Automation. 
+Advanced reporting. 
+Portfolio. 
+Integrasi GitHub, GitLab, Slack, dan Teams. 
+Custom workflow dan custom field. 
+Enterprise
+SAML/OIDC SSO. 
+SCIM. 
+Audit export. 
+Data retention. 
+Dedicated tenant. 
+Air-gapped deployment. 
+IP allowlist. 
+Customer-managed AI. 
+Advanced security policy. 
+Dengan pembagian ini, arsitektur permission, feature flag, dan konfigurasi organisasi dapat dipersiapkan lebih awal.
+
+3. Gunakan feature flag sejak awal
+Jangan mengaktifkan fitur baru sekaligus untuk semua organisasi.
+Pasang Laravel Pennant:
+sail composer require laravel/pennant
+sail artisan vendor:publish \
+  --provider="Laravel\Pennant\PennantServiceProvider"
+sail artisan migrate
+Contoh feature flag:
+Feature::define(
+    'ai-sprint-planning',
+    fn (Organization $organization): bool =&gt;
+        $organization-&gt;settings['ai_beta'] ?? false
+);
+Feature flag yang disarankan:
+ai-assistant
+ai-sprint-planning
+advanced-reports
+custom-fields
+automation-builder
+portfolio
+new-kanban-engine
+local-ai
+service-desk
+Laravel Pennant memang dirancang untuk rollout bertahap, pengujian variasi antarmuka, dan pengaktifan fitur berdasarkan scope seperti pengguna atau organisasi. 
+
+4. Buat arsitektur custom field dengan benar
+Aplikasi seperti Jira atau ClickUp hampir pasti membutuhkan custom field.
+Jangan menambahkan kolom baru ke tabel tasks setiap kali admin membuat field.
+Gunakan struktur:
+custom_field_definitions
+id
+organization_id
+project_id nullable
+entity_type
+name
+field_key
+field_type
+configuration JSONB
+is_required
+is_searchable
+position
+custom_field_options
+id
+custom_field_definition_id
+label
+value
+position
+color
+custom_field_values
+id
+custom_field_definition_id
+entity_type
+entity_id
+value_text nullable
+value_number nullable
+value_boolean nullable
+value_date nullable
+value_json nullable
+Tipe awal:
+text
+textarea
+number
+currency
+date
+datetime
+checkbox
+single_select
+multi_select
+user
+team
+url
+email
+formula
+Jangan langsung membuat formula field pada MVP. Formula memerlukan parser, dependency graph, circular-reference detection, dan keamanan evaluasi.
+
+5. Pisahkan activity log dan security audit log
+Keduanya terlihat mirip, tetapi memiliki tujuan berbeda.
+Activity log
+Untuk pengguna:
+Budi memindahkan WMS-15 ke Review
+Siti menambahkan komentar
+Andi mengubah prioritas menjadi High
+Activity dapat terlihat oleh anggota project.
+Audit log
+Untuk administrator dan keamanan:
+actor_id
+organization_id
+request_id
+IP
+user_agent
+event
+before
+after
+authentication_method
+result
+risk_level
+Audit log sebaiknya:
+Tidak dapat diedit dari aplikasi. 
+Memiliki retention policy. 
+Dapat diekspor. 
+Menyamarkan credential. 
+Menyimpan kegagalan akses. 
+Menyimpan perubahan konfigurasi AI. 
+Menyimpan penggunaan administrative privilege. 
+
+6. Terapkan domain event dan transactional outbox
+Jangan mengirim email, webhook, dan broadcast langsung dari controller.
+Gunakan alur:
+HTTP request
+→ database transaction
+→ simpan perubahan
+→ simpan domain event/outbox
+→ commit
+→ worker memproses event
+→ email, WebSocket, webhook, audit
+Contoh event:
+TaskCreated
+TaskMoved
+TaskAssigned
+SprintStarted
+SprintCompleted
+MemberInvited
+CommentAdded
+AiSuggestionApproved
+Tambahkan tabel outbox_messages:
+id
+organization_id
+event_type
+aggregate_type
+aggregate_id
+payload JSONB
+occurred_at
+processed_at nullable
+attempts
+last_error nullable
+Keuntungannya:
+Perubahan task tidak berhasil tanpa event. 
+Event tidak hilang ketika Redis sementara mati. 
+Webhook dapat diulang. 
+Proses menjadi idempotent. 
+Debugging lebih mudah. 
+
+7. Buat idempotency sebagai standar
+Idempotency penting untuk:
+Membuat task dari integrasi. 
+Webhook. 
+Import. 
+AI tool action. 
+Billing. 
+Upload finalization. 
+Menyelesaikan sprint. 
+Bulk action. 
+Contoh request:
+POST /api/v1/projects/23/tasks
+Idempotency-Key: e2fa5189-2340-4ecf-a11b-31081e55b877
+Tabel:
+idempotency_keys
+├── organization_id
+├── key
+├── request_hash
+├── response_status
+├── response_body
+├── expires_at
+└── created_at
+Jika key yang sama dikirim ulang dengan payload sama, kembalikan response sebelumnya. Jika key sama tetapi payload berbeda, kembalikan conflict.
+
+8. Gunakan PostgreSQL untuk search tahap awal
+Jangan langsung menambahkan Elasticsearch atau OpenSearch.
+Tahap pertama cukup menggunakan:
+PostgreSQL full-text search. 
+Trigram similarity. 
+Prefix search untuk task key. 
+Indexed filters. 
+Search permission di query. 
+Objek yang dicari:
+Task
+Project
+Comment
+Wiki
+User
+Sprint
+Attachment metadata
+Struktur search result:
+{
+  "type": "task",
+  "id": "019...",
+  "title": "Perbaiki autentikasi SSO",
+  "subtitle": "WMS-142 · AI Platform",
+  "highlight": "autentikasi...",
+  "url": "/o/nusantara/projects/wms/tasks/WMS-142"
+}
+Laravel 13 memiliki dukungan pencarian bawaan dan dokumentasinya menekankan bahwa banyak kasus pencarian tidak selalu membutuhkan layanan eksternal. 
+Tambahkan search engine khusus hanya ketika:
+Data sudah sangat besar. 
+Fuzzy search PostgreSQL tidak mencukupi. 
+Faceting kompleks diperlukan. 
+Search analytics sangat intensif. 
+Cross-document ranking membutuhkan engine khusus. 
+
+9. Bangun AI sebagai capability, bukan chatbot tunggal
+Buat capability registry:
+sprint_summary
+task_decomposition
+acceptance_criteria_generation
+duplicate_detection
+project_risk_analysis
+standup_summary
+retrospective_analysis
+natural_language_search
+release_note_generation
+Setiap capability memiliki konfigurasi:
+provider
+model
+prompt_version
+temperature
+maximum_tokens
+monthly_budget
+requires_approval
+allowed_tools
+data_scope
+fallback_provider
+timeout
+Contoh:
+final readonly class AiCapabilityConfiguration
+{
+    public function __construct(
+        public string $capability,
+        public string $provider,
+        public string $model,
+        public bool $requiresApproval,
+        public array $allowedTools,
+        public int $maximumTokens,
+    ) {
+    }
+}
+Laravel AI SDK saat ini mendukung beberapa provider, structured output, tool use, human tool approval, streaming, queueing, failover, embeddings, vector stores, dan pengujian agent. Ini cocok dijadikan fondasi teknis, tetapi konfigurasi produk tetap harus dibungkus oleh gateway milik aplikasi. 
+
+10. Pin model AI per capability
+Jangan selalu menggunakan model “terbaru” secara otomatis.
+Contoh registry:
+Capability              Model               Status
+Sprint summary          provider/model-a    stable
+Task decomposition      provider/model-b    beta
+Duplicate detection     local-embedding-x   stable
+Risk analysis           provider/model-c    evaluation
+Setiap pergantian model harus mencatat:
+model lama
+model baru
+alasan
+tanggal
+hasil evaluation
+perubahan biaya
+perubahan latency
+approver
+Dokumentasi Laravel AI SDK juga mengingatkan bahwa pemilihan model otomatis dapat berubah antarversi dan berpotensi mengubah perilaku maupun biaya; untuk kebutuhan stabil, model sebaiknya ditentukan secara eksplisit. 
+
+11. Buat AI evaluation sebelum AI automation
+Sebelum AI diperbolehkan mengubah task, buat evaluation suite.
+Dataset minimal:
+50 contoh sprint summary
+50 task decomposition
+30 duplicate-task scenarios
+30 permission-leak attempts
+30 prompt-injection attempts
+20 provider-failure scenarios
+20 malformed structured-output scenarios
+Metrik:
+Output sesuai schema. 
+Fakta berasal dari sumber. 
+Citation benar. 
+Tidak mengakses data organisasi lain. 
+Tidak mengarang task. 
+Latency. 
+Token. 
+Biaya. 
+Approval acceptance rate. 
+Provider failure rate. 
+Status rilis AI:
+experimental
+internal
+beta
+general-availability
+disabled
+AI yang belum lulus evaluation hanya boleh aktif untuk organisasi internal atau beta tester.
+
+12. Tambahkan observability sejak sprint pertama
+Pasang:
+Structured application log. 
+Request ID. 
+Laravel Horizon untuk queue. 
+Laravel Pulse untuk operational overview. 
+Telescope hanya untuk local atau staging. 
+Error tracker seperti Sentry. 
+Health endpoints. 
+Database slow-query monitoring. 
+Laravel Pulse dapat menampilkan slow request, slow job, slow query, queue throughput, exception, cache hit/miss, dan outgoing request. Telescope lebih cocok untuk pemeriksaan mendalam terhadap request atau event individual. 
+Health endpoint:
+/health/live
+/health/ready
+/health/database
+/health/redis
+/health/storage
+/health/reverb
+/health/ai-providers
+Jangan tampilkan credential atau detail internal pada health endpoint publik.
+
+13. Jangan memakai Octane terlalu awal
+Laravel Octane dapat meningkatkan throughput dengan mempertahankan aplikasi di memory, tetapi juga menambah risiko state bocor antar-request jika kode tidak dirancang dengan benar. Octane tersedia sebagai komponen resmi Laravel 13. 
+Gunakan urutan:
+1. Optimalkan query.
+2. Tambahkan index.
+3. Kurangi N+1 query.
+4. Gunakan cache.
+5. Gunakan queue.
+6. Load test.
+7. Baru evaluasi Octane.
+Jangan menggunakan Octane hanya karena terlihat lebih cepat. Gunakan ketika hasil load test menunjukkan PHP-FPM menjadi bottleneck.
+
+14. Bangun import center lebih awal
+Untuk mendapatkan pengguna Jira atau ClickUp, import lebih penting daripada beberapa fitur tambahan.
+MVP importer:
+CSV
+Jira
+Trello
+GitHub Issues
+Arsitektur:
+Source connector
+→ extractor
+→ normalizer
+→ field mapper
+→ validator
+→ importer
+→ reconciliation report
+Fitur wajib:
+Dry run. 
+Preview. 
+Mapping user. 
+Mapping status. 
+Mapping priority. 
+Progress. 
+Retry. 
+Error report. 
+Duplicate prevention. 
+Resume. 
+Rollback batch. 
+Gunakan queue batch agar import besar tidak menahan HTTP request.
+
+15. Persiapkan API dan webhook sebagai produk
+Jangan hanya membuat API untuk kebutuhan frontend.
+API publik harus memiliki:
+Versioning. 
+OAuth atau personal access token. 
+Scope. 
+Rate limit. 
+Idempotency. 
+Pagination. 
+Filtering. 
+Sorting. 
+Sparse fields bila diperlukan. 
+Request ID. 
+Consistent error response. 
+Format error:
+{
+  "error": {
+    "code": "TASK_VERSION_CONFLICT",
+    "message": "Task telah diperbarui oleh pengguna lain.",
+    "request_id": "req_01J...",
+    "details": {
+      "expected_version": 6,
+      "current_version": 7
+    }
+  }
+}
+Webhook harus memiliki:
+Signature. 
+Timestamp. 
+Replay protection. 
+Delivery log. 
+Retry. 
+Exponential backoff. 
+Dead-letter state. 
+Manual redelivery. 
+Secret rotation. 
+
+16. Definisikan workflow engine sebagai state machine
+Jangan mengizinkan task berpindah ke semua status secara bebas.
+Tambahkan:
+workflow_statuses
+workflow_transitions
+workflow_transition_rules
+Contoh transition:
+To Do → In Progress
+In Progress → Review
+Review → Done
+Review → In Progress
+Rule transition:
+permission
+required_fields
+required_approval
+required_checklist
+maximum_wip
+allowed_task_type
+Contoh:
+Task tidak dapat dipindahkan ke Done apabila acceptance criteria belum lengkap atau masih memiliki blocker aktif.
+Pastikan administrator dapat mengatur workflow tanpa menulis kode.
+
+17. Tambahkan saved views sebagai fitur inti
+Saved view sangat penting untuk membuat aplikasi fleksibel.
+Simpan:
+name
+scope
+filters
+sorting
+grouping
+visible_columns
+column_widths
+layout
+is_default
+is_shared
+Contoh saved view:
+Bug prioritas tinggi
+Task tanpa assignee
+Task terlambat
+Task untuk release berikutnya
+Review queue
+Blocked this week
+Saved view dapat digunakan pada:
+Task list. 
+Board. 
+Reports. 
+Portfolio. 
+Workload. 
+
+18. Bangun permission test generator
+Karena permission akan menjadi kompleks, buat matriks otomatis.
+Contoh:
+Role
+View
+Create
+Edit
+Move
+Delete
+Manage Sprint
+Owner
+Ya
+Ya
+Ya
+Ya
+Ya
+Ya
+Scrum Master
+Ya
+Ya
+Ya
+Ya
+Terbatas
+Ya
+Member
+Ya
+Ya
+Terbatas
+Ya
+Tidak
+Tidak
+Viewer
+Ya
+Tidak
+Tidak
+Tidak
+Tidak
+Tidak
+Setiap baris harus memiliki automated test.
+Uji pula:
+Role benar, organisasi salah
+Role benar, project salah
+User nonaktif
+Project archived
+Task soft deleted
+API token tanpa scope
+Queue job tanpa tenant context
+WebSocket channel organisasi lain
+AI retrieval organisasi lain
+
+19. Persiapkan backup dan disaster recovery
+Backup tidak cukup hanya berhasil dibuat. Restore harus diuji.
+Backup:
+PostgreSQL. 
+Object storage. 
+Encryption key procedure. 
+AI provider configuration. 
+Application configuration. 
+Audit archive. 
+Tetapkan:
+RPO: berapa banyak data yang boleh hilang?
+RTO: berapa lama aplikasi boleh tidak tersedia?
+Contoh target awal:
+RPO: 24 jam untuk development
+RPO: 1 jam untuk production
+RTO: 8 jam untuk tahap beta
+RTO: 2 jam untuk production matang
+Lakukan restore drill secara berkala ke environment terisolasi.
+
+20. Tambahkan product analytics yang menjaga privasi
+Ukur penggunaan fitur, bukan isi data sensitif.
+Event contoh:
+organization_created
+project_created
+task_created
+task_moved
+sprint_started
+sprint_completed
+ai_summary_requested
+ai_suggestion_approved
+import_completed
+automation_executed
+Hindari mengirim:
+Judul task. 
+Deskripsi. 
+Komentar. 
+Nama file. 
+Prompt AI penuh. 
+Credential. 
+Data pribadi yang tidak diperlukan. 
+Metrik produk utama:
+Activation:
+Organisasi membuat project dan minimal lima task.
+Engagement:
+Organisasi aktif menggunakan board beberapa hari per minggu.
+Retention:
+Organisasi masih aktif setelah 4 dan 8 minggu.
+
+AI value:
+Persentase rekomendasi AI yang diterapkan atau diedit.
+Migration success:
+Persentase import yang selesai tanpa intervensi manual.
+
+Hal yang sebaiknya dilakukan berikutnya
+Urutan terbaik dari posisi project Anda sekarang:
+Finalisasi MVP dan non-goals. 
+Buat starter repository. 
+Implementasikan organisasi dan tenant isolation. 
+Implementasikan project, workflow, dan task. 
+Implementasikan Kanban concurrency. 
+Tambahkan audit, outbox, dan idempotency. 
+Tambahkan real-time dan queue. 
+Pasang observability. 
+Buat sprint dan Scrum Master workspace. 
+Bangun satu AI capability dengan evaluation. 
+Buat CSV/Jira importer. 
+Uji dengan satu tim nyata selama beberapa sprint. 
+Rekomendasi paling penting
+Jadikan tenant isolation, Kanban concurrency, import, dan AI permission boundary sebagai empat area yang tidak boleh ditunda. Keempatnya jauh lebih sulit diperbaiki setelah aplikasi dan data pengguna sudah berkembang.
+Target produk pertama sebaiknya bukan “memiliki semua fitur Jira”, tetapi:
+Sebuah Work Management System yang nyaman digunakan, memiliki Scrum workspace yang kuat, dapat memakai AI cloud maupun lokal, dan mampu membuktikan bahwa data setiap organisasi tetap terisolasi.
+Top of Form
+Bottom of Form
+Saat ini sudah ada konsep task/issue, tetapi belum menjadi sistem ticketing/service desk yang lengkap.
+Artinya, pengguna sudah bisa membuat item pekerjaan seperti:
+Task 
+Bug 
+Story 
+Epic 
+Subtask 
+Namun fitur ticketing seperti helpdesk belum sepenuhnya masuk ke MVP awal.
+Agar menjadi ticketing lengkap
+Tambahkan modul Service Desk / Ticket Management dengan fitur:
+Ticket dari portal pengguna 
+Ticket dari email 
+Form permintaan publik atau internal 
+Nomor tiket otomatis, misalnya IT-000123 
+Kategori dan tipe permintaan 
+Priority dan severity 
+Agent atau support team 
+Assignment queue 
+SLA response dan resolution 
+Status ticket 
+Komentar internal dan balasan ke pelanggan 
+Attachment 
+Approval 
+Escalation 
+Knowledge base 
+Customer portal 
+CSAT atau rating penyelesaian 
+Audit log 
+AI classification dan suggested response 
+Tipe ticket yang disarankan
+Incident
+Service Request
+Problem
+Change Request
+Bug Report
+Access Request
+General Support
+Contoh workflow:
+New
+→ Triage
+→ Assigned
+→ In Progress
+→ Waiting for Customer
+→ Waiting for Third Party
+→ Resolved
+→ Closed
+→ Reopened
+Perbedaan task dan ticket
+Task digunakan untuk pekerjaan internal tim.
+Ticket biasanya berasal dari pengguna, pelanggan, atau unit lain dan memiliki:
+Pelapor eksternal 
+SLA 
+Riwayat komunikasi 
+Queue support 
+Escalation 
+Kepuasan pelanggan 
+Portal untuk memantau status 
+Ticket yang sudah ditriage dapat dihubungkan ke task development.
+Contoh:
+Ticket IT-145
+“Tidak dapat login”
+↓ dibuat relasi
+Bug WMS-284
+“Perbaiki token refresh pada SSO”
+Ticket tidak harus berubah menjadi task. Keduanya tetap menjadi entitas terpisah tetapi saling terhubung.
+Struktur database tambahan
+Tabel utama yang diperlukan:
+service_desks
+ticket_types
+tickets
+ticket_statuses
+ticket_priorities
+ticket_categories
+ticket_comments
+ticket_participants
+ticket_assignments
+ticket_sla_policies
+ticket_sla_instances
+ticket_escalations
+ticket_approvals
+ticket_links
+customer_organizations
+customer_contacts
+support_queues
+email_channels
+satisfaction_surveys
+Contoh kolom tabel tickets:
+id
+uuid
+organization_id
+service_desk_id
+ticket_number
+ticket_type_id
+status_id
+priority_id
+category_id
+subject
+description
+requester_id
+assigned_user_id
+assigned_team_id
+source
+impact
+urgency
+resolution
+first_response_at
+resolved_at
+closed_at
+due_at
+sla_status
+created_at
+updated_at
+deleted_at
+Channel pembuatan ticket
+Ticket dapat dibuat melalui:
+Portal web 
+Form publik 
+Email 
+Admin atau agent 
+REST API 
+Webhook 
+Slack atau Microsoft Teams 
+Konversi dari chat 
+Monitoring system 
+Field source dapat berisi:
+portal
+email
+api
+agent
+slack
+teams
+monitoring
+webhook
+AI untuk ticketing
+Fitur AI yang relevan:
+Klasifikasi kategori 
+Deteksi priority dan urgency 
+Routing ke tim yang tepat 
+Ringkasan percakapan panjang 
+Suggested response 
+Duplicate-ticket detection 
+Knowledge article recommendation 
+Sentiment detection 
+SLA risk prediction 
+Pembuatan task dari ticket 
+Penyembunyian data sensitif sebelum dikirim ke provider AI 
+AI sebaiknya tidak langsung mengirim balasan tanpa review agent, terutama pada tahap awal.
+Saran posisi dalam roadmap
+Saya menyarankan ticketing menjadi modul setelah core work management stabil:
+Phase 1
+Organization, project, task, Kanban, sprint
+Phase 2
+Comments, files, notifications, audit, AI summary
+Phase 3
+Service desk dan ticketing
+Phase 4
+Email-to-ticket, SLA, customer portal, knowledge base
+Phase 5
+AI routing, suggested response, escalation prediction
+Kesimpulannya: ticketing dasar dapat dibangun dari fondasi task yang sudah ada, tetapi service desk profesional belum termasuk sebagai modul lengkap dan perlu ditambahkan secara khusus.

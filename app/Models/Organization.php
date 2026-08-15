@@ -1,0 +1,114 @@
+<?php
+
+namespace App\Models;
+
+use App\Models\Concerns\HasUuidPrimaryKey;
+use Database\Factories\OrganizationFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
+
+/**
+ * @property string $id
+ * @property string $name
+ * @property string $slug
+ * @property string $status
+ * @property string $timezone
+ * @property string $locale
+ * @property array<string, mixed> $settings
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ */
+#[Fillable(['name', 'slug', 'status', 'timezone', 'locale', 'settings'])]
+class Organization extends Model
+{
+    /** @use HasFactory<OrganizationFactory> */
+    use HasFactory, HasUuidPrimaryKey, SoftDeletes;
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'settings' => 'array',
+        ];
+    }
+
+    /**
+     * Get all memberships for the organization.
+     *
+     * @return HasMany<OrganizationMembership, $this>
+     */
+    public function memberships(): HasMany
+    {
+        return $this->hasMany(OrganizationMembership::class);
+    }
+
+    /**
+     * Get all users in the organization.
+     *
+     * @return BelongsToMany<User, $this>
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'organization_memberships')
+            ->withPivot(['id', 'role', 'title', 'status', 'joined_at'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Get the owner membership of the organization.
+     *
+     * @return HasOneThrough<User, OrganizationMembership, $this>
+     */
+    public function owner(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            User::class,
+            OrganizationMembership::class,
+            'organization_id',
+            'id',
+            'id',
+            'user_id'
+        )->where('organization_memberships.role', 'owner');
+    }
+
+    /**
+     * Get all teams for the organization.
+     *
+     * @return HasMany<Team, $this>
+     */
+    public function teams(): HasMany
+    {
+        return $this->hasMany(Team::class);
+    }
+
+    /**
+     * Get all custom and organization roles.
+     *
+     * @return HasMany<Role, $this>
+     */
+    public function roles(): HasMany
+    {
+        return $this->hasMany(Role::class);
+    }
+
+    /**
+     * Get all invitations for the organization.
+     *
+     * @return HasMany<OrganizationInvitation, $this>
+     */
+    public function invitations(): HasMany
+    {
+        return $this->hasMany(OrganizationInvitation::class);
+    }
+}

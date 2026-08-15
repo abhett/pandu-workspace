@@ -1,0 +1,144 @@
+# ==========================================
+# Laravel & Node Dependencies
+# ==========================================
+/vendor/
+/node_modules/
+/public/build/
+/public/hot
+/public/storage
+/public/fonts-manifest.dev.json
+/bootstrap/ssr
+
+# ==========================================
+# Environment / Secrets
+# ==========================================
+.env
+.env.*
+!.env.example
+/auth.json
+Homestead.json
+Homestead.yaml
+
+# ==========================================
+# Laravel Storage & Cache
+# ==========================================
+/storage/*.key
+/storage/pail
+/storage/app/*
+!/storage/app/.gitignore
+/storage/framework/*
+!/storage/framework/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# Laravel Wayfinder generated files
+/resources/js/actions
+/resources/js/routes
+/resources/js/wayfinder
+
+# ==========================================
+# Project Documentation & Design References
+# ==========================================
+/docs/
+/design/
+/designs/
+/wireframes/
+/mockups/
+/stitch/
+
+# ==========================================
+# AI Agents, Plans, Skills & Context
+# ==========================================
+# Antigravity & AI Brain
+.antigravity/
+.antigravity*
+.agents/
+.agent/
+.ai/
+.ai*
+.ai-context/
+.ai-workspace/
+.gemini/
+.claude/
+.cursor/
+.windsurf/
+.cline/
+.roo/
+
+# Agent Rules & Instructions
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+COPILOT.md
+CURSOR.md
+AI.md
+
+# AI Plans, Tasks & Notes
+TASKS.md
+TASK_PLAN.md
+IMPLEMENTATION_PLAN.md
+implementation_plan.md
+walkthrough.md
+CHANGELOG_AI.md
+AI_CONTEXT.md
+PROJECT_CONTEXT.md
+ARCHITECTURE.md
+
+# MCP & Local AI Config
+.mcp/
+mcp.json
+mcp.config.json
+boost.json
+
+# Scratch & Temporary testing scripts
+scratch/
+scratch*
+scratch_*.php
+
+# ==========================================
+# Testing & Code Coverage
+# ==========================================
+.phpunit.result.cache
+.phpunit.cache/
+coverage/
+
+# ==========================================
+# Frontend Logs & Cache
+# ==========================================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.eslintcache
+
+# ==========================================
+# IDE & Editors
+# ==========================================
+.idea/
+.vscode/
+.fleet/
+.nova/
+.zed/
+.phpactor.json
+*.sublime-project
+*.sublime-workspace
+
+# ==========================================
+# Operating System
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# Temporary Files
+# ==========================================
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+gitignore

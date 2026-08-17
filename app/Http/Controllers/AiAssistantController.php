@@ -140,6 +140,10 @@ class AiAssistantController extends Controller
         $orgId = session('current_organization_id') ?? $user->memberships()->value('organization_id');
         $organization = Organization::where('id', (string) $orgId)->firstOrFail();
 
+        if (! $user->hasPermissionInOrganization($organization, 'organization:manage') && ! in_array($user->roleInOrganization($organization), ['owner', 'admin'])) {
+            abort(403, 'Anda tidak memiliki hak untuk melihat konfigurasi AI organisasi.');
+        }
+
         $setting = OrganizationAiSetting::firstOrCreate(
             ['organization_id' => $organization->id],
             [

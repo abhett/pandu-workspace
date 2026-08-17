@@ -28,6 +28,10 @@ class RolePermissionController extends Controller
 
         $organization = Organization::findOrFail($orgId);
 
+        if (! $user->hasPermissionInOrganization($organization, 'roles:manage') && ! in_array($user->roleInOrganization($organization), ['owner', 'admin'])) {
+            abort(403, 'Anda tidak memiliki hak akses untuk melihat dan mengelola peran.');
+        }
+
         // Fetch all permissions grouped by category
         $groupedPermissions = PermissionRegistry::allGrouped();
 

@@ -196,4 +196,27 @@ class User extends Authenticatable
     {
         return $this->hasMany(Attachment::class, 'uploader_id');
     }
+
+    /**
+     * Get all notification preferences for the user.
+     *
+     * @return HasMany<UserNotificationPreference, $this>
+     */
+    public function notificationPreferences(): HasMany
+    {
+        return $this->hasMany(UserNotificationPreference::class);
+    }
+
+    /**
+     * Check whether the user wants to receive a specific event type on a channel.
+     */
+    public function wantsNotification(string $eventType, string $channel = 'in_app'): bool
+    {
+        $pref = $this->notificationPreferences()->where('event_type', $eventType)->first();
+        if (! $pref) {
+            return true; // Default enabled
+        }
+
+        return $channel === 'email' ? $pref->email_enabled : $pref->in_app_enabled;
+    }
 }

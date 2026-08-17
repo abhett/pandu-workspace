@@ -8,6 +8,7 @@ use App\Models\Sprint;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\WorkflowStatus;
+use App\Notifications\SprintStartedNotification;
 use App\Services\Sprint\SprintService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -305,6 +306,14 @@ class SprintController extends Controller
 
         try {
             $started = $this->sprintService->startSprint($sprint, $user, $validated);
+
+            // Notify other project members
+            $project->loadMissing('members');
+            foreach ($project->members as $member) {
+                if ((int) $member->id !== (int) $user->id) {
+                    $member->notify(new SprintStartedNotification($started, $project, $user));
+                }
+            }
 
             return back()->with('success', "Sprint '{$started->name}' telah resmi dimulai!");
         } catch (InvalidArgumentException $e) {

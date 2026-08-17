@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import {
     BarChart3,
     CheckSquare,
@@ -25,7 +25,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
+import type { Auth, NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     {
@@ -40,61 +40,85 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Kotak Masuk',
-        href: '#',
+        href: '/notifications',
         icon: Inbox,
     },
 ];
 
-const workspaceNavItems: NavItem[] = [
-    {
-        title: 'Proyek',
-        href: '/projects',
-        icon: FolderKanban,
-    },
-    {
-        title: 'Portofolio',
-        href: '#',
-        icon: PieChart,
-    },
-    {
-        title: 'Direktori Tim',
-        href: '/teams',
-        icon: UsersRound,
-    },
-    {
-        title: 'Anggota Organisasi',
-        href: '/organization/members',
-        icon: Users,
-    },
-    {
-        title: 'Laporan & Metrik',
-        href: '#',
-        icon: BarChart3,
-    },
-];
-
-const securityNavItems: NavItem[] = [
-    {
-        title: 'Peran & Izin (RBAC)',
-        href: '/organization/roles',
-        icon: Key,
-    },
-];
-
-const aiNavItems: NavItem[] = [
-    {
-        title: 'Asisten AI',
-        href: '#',
-        icon: Sparkles,
-    },
-    {
-        title: 'Otomasi Workflow',
-        href: '#',
-        icon: Zap,
-    },
-];
-
 export function AppSidebar() {
+    const { auth } = usePage<{ auth?: Auth }>().props;
+    const role = auth?.organization?.role || 'guest';
+    const permissions = auth?.permissions || [];
+    const isOwnerOrAdmin = role === 'owner' || role === 'admin';
+
+    const canViewMembers = isOwnerOrAdmin || permissions.includes('members:view') || permissions.includes('members:invite');
+    const canManageRoles = isOwnerOrAdmin || permissions.includes('roles:manage');
+    const canManageAi = isOwnerOrAdmin || permissions.includes('organization:manage');
+
+    const workspaceNavItems: NavItem[] = [
+        {
+            title: 'Proyek',
+            href: '/projects',
+            icon: FolderKanban,
+        },
+        {
+            title: 'Portofolio',
+            href: '#',
+            icon: PieChart,
+        },
+        {
+            title: 'Direktori Tim',
+            href: '/teams',
+            icon: UsersRound,
+        },
+        ...(canViewMembers
+            ? [
+                  {
+                      title: 'Anggota Organisasi',
+                      href: '/organization/members',
+                      icon: Users,
+                  },
+              ]
+            : []),
+        {
+            title: 'Laporan & Metrik',
+            href: '#',
+            icon: BarChart3,
+        },
+    ];
+
+    const securityNavItems: NavItem[] = canManageRoles
+        ? [
+              {
+                  title: 'Peran & Izin (RBAC)',
+                  href: '/organization/roles',
+                  icon: Key,
+              },
+          ]
+        : [];
+
+    const aiNavItems: NavItem[] = [
+        {
+            title: 'Asisten AI',
+            href: '#',
+            icon: Sparkles,
+        },
+        ...(canManageAi
+            ? [
+                  {
+                      title: 'Pengaturan AI & Kuota',
+                      href: '/organization/ai-settings',
+                      icon: Zap,
+                  },
+              ]
+            : []),
+        {
+            title: 'Otomasi Workflow',
+            href: '#',
+            icon: Zap,
+        },
+    ];
+
     return (
         <Sidebar
             collapsible="icon"
@@ -116,10 +140,12 @@ export function AppSidebar() {
             <SidebarContent className="space-y-2">
                 <NavMain items={mainNavItems} groupLabel="Menu Utama" />
                 <NavMain items={workspaceNavItems} groupLabel="Workspace" />
-                <NavMain
-                    items={securityNavItems}
-                    groupLabel="Keamanan & Akses"
-                />
+                {securityNavItems.length > 0 && (
+                    <NavMain
+                        items={securityNavItems}
+                        groupLabel="Keamanan & Akses"
+                    />
+                )}
                 <NavMain items={aiNavItems} groupLabel="AI & Automations" />
             </SidebarContent>
 

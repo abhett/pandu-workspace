@@ -8,6 +8,7 @@ use App\Models\Task;
 use App\Models\TaskActivity;
 use App\Models\User;
 use App\Models\WorkflowStatus;
+use App\Notifications\TaskAssignedNotification;
 use Illuminate\Support\Facades\DB;
 
 final class TaskService
@@ -75,6 +76,13 @@ final class TaskService
                         'assigned_at' => now(),
                         'assigned_by' => $actor->id,
                     ];
+
+                    if ((int) $userId !== (int) $actor->id) {
+                        $assignedUser = User::find($userId);
+                        if ($assignedUser) {
+                            $assignedUser->notify(new TaskAssignedNotification($task, $project, $actor));
+                        }
+                    }
                 }
                 $task->assignees()->attach($pivotData);
             }
@@ -171,6 +179,16 @@ final class TaskService
                         ];
                     }
                     $task->assignees()->sync($pivotData);
+
+                    $addedIds = array_diff($newAssigneeIds, $currentAssigneeIds);
+                    foreach ($addedIds as $newId) {
+                        if ((int) $newId !== (int) $actor->id) {
+                            $newAssignee = User::find($newId);
+                            if ($newAssignee) {
+                                $newAssignee->notify(new TaskAssignedNotification($task, $task->project, $actor));
+                            }
+                        }
+                    }
 
                     $changes['assignees'] = [
                         'before_count' => count($currentAssigneeIds),

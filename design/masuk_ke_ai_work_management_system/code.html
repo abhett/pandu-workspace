@@ -1,0 +1,93 @@
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"zinc-surface":"#09090B","on-secondary-fixed":"#09006b","primary":"#c3c0ff","primary-container":"#4f46e5","on-tertiary-container":"#67f4b7","on-primary-fixed":"#0f0069","surface-container":"#102034","secondary-fixed-dim":"#c1c1ff","surface-dim":"#031427","tertiary-fixed-dim":"#4edea3","zinc-border":"#27272A","tertiary-container":"#006e4b","on-secondary":"#1400a8","error":"#ffb4ab","status-todo":"#3B82F6","tertiary":"#4edea3","surface-container-lowest":"#000f21","error-container":"#93000a","on-error":"#690005","status-backlog":"#94A3B8","tertiary-fixed":"#6ffbbe","secondary":"#c1c1ff","primary-fixed-dim":"#c3c0ff","inverse-on-surface":"#213145","on-surface-variant":"#c7c4d8","secondary-container":"#2f27d0","secondary-fixed":"#e1dfff","outline-variant":"#464555","on-tertiary-fixed-variant":"#005236","inverse-primary":"#4d44e3","on-tertiary-fixed":"#002113","outline":"#918fa1","status-blocked":"#EF4444","surface-container-highest":"#26364a","surface-bright":"#2a3a4f","on-primary":"#1d00a5","on-surface":"#d3e4fe","on-secondary-fixed-variant":"#2c24ce","background":"#031427","surface-tint":"#c3c0ff","status-review":"#8B5CF6","surface-variant":"#26364a","on-primary-container":"#dad7ff","on-error-container":"#ffdad6","on-background":"#d3e4fe","on-primary-fixed-variant":"#3323cc","warning-amber":"#F59E0B","status-done":"#10B981","surface":"#031427","on-secondary-container":"#b1b1ff","surface-container-low":"#0b1c30","inverse-surface":"#d3e4fe","status-cancelled":"#475569","on-tertiary":"#003824","status-inprogress":"#4F46E5","primary-fixed":"#e2dfff","surface-container-high":"#1b2b3f"}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/></head><body class="bg-background font-body-md text-on-background"><main class="min-h-screen flex items-center justify-center p-margin-mobile"><div class="flex flex-col w-full items-center justify-center min-h-[calc(100vh-200px)] relative overflow-hidden bg-background py-margin-desktop px-margin-mobile">
+<div class="absolute top-0 left-1/4 w-96 h-96 bg-primary-container/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none"></div>
+<div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-secondary-container/20 rounded-full blur-[100px] mix-blend-screen pointer-events-none"></div>
+<div class="w-full max-w-md relative z-10 flex flex-col gap-stack-lg">
+<div class="flex flex-col items-center text-center gap-stack-sm mb-stack-lg">
+<div class="w-20 h-20 rounded-2xl bg-surface-container flex items-center justify-center mb-stack-md shadow-lg overflow-hidden">
+<img alt="AI Work Management Logo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6YI9EDXmf8KVe_LfPwXZiye_68CSFV_LA15ZRKCrAp4mYLwV3aZQHszhUVzcdUBflYsQNMrFUV_xxaPvY7iQospN7zrB0x_f_qOpyCLyAhptyAu8fWvVa7wdEdEjuaESDd_XdPfMdm5VBzsnYov81mN9cCJw9EXlMAZXyOAXCCZTI5O2T5CZRh_HB6A9TD6CoNz5zUImnzC46hN4RCTHy75-JhgYhdntkzRFHyB0refLX37YkiThN"/>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-background tracking-tight">Selamat Datang</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-sm">Masuk ke sistem manajemen kerja berbasis AI Anda untuk melanjutkan.</p>
+</div>
+<form class="flex flex-col gap-stack-md bg-surface-container/50 backdrop-blur-md p-gutter rounded-3xl shadow-xl border border-white/5 relative overflow-hidden group transition-all duration-500 hover:bg-surface-container/70">
+<div class="flex flex-col gap-stack-xs">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-[10px]" for="email">Email Perusahaan</label>
+<div class="relative group/input">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50 group-focus-within/input:text-primary transition-colors text-lg">mail</span>
+<input class="w-full bg-surface/50 border border-white/5 rounded-xl py-3 pl-10 pr-4 text-on-background font-body-sm text-body-sm focus:outline-none focus:border-primary/50 focus:bg-surface transition-all placeholder:text-on-surface-variant/30" id="email" placeholder="nama@perusahaan.com" required="" type="email"/>
+</div>
+</div>
+<div class="flex flex-col gap-stack-xs relative">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-[10px]" for="password">Kata Sandi</label>
+<a class="font-label-sm text-label-sm text-primary hover:text-primary-fixed transition-colors" href="#">Lupa sandi?</a>
+</div>
+<div class="relative group/input">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50 group-focus-within/input:text-primary transition-colors text-lg">lock</span>
+<input class="w-full bg-surface/50 border border-white/5 rounded-xl py-3 pl-10 pr-10 text-on-background font-body-sm text-body-sm focus:outline-none focus:border-primary/50 focus:bg-surface transition-all placeholder:text-on-surface-variant/30" id="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-on-surface transition-colors focus:outline-none" onclick="togglePassword()" type="button">
+<span class="material-symbols-outlined text-lg" id="toggleIcon">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<input class="w-4 h-4 rounded bg-surface border-white/10 text-primary focus:ring-primary focus:ring-offset-background" id="remember" type="checkbox"/>
+<label class="font-body-sm text-body-sm text-on-surface-variant cursor-pointer select-none" for="remember">Ingat saya selama 30 hari</label>
+</div>
+<button class="mt-4 w-full bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-label-md text-label-md py-3.5 rounded-xl shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_25px_rgba(79,70,229,0.5)] transition-all flex items-center justify-center gap-2 relative overflow-hidden group/btn" type="submit">
+<span class="relative z-10">Masuk ke Dashboard</span>
+<span class="material-symbols-outlined relative z-10 text-sm group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700"></div>
+</button>
+</form>
+<div class="flex flex-col gap-stack-md mt-4">
+<div class="flex items-center gap-4">
+<div class="flex-1 h-px bg-white/5"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant/50 uppercase tracking-widest">Atau lanjutkan dengan</span>
+<div class="flex-1 h-px bg-white/5"></div>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<button class="bg-surface-container/30 hover:bg-surface-container/60 border border-white/5 rounded-xl py-3 flex items-center justify-center transition-all group">
+<svg class="w-5 h-5 text-on-surface-variant group-hover:text-on-background transition-colors" fill="currentColor" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+</button>
+<button class="bg-surface-container/30 hover:bg-surface-container/60 border border-white/5 rounded-xl py-3 flex items-center justify-center transition-all group">
+<svg class="w-5 h-5 text-on-surface-variant group-hover:text-on-background transition-colors" fill="currentColor" viewbox="0 0 21 21">
+<path d="M0 0h10v10H0V0zm11 0h10v10H11V0zM0 11h10v10H0V11zm11 0h10v10H11V11z" fill="#00a4ef"></path>
+</svg>
+</button>
+<button class="bg-surface-container/30 hover:bg-surface-container/60 border border-white/5 rounded-xl py-3 flex flex-col items-center justify-center transition-all group">
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-on-background transition-colors font-bold tracking-wider">SSO</span>
+</button>
+</div>
+</div>
+<div class="text-center mt-4">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Belum memiliki akun? <a class="text-primary hover:text-primary-fixed transition-colors font-label-md" href="#">Minta Akses</a>
+</p>
+</div>
+<div class="absolute -bottom-16 left-1/2 -translate-x-1/2 w-full text-center flex items-center justify-center gap-2 text-on-surface-variant/40">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+<span class="font-mono text-[10px] uppercase tracking-widest">Data Anda aman dengan enkripsi enterprise</span>
+</div>
+</div>
+</div>
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const icon = document.getElementById('toggleIcon');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.textContent = 'visibility_off';
+        } else {
+            passwordInput.type = 'password';
+            icon.textContent = 'visibility';
+        }
+    }
+</script></main></body></html>

@@ -164,4 +164,24 @@ class Project extends Model
     {
         return $this->hasMany(Label::class);
     }
+
+    /**
+     * Get all sprints for this project.
+     *
+     * @return HasMany<Sprint, $this>
+     */
+    public function sprints(): HasMany
+    {
+        return $this->hasMany(Sprint::class)->orderBy('sequence_number');
+    }
+
+    /**
+     * Get the active sprint of this project.
+     *
+     * @return HasOne<Sprint, $this>
+     */
+    public function activeSprint(): HasOne
+    {
+        return $this->hasOne(Sprint::class)->where('status', 'active');
+    }
 }

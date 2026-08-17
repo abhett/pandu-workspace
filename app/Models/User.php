@@ -13,6 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @property int $id
@@ -38,7 +39,7 @@ use Illuminate\Support\Str;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The "booted" method of the model.
@@ -184,5 +185,15 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Task::class, 'task_assignees')
             ->withPivot(['assigned_at', 'assigned_by']);
+    }
+
+    /**
+     * Get all attachments uploaded by the user.
+     *
+     * @return HasMany<Attachment, $this>
+     */
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(Attachment::class, 'uploader_id');
     }
 }

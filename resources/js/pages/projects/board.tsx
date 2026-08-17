@@ -330,6 +330,13 @@ export default function KanbanBoardPage({
                             <span>Papan Kanban</span>
                         </Link>
                         <Link
+                            href={`/projects/${project.id}/backlog`}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+                        >
+                            <Layers className="h-3.5 w-3.5" />
+                            <span>Backlog & Sprints</span>
+                        </Link>
+                        <Link
                             href={`/projects/${project.id}/tasks`}
                             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
                         >

@@ -1,0 +1,421 @@
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"zinc-surface":"#09090B","on-secondary-fixed":"#09006b","primary":"#c3c0ff","primary-container":"#4f46e5","on-tertiary-container":"#67f4b7","on-primary-fixed":"#0f0069","surface-container":"#102034","secondary-fixed-dim":"#c1c1ff","surface-dim":"#031427","tertiary-fixed-dim":"#4edea3","zinc-border":"#27272A","tertiary-container":"#006e4b","on-secondary":"#1400a8","error":"#ffb4ab","status-todo":"#3B82F6","tertiary":"#4edea3","surface-container-lowest":"#000f21","error-container":"#93000a","on-error":"#690005","status-backlog":"#94A3B8","tertiary-fixed":"#6ffbbe","secondary":"#c1c1ff","primary-fixed-dim":"#c3c0ff","inverse-on-surface":"#213145","on-surface-variant":"#c7c4d8","secondary-container":"#2f27d0","secondary-fixed":"#e1dfff","outline-variant":"#464555","on-tertiary-fixed-variant":"#005236","inverse-primary":"#4d44e3","on-tertiary-fixed":"#002113","outline":"#918fa1","status-blocked":"#EF4444","surface-container-highest":"#26364a","surface-bright":"#2a3a4f","on-primary":"#1d00a5","on-surface":"#d3e4fe","on-secondary-fixed-variant":"#2c24ce","background":"#031427","surface-tint":"#c3c0ff","status-review":"#8B5CF6","surface-variant":"#26364a","on-primary-container":"#dad7ff","on-error-container":"#ffdad6","on-background":"#d3e4fe","on-primary-fixed-variant":"#3323cc","warning-amber":"#F59E0B","status-done":"#10B981","surface":"#031427","on-secondary-container":"#b1b1ff","surface-container-low":"#0b1c30","inverse-surface":"#d3e4fe","status-cancelled":"#475569","on-tertiary":"#003824","status-inprogress":"#4F46E5","primary-fixed":"#e2dfff","surface-container-high":"#1b2b3f"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"unit":"8px","gutter":"24px","stack-sm":"8px","container-max":"1440px","stack-xs":"4px","margin-mobile":"16px","stack-lg":"24px","stack-md":"16px","margin-desktop":"32px"},"fontFamily":{"headline-lg-mobile":["Geist"],"mono":["Geist"],"label-md":["Geist"],"label-sm":["Geist"],"headline-md":["Geist"],"headline-sm":["Geist"],"body-sm":["Inter"],"body-lg":["Inter"],"headline-lg":["Geist"],"body-md":["Inter"],"display":["Geist"]},"fontSize":{"headline-lg-mobile":["24px",{"lineHeight":"32px","fontWeight":"600"}],"mono":["13px",{"lineHeight":"18px","fontWeight":"400"}],"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"500"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}],"body-sm":["14px",{"lineHeight":"20px","fontWeight":"400"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.04em","fontWeight":"700"}]}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/></head><body class="bg-background font-body-md text-on-background"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-low z-50 flex flex-col shadow-[1px_0_8px_rgba(0,0,0,0.08)]"><div class="p-stack-lg flex items-center gap-stack-sm"><img alt="AI Work Management Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6YI9EDXmf8KVe_LfPwXZiye_68CSFV_LA15ZRKCrAp4mYLwV3aZQHszhUVzcdUBflYsQNMrFUV_xxaPvY7iQospN7zrB0x_f_qOpyCLyAhptyAu8fWvVa7wdEdEjuaESDd_XdPfMdm5VBzsnYov81mN9cCJw9EXlMAZXyOAXCCZTI5O2T5CZRh_HB6A9TD6CoNz5zUImnzC46hN4RCTHy75-JhgYhdntkzRFHyB0refLX37YkiThN"/><span class="font-headline-sm text-primary tracking-tight">WMS AI</span></div><div class="px-stack-md mb-stack-md"><button class="w-full flex items-center justify-between p-stack-sm bg-surface-container-high rounded-xl text-on-surface-variant hover:text-on-surface transition-colors"><div class="flex items-center gap-stack-sm"><span class="material-symbols-outlined text-primary">corporate_fare</span><span class="font-label-md truncate">Nusantara Digital</span></div><span class="material-symbols-outlined">unfold_more</span></button></div><div class="px-stack-md mb-stack-md"><button class="w-full flex items-center justify-between p-stack-sm border border-outline-variant rounded-xl text-on-surface-variant hover:border-primary transition-all"><div class="flex items-center gap-stack-sm"><span class="material-symbols-outlined text-sm">search</span><span class="font-label-sm">Cari...</span></div><span class="font-mono text-xs opacity-50 px-1 border border-outline-variant rounded">Cmd+K</span></button></div><nav class="flex-1 px-stack-md overflow-y-auto space-y-stack-xs" data-active-classes="bg-primary-container text-on-primary-container font-medium"><a class="flex items-center gap-stack-sm px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all" data-path="home" href="#"><span class="material-symbols-outlined">home</span><span class="font-label-md">Home</span></a><a class="flex items-center gap-stack-sm px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all" data-path="my-work" href="#"><span class="material-symbols-outlined">task_alt</span><span class="font-label-md">Pekerjaan Saya</span></a><a class="flex items-center gap-stack-sm px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all" data-path="inbox" href="#"><span class="material-symbols-outlined">inbox</span><span class="font-label-md">Kotak Masuk</span></a><div class="py-stack-sm"><p class="px-stack-sm font-label-sm text-outline uppercase tracking-widest mb-stack-xs">Favorit</p><a aria-current="page" class="flex items-center gap-stack-sm px-stack-sm py-2 rounded-lg transition-all bg-primary-container text-on-primary-container font-medium" data-path="project-details" href="#"><span class="material-symbols-outlined text-status-inprogress">folder_special</span><span class="font-label-md truncate">WMS - AI Platform</span></a></div><div class="space-y-stack-xs"><a class="flex items-center gap-stack-sm px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all" data-path="projects" href="#"><span class="material-symbols-outlined">list_alt</span><span class="font-label-md">Proyek</span></a><a class="flex items-center gap-stack-sm px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all" data-path="portfolio" href="#"><span class="material-symbols-outlined">pie_chart</span><span class="font-label-md">Portofolio</span></a><a class="flex items-center gap-stack-sm px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all" data-path="teams" href="#"><span class="material-symbols-outlined">groups</span><span class="font-label-md">Tim</span></a><a class="flex items-center gap-stack-sm px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all" data-path="reports" href="#"><span class="material-symbols-outlined">analytics</span><span class="font-label-md">Laporan</span></a></div><div class="pt-stack-md mt-stack-md border-t border-outline-variant/30"><a class="flex items-center gap-stack-sm px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all" data-path="ai-assistant" href="#"><span class="material-symbols-outlined text-tertiary">auto_awesome</span><span class="font-label-md">Asisten AI</span></a><a class="flex items-center gap-stack-sm px-stack-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-all" data-path="automation" href="#"><span class="material-symbols-outlined">bolt</span><span class="font-label-md">Otomasi</span></a></div></nav><div class="mt-auto p-stack-md space-y-stack-xs border-t border-outline-variant/30"><div class="flex items-center justify-between px-stack-sm py-2 text-on-surface-variant"><div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-status-done"></div><span class="text-[10px] uppercase font-bold tracking-widest">Connected</span></div><span class="material-symbols-outlined text-sm">help</span></div><div class="flex items-center gap-stack-sm px-stack-sm py-2 rounded-xl bg-surface-container-high"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEZ2pKbzvnY_f9p26WHBoMcOKOuELVHkOhW75YopHoLWv4cPjmJArXoAckFRxmc3Er4ZMk9iAXd__CbBmcZ1q8NCceup1loacrxLWcMKFxlaJww-a_cM4kFza1fU0jcxF4GUBum_4Q6D1rfWkir6gny-_J33HirvxTWl9K3tFwzA4cUwee4KgSR04vJkNi2oazJ690B9T0el_2iSK8DxreEHP_4aiosPtznKUHBmS6no1pPEvzs_a6"/><div class="flex-1 min-w-0"><p class="font-label-md text-on-surface truncate">Andi Pratama</p><p class="font-label-sm text-on-surface-variant truncate">Admin</p></div><button class="material-symbols-outlined text-on-surface-variant">settings</button></div></div></aside><div class="pl-72 flex flex-col min-h-screen"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/80 backdrop-blur-xl z-40 border-b border-outline-variant/10 flex items-center justify-between px-margin-desktop"><div class="flex flex-col"><nav class="flex items-center gap-1 text-[10px] uppercase font-bold tracking-tighter text-outline"><span class="hover:text-primary transition-colors cursor-pointer">Proyek</span><span class="material-symbols-outlined text-xs">chevron_right</span><span class="text-on-surface-variant">WMS - AI Platform</span></nav><h1 class="font-headline-sm text-on-surface leading-tight">Ringkasan Proyek</h1></div><div class="flex items-center gap-stack-md"><div class="flex -space-x-2 mr-stack-sm"><img class="w-7 h-7 rounded-full border-2 border-surface object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEZ2pKbzvnY_f9p26WHBoMcOKOuELVHkOhW75YopHoLWv4cPjmJArXoAckFRxmc3Er4ZMk9iAXd__CbBmcZ1q8NCceup1loacrxLWcMKFxlaJww-a_cM4kFza1fU0jcxF4GUBum_4Q6D1rfWkir6gny-_J33HirvxTWl9K3tFwzA4cUwee4KgSR04vJkNi2oazJ690B9T0el_2iSK8DxreEHP_4aiosPtznKUHBmS6no1pPEvzs_a6"/><div class="w-7 h-7 rounded-full border-2 border-surface bg-primary-container flex items-center justify-center text-[10px] font-bold text-on-primary-container">+3</div></div><div class="h-4 w-[1px] bg-outline-variant mx-2"></div><button class="p-2 hover:bg-surface-container-high rounded-full transition-colors relative"><span class="material-symbols-outlined text-on-surface-variant">notifications</span><span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span></button><button class="bg-primary-container text-on-primary-container px-stack-md py-2 rounded-lg font-label-md flex items-center gap-1 hover:brightness-110 transition-all shadow-sm"><span class="material-symbols-outlined text-sm">add</span> Tambah</button></div></header><main class="flex-1 pt-16 bg-background relative px-margin-desktop py-stack-lg"><div class="flex flex-col w-full gap-stack-lg">
+<!-- Header Section -->
+<div class="flex flex-col gap-stack-sm md:flex-row md:items-end justify-between w-full pb-stack-lg border-b border-zinc-border/50">
+<div class="flex flex-col max-w-2xl gap-stack-sm">
+<div class="flex items-center gap-stack-sm">
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-mono text-xs uppercase tracking-widest flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-status-inprogress animate-pulse"></span>
+          System Status
+        </span>
+</div>
+<h2 class="font-display text-display text-on-background">Loading & Feedback States</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+        Demonstration of various progressive loading patterns, skeleton screens, and inline feedback mechanisms used to communicate system state during high-latency operations.
+      </p>
+</div>
+<div class="flex gap-stack-md mt-stack-md md:mt-0">
+<button class="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-bright transition-colors font-label-md flex items-center gap-2 border border-zinc-border" onclick="triggerToast('success')">
+<span class="material-symbols-outlined text-status-done text-sm">check_circle</span>
+        Success
+      </button>
+<button class="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-bright transition-colors font-label-md flex items-center gap-2 border border-zinc-border" onclick="triggerToast('error')">
+<span class="material-symbols-outlined text-error text-sm">error</span>
+        Error
+      </button>
+<button class="px-4 py-2 rounded-lg bg-primary text-on-primary hover:brightness-110 transition-colors font-label-md flex items-center gap-2" onclick="toggleSkeletons()">
+<span class="material-symbols-outlined text-sm">refresh</span>
+        Toggle Content
+      </button>
+</div>
+</div>
+<!-- Main Grid Area -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter w-full">
+<!-- Left Column: Notifications & Spinners -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<!-- Inline Alerts Card -->
+<div class="bg-surface-container rounded-xl p-stack-lg border border-zinc-border flex flex-col gap-stack-md relative overflow-hidden group">
+<!-- Decorative bg glow -->
+<div class="absolute -top-12 -right-12 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-500 pointer-events-none"></div>
+<div class="flex items-center justify-between mb-stack-sm relative z-10">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">System Alerts</h3>
+<span class="material-symbols-outlined text-outline">notifications_active</span>
+</div>
+<div class="flex flex-col gap-stack-sm relative z-10">
+<!-- Info Alert -->
+<div class="flex items-start gap-stack-sm p-stack-sm rounded-lg bg-status-todo/10 border border-status-todo/20">
+<span class="material-symbols-outlined text-status-todo mt-0.5">info</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Update Available</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Version 2.4.1 is ready to install.</span>
+</div>
+</div>
+<!-- Warning Alert -->
+<div class="flex items-start gap-stack-sm p-stack-sm rounded-lg bg-warning-amber/10 border border-warning-amber/20">
+<span class="material-symbols-outlined text-warning-amber mt-0.5">warning</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">High Latency</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Database cluster A is responding slowly.</span>
+</div>
+</div>
+<!-- Error Alert -->
+<div class="flex items-start gap-stack-sm p-stack-sm rounded-lg bg-error-container/20 border border-error/20">
+<span class="material-symbols-outlined text-error mt-0.5">report</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-error-container">Sync Failed</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Could not connect to external API endpoint.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Spinner Variations Card -->
+<div class="bg-surface-container rounded-xl p-stack-lg border border-zinc-border flex flex-col gap-stack-md">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-stack-sm">Active Processes</h3>
+<div class="grid grid-cols-2 gap-stack-md">
+<!-- Circular Indeterminate -->
+<div class="flex flex-col items-center justify-center p-stack-md bg-surface-container-high rounded-lg border border-zinc-border/50 gap-stack-sm">
+<svg class="animate-spin w-8 h-8 text-primary" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+<span class="font-mono text-mono text-on-surface-variant">Data Sync</span>
+</div>
+<!-- Linear Determinate -->
+<div class="flex flex-col items-center justify-center p-stack-md bg-surface-container-high rounded-lg border border-zinc-border/50 gap-stack-sm w-full">
+<div class="w-full bg-surface rounded-full h-1.5 overflow-hidden">
+<div class="bg-tertiary h-1.5 rounded-full" style="width: 45%"></div>
+</div>
+<div class="flex justify-between w-full font-mono text-xs text-on-surface-variant">
+<span>Model Build</span>
+<span>45%</span>
+</div>
+</div>
+<!-- Pulse Dot -->
+<div class="flex flex-col items-center justify-center p-stack-md bg-surface-container-high rounded-lg border border-zinc-border/50 gap-stack-sm">
+<div class="flex gap-1.5">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse" style="animation-delay: 0s"></div>
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse" style="animation-delay: 0.2s"></div>
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse" style="animation-delay: 0.4s"></div>
+</div>
+<span class="font-mono text-mono text-on-surface-variant mt-2">Connecting</span>
+</div>
+<!-- Semantic Spinner -->
+<div class="flex flex-col items-center justify-center p-stack-md bg-surface-container-high rounded-lg border border-zinc-border/50 gap-stack-sm relative">
+<svg class="animate-spin w-8 h-8 text-status-inprogress" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+<span class="material-symbols-outlined absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[calc(50%+12px)] text-sm text-status-inprogress">psychology</span>
+<span class="font-mono text-mono text-on-surface-variant mt-1">AI Infer</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Bento Grid Skeletons -->
+<div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-gutter w-full">
+<!-- Metric Cards (Skeleton) -->
+<div class="col-span-1 md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-gutter">
+<!-- Metric 1 -->
+<div class="bg-surface-container rounded-xl p-stack-lg border border-zinc-border flex flex-col gap-stack-md relative overflow-hidden skeleton-wrapper">
+<div class="shimmer-layer absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-surface-bright/10 to-transparent z-10 pointer-events-none"></div>
+<div class="flex justify-between items-start w-full">
+<div class="w-10 h-10 rounded-lg bg-surface-bright animate-pulse"></div>
+<div class="w-16 h-5 rounded bg-surface-bright animate-pulse"></div>
+</div>
+<div class="flex flex-col gap-2 mt-4">
+<div class="w-24 h-8 rounded-lg bg-surface-bright animate-pulse"></div>
+<div class="w-32 h-4 rounded bg-surface-bright animate-pulse"></div>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="bg-surface-container rounded-xl p-stack-lg border border-zinc-border flex flex-col gap-stack-md relative overflow-hidden skeleton-wrapper">
+<div class="shimmer-layer absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-surface-bright/10 to-transparent z-10 pointer-events-none"></div>
+<div class="flex justify-between items-start w-full">
+<div class="w-10 h-10 rounded-lg bg-surface-bright animate-pulse"></div>
+<div class="w-16 h-5 rounded bg-surface-bright animate-pulse"></div>
+</div>
+<div class="flex flex-col gap-2 mt-4">
+<div class="w-20 h-8 rounded-lg bg-surface-bright animate-pulse"></div>
+<div class="w-36 h-4 rounded bg-surface-bright animate-pulse"></div>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="bg-surface-container rounded-xl p-stack-lg border border-zinc-border flex flex-col gap-stack-md relative overflow-hidden skeleton-wrapper">
+<div class="shimmer-layer absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-surface-bright/10 to-transparent z-10 pointer-events-none"></div>
+<div class="flex justify-between items-start w-full">
+<div class="w-10 h-10 rounded-lg bg-surface-bright animate-pulse"></div>
+<div class="w-16 h-5 rounded bg-surface-bright animate-pulse"></div>
+</div>
+<div class="flex flex-col gap-2 mt-4">
+<div class="w-28 h-8 rounded-lg bg-surface-bright animate-pulse"></div>
+<div class="w-24 h-4 rounded bg-surface-bright animate-pulse"></div>
+</div>
+</div>
+</div>
+<!-- Chart Area (Skeleton) -->
+<div class="col-span-1 md:col-span-2 bg-surface-container rounded-xl p-stack-lg border border-zinc-border relative overflow-hidden skeleton-wrapper h-80 flex flex-col gap-stack-md">
+<div class="shimmer-layer absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-surface-bright/10 to-transparent z-10 pointer-events-none"></div>
+<div class="flex justify-between items-end w-full">
+<div class="flex flex-col gap-2">
+<div class="w-48 h-6 rounded bg-surface-bright animate-pulse"></div>
+<div class="w-32 h-4 rounded bg-surface-bright animate-pulse"></div>
+</div>
+<div class="flex gap-2">
+<div class="w-16 h-8 rounded-lg bg-surface-bright animate-pulse"></div>
+<div class="w-16 h-8 rounded-lg bg-surface-bright animate-pulse"></div>
+</div>
+</div>
+<!-- Bar Chart Skeleton -->
+<div class="flex-1 w-full mt-stack-md flex items-end justify-between gap-2 border-b border-surface-bright pb-2">
+<!-- Dynamic skeleton bars generated via JS to vary heights slightly -->
+<div class="w-full bg-surface-bright rounded-t-sm h-[30%] animate-pulse"></div>
+<div class="w-full bg-surface-bright rounded-t-sm h-[50%] animate-pulse"></div>
+<div class="w-full bg-surface-bright rounded-t-sm h-[20%] animate-pulse"></div>
+<div class="w-full bg-surface-bright rounded-t-sm h-[70%] animate-pulse"></div>
+<div class="w-full bg-surface-bright rounded-t-sm h-[45%] animate-pulse"></div>
+<div class="w-full bg-surface-bright rounded-t-sm h-[80%] animate-pulse"></div>
+<div class="w-full bg-surface-bright rounded-t-sm h-[60%] animate-pulse"></div>
+<div class="w-full bg-surface-bright rounded-t-sm h-[90%] animate-pulse"></div>
+<div class="w-full bg-surface-bright rounded-t-sm h-[40%] animate-pulse"></div>
+<div class="w-full bg-surface-bright rounded-t-sm h-[75%] animate-pulse"></div>
+<div class="w-full bg-surface-bright rounded-t-sm h-[55%] animate-pulse"></div>
+<div class="w-full bg-surface-bright rounded-t-sm h-[85%] animate-pulse"></div>
+</div>
+</div>
+<!-- List View (Skeleton) -->
+<div class="col-span-1 bg-surface-container rounded-xl p-stack-lg border border-zinc-border relative overflow-hidden skeleton-wrapper h-80 flex flex-col gap-stack-lg">
+<div class="shimmer-layer absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-surface-bright/10 to-transparent z-10 pointer-events-none"></div>
+<div class="flex justify-between items-center w-full mb-2">
+<div class="w-32 h-6 rounded bg-surface-bright animate-pulse"></div>
+<div class="w-8 h-8 rounded-full bg-surface-bright animate-pulse"></div>
+</div>
+<div class="flex flex-col gap-stack-md w-full flex-1">
+<!-- List Item 1 -->
+<div class="flex items-center gap-stack-md w-full">
+<div class="w-10 h-10 rounded-full bg-surface-bright animate-pulse flex-shrink-0"></div>
+<div class="flex flex-col gap-2 w-full">
+<div class="w-3/4 h-4 rounded bg-surface-bright animate-pulse"></div>
+<div class="w-1/2 h-3 rounded bg-surface-bright animate-pulse"></div>
+</div>
+</div>
+<!-- List Item 2 -->
+<div class="flex items-center gap-stack-md w-full">
+<div class="w-10 h-10 rounded-full bg-surface-bright animate-pulse flex-shrink-0"></div>
+<div class="flex flex-col gap-2 w-full">
+<div class="w-2/3 h-4 rounded bg-surface-bright animate-pulse"></div>
+<div class="w-1/3 h-3 rounded bg-surface-bright animate-pulse"></div>
+</div>
+</div>
+<!-- List Item 3 -->
+<div class="flex items-center gap-stack-md w-full">
+<div class="w-10 h-10 rounded-full bg-surface-bright animate-pulse flex-shrink-0"></div>
+<div class="flex flex-col gap-2 w-full">
+<div class="w-4/5 h-4 rounded bg-surface-bright animate-pulse"></div>
+<div class="w-1/2 h-3 rounded bg-surface-bright animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Detail Panel (Skeleton) -->
+<div class="col-span-1 bg-surface-container rounded-xl p-stack-lg border border-zinc-border relative overflow-hidden skeleton-wrapper h-80 flex flex-col gap-stack-md">
+<div class="shimmer-layer absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-surface-bright/10 to-transparent z-10 pointer-events-none"></div>
+<div class="w-full h-32 rounded-lg bg-surface-bright animate-pulse mb-2"></div>
+<div class="flex items-center gap-3 w-full mb-2">
+<div class="w-16 h-6 rounded-full bg-surface-bright animate-pulse"></div>
+<div class="w-16 h-6 rounded-full bg-surface-bright animate-pulse"></div>
+</div>
+<div class="flex flex-col gap-2 w-full flex-1">
+<div class="w-full h-3 rounded bg-surface-bright animate-pulse"></div>
+<div class="w-[90%] h-3 rounded bg-surface-bright animate-pulse"></div>
+<div class="w-[80%] h-3 rounded bg-surface-bright animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Toast Container (Fixed) -->
+<div class="fixed bottom-margin-desktop right-margin-desktop z-50 flex flex-col gap-stack-sm items-end pointer-events-none" id="toast-container">
+<!-- Toasts injected here -->
+</div>
+</div>
+<style>
+  /* Base animation for shimmer effect */
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  .shimmer-layer {
+    animation: shimmer 2s infinite linear;
+  }
+
+  /* Toast entrance/exit animations */
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  
+  @keyframes fadeOutRight {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+  }
+
+  .toast-enter {
+    animation: slideInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .toast-exit {
+    animation: fadeOutRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+</style>
+<script>
+  // Toast Notification Logic
+  function triggerToast(type) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    
+    // Base classes
+    toast.className = 'toast-enter pointer-events-auto flex items-center gap-stack-sm px-stack-md py-stack-sm rounded-xl shadow-xl border bg-surface-container-high text-on-surface min-w-[300px] max-w-sm relative overflow-hidden group';
+    
+    let icon, title, message, borderColor, iconColor, bgGlow;
+    
+    if (type === 'success') {
+      icon = 'check_circle';
+      title = 'Operation Successful';
+      message = 'Data has been synchronized across all nodes.';
+      borderColor = 'border-status-done/30';
+      iconColor = 'text-status-done';
+      bgGlow = 'bg-status-done/10';
+    } else if (type === 'error') {
+      icon = 'error';
+      title = 'Sync Failed';
+      message = 'Timeout reached while attempting to connect.';
+      borderColor = 'border-error/30';
+      iconColor = 'text-error';
+      bgGlow = 'bg-error/10';
+    }
+
+    toast.classList.add(borderColor);
+
+    toast.innerHTML = `
+      <div class="absolute left-0 top-0 bottom-0 w-1 ${bgGlow}"></div>
+      <span class="material-symbols-outlined ${iconColor} text-xl">${icon}</span>
+      <div class="flex flex-col flex-1 mr-4">
+        <span class="font-label-md text-label-md">${title}</span>
+        <span class="font-body-sm text-body-sm text-on-surface-variant truncate">${message}</span>
+      </div>
+      <button onclick="this.parentElement.remove()" class="p-1 rounded hover:bg-surface-bright text-on-surface-variant transition-colors absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
+        <span class="material-symbols-outlined text-sm">close</span>
+      </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+      if(toast.parentElement) {
+        toast.classList.remove('toast-enter');
+        toast.classList.add('toast-exit');
+        setTimeout(() => {
+          if(toast.parentElement) toast.remove();
+        }, 300); // Wait for exit animation
+      }
+    }, 4000);
+  }
+
+  // Toggle Skeletons Logic (Mock actual content loading)
+  let isSkeleton = true;
+  function toggleSkeletons() {
+    const wrappers = document.querySelectorAll('.skeleton-wrapper');
+    
+    if(isSkeleton) {
+      // Switch to Content (Simulated with placeholders)
+      wrappers.forEach(w => {
+        w.dataset.originalHtml = w.innerHTML; // Save skeleton state
+        
+        // Simple heuristic to determine which card it is based on DOM position
+        // In a real app, you'd manage state properly. This is just for visual demo.
+        if(w.classList.contains('col-span-1') && !w.classList.contains('md:col-span-2') && w.querySelector('.rounded-full')) {
+           // List View
+           w.innerHTML = `
+            <div class="flex justify-between items-center w-full mb-2">
+              <h4 class="font-headline-sm text-headline-sm text-on-surface">Recent Activity</h4>
+              <button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface">more_vert</button>
+            </div>
+            <div class="flex flex-col gap-stack-md w-full flex-1 overflow-y-auto pr-2">
+              <div class="flex items-center gap-stack-md w-full group cursor-pointer p-2 -ml-2 rounded-lg hover:bg-surface-bright/50 transition-colors">
+                <img src="placeholder" data-alt="A small circular avatar showing a professional headshot of a woman against a dark background, cinematic lighting" class="w-10 h-10 rounded-full object-cover flex-shrink-0 border border-zinc-border">
+                <div class="flex flex-col flex-1 min-w-0">
+                  <span class="font-label-md text-label-md text-on-surface truncate">Sarah Jenkins</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant truncate">Merged PR #492 into main</span>
+                </div>
+                <span class="font-mono text-mono text-on-surface-variant/50 text-xs">2m</span>
+              </div>
+              <div class="flex items-center gap-stack-md w-full group cursor-pointer p-2 -ml-2 rounded-lg hover:bg-surface-bright/50 transition-colors">
+                <div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-sm flex-shrink-0">
+                  <span class="material-symbols-outlined text-sm">commit</span>
+                </div>
+                <div class="flex flex-col flex-1 min-w-0">
+                  <span class="font-label-md text-label-md text-on-surface truncate">System Auto-Deploy</span>
+                  <span class="font-body-sm text-body-sm text-on-surface-variant truncate">Deployed v2.4.0 successfully</span>
+                </div>
+                <span class="font-mono text-mono text-on-surface-variant/50 text-xs">1h</span>
+              </div>
+            </div>
+           `;
+        } else if (w.classList.contains('col-span-1') && !w.classList.contains('md:col-span-2')) {
+           // Detail panel
+           w.innerHTML = `
+            <div class="w-full h-32 rounded-lg bg-cover bg-center mb-stack-sm relative overflow-hidden" style="background-image: url('placeholder')" data-alt="A macro shot of a sleek, futuristic circuit board glowing with deep indigo and emerald lights, high contrast, cyber aesthetic">
+               <div class="absolute inset-0 bg-gradient-to-t from-surface-container to-transparent"></div>
+               <span class="absolute bottom-2 left-2 px-2 py-1 bg-surface-container-high/80 backdrop-blur rounded font-mono text-[10px] text-tertiary border border-zinc-border/50 uppercase tracking-wider">Active Model</span>
+            </div>
+            <h4 class="font-headline-sm text-headline-sm text-on-surface leading-tight mb-1">Nexus Core Engine</h4>
+            <div class="flex items-center gap-2 mb-stack-md">
+              <span class="px-2 py-0.5 rounded bg-status-done/10 text-status-done border border-status-done/20 font-label-sm text-label-sm">Online</span>
+              <span class="font-mono text-xs text-on-surface-variant">v.9.4.2</span>
+            </div>
+            <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">
+              The primary orchestration engine responsible for distributing ML workloads across available cluster nodes. Currently operating at nominal capacity.
+            </p>
+           `;
+        } else {
+          // Just swap back the inner HTML loosely if it's the chart or metrics to save space in this demo, 
+          // or just leave them as skeletons for dramatic effect, but let's clear shimmer.
+          const shimmer = w.querySelector('.shimmer-layer');
+          if(shimmer) shimmer.remove();
+          
+          // Stop pulsing
+          const pulsingEls = w.querySelectorAll('.animate-pulse');
+          pulsingEls.forEach(el => {
+            el.classList.remove('animate-pulse');
+            // make them solid colors
+            el.classList.replace('bg-surface-bright', 'bg-surface-bright/50'); 
+          });
+        }
+      });
+      isSkeleton = false;
+    } else {
+      // Revert to skeletons
+      wrappers.forEach(w => {
+        if(w.dataset.originalHtml) {
+          w.innerHTML = w.dataset.originalHtml;
+        }
+      });
+      isSkeleton = true;
+    }
+  }
+</script></main></div></body></html>

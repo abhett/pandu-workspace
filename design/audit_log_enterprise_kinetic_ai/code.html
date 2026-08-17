@@ -1,0 +1,378 @@
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"secondary-fixed-dim":"#c1c1ff","on-secondary-container":"#b1b1ff","surface-variant":"#26364a","surface":"#031427","status-cancelled":"#475569","status-blocked":"#EF4444","error-container":"#93000a","inverse-surface":"#d3e4fe","surface-container":"#102034","outline-variant":"#464555","background":"#031427","tertiary":"#4edea3","error":"#ffb4ab","on-background":"#d3e4fe","on-tertiary-container":"#67f4b7","surface-dim":"#031427","on-tertiary":"#003824","surface-container-lowest":"#000f21","on-primary":"#1d00a5","zinc-surface":"#09090B","on-primary-fixed":"#0f0069","surface-container-highest":"#26364a","status-todo":"#3B82F6","primary-container":"#4f46e5","on-secondary":"#1400a8","on-surface-variant":"#c7c4d8","status-done":"#10B981","on-secondary-fixed":"#09006b","on-secondary-fixed-variant":"#2c24ce","primary-fixed":"#e2dfff","zinc-border":"#27272A","status-backlog":"#94A3B8","tertiary-container":"#006e4b","surface-container-high":"#1b2b3f","tertiary-fixed":"#6ffbbe","primary-fixed-dim":"#c3c0ff","inverse-primary":"#4d44e3","secondary-container":"#2f27d0","surface-bright":"#2a3a4f","warning-amber":"#F59E0B","on-primary-fixed-variant":"#3323cc","outline":"#918fa1","on-error":"#690005","inverse-on-surface":"#213145","status-review":"#8B5CF6","on-surface":"#d3e4fe","on-tertiary-fixed":"#002113","on-primary-container":"#dad7ff","surface-container-low":"#0b1c30","secondary-fixed":"#e1dfff","primary":"#c3c0ff","on-tertiary-fixed-variant":"#005236","secondary":"#c1c1ff","tertiary-fixed-dim":"#4edea3","surface-tint":"#c3c0ff","status-inprogress":"#4F46E5","on-error-container":"#ffdad6"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"stack-md":"16px","container-max":"1440px","margin-mobile":"16px","stack-xs":"4px","stack-sm":"8px","stack-lg":"24px","margin-desktop":"32px","gutter":"24px","unit":"8px"},"fontFamily":{"headline-sm":["Geist"],"mono":["Geist"],"label-sm":["Geist"],"headline-lg-mobile":["Geist"],"body-lg":["Inter"],"label-md":["Geist"],"display":["Geist"],"body-md":["Inter"],"headline-lg":["Geist"],"headline-md":["Geist"],"body-sm":["Inter"]},"fontSize":{"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}],"mono":["13px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","fontWeight":"600"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"500"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.04em","fontWeight":"700"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"body-sm":["14px",{"lineHeight":"20px","fontWeight":"400"}]}}}}</script><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-low z-50 flex flex-col border-r border-outline-variant/10 overflow-y-auto scrollbar-hide"><div class="p-stack-lg flex items-center gap-stack-sm"><img alt="Kinetic AI Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLtzYEc5FmeispUUsmDSxWEsstJ7UP3jMB8jP9CNMUgOvO3-ImuvhCYvKd0KFqhBQ6jvFzSa7VjCX4I5gKfr2VWaJA8Evhi8IC9aemwVYRyi4len5AwD0H3wcdoFNViZkxEob3dl9-8tmjIqeldFw0Z-VAr7PBP1pLI94nANv3Lsv-ogaNOvEd4WGiR-l7JPUS7trdqnS8igdaKHZ_o2vR48S7ySQ1UI55VdEcBKvm-PUdrtN6ZXILYOAA"/><span class="font-headline-sm text-headline-sm text-primary tracking-tight">Kinetic AI</span></div><nav class="flex-1 px-stack-md space-y-stack-xs" data-active-classes="bg-primary-container text-on-primary-container font-label-md"><div class="py-stack-sm text-label-sm uppercase tracking-widest text-outline px-stack-sm">Workspace</div><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group" data-path="general" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">settings</span>General</a><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="members" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">group</span>Members</a><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="teams" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">groups_3</span>Teams</a><div class="pt-stack-md pb-stack-sm text-label-sm uppercase tracking-widest text-outline px-stack-sm">Security & Policy</div><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="roles" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">admin_panel_settings</span>Roles</a><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="permissions" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">key</span>Permissions</a><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="security" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">shield</span>Security</a><div class="pt-stack-md pb-stack-sm text-label-sm uppercase tracking-widest text-outline px-stack-sm">Infrastructure</div><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="ai-providers" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">memory</span>AI Providers</a><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="storage" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">database</span>Storage</a><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="integrations" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">extension</span>Integrations</a><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="automation" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">bolt</span>Automation</a><div class="pt-stack-md pb-stack-sm text-label-sm uppercase tracking-widest text-outline px-stack-sm">Reporting</div><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="notifications" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">notifications</span>Notifications</a><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="audit-logs" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">receipt_long</span>Audit Logs</a><div class="pt-stack-md pb-stack-sm text-label-sm uppercase tracking-widest text-outline px-stack-sm">Finance & Data</div><a aria-current="page" class="flex items-center px-stack-sm py-stack-sm rounded-xl transition-all bg-primary-container text-on-primary-container font-label-md" data-path="billing" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">credit_card</span>Billing</a><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="usage" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">speed</span>Usage</a><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="data-retention" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">history</span>Data Retention</a><a class="flex items-center px-stack-sm py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="import-export" href="#"><span class="material-symbols-outlined mr-3 text-[20px]">sync_alt</span>Import/Export</a></nav></aside><div class="pl-72 flex flex-col min-h-screen"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-margin-desktop"><div class="flex items-center bg-surface-container px-stack-sm py-1.5 rounded-lg border border-outline-variant/10 w-96"><span class="material-symbols-outlined text-outline text-[18px]">search</span><input class="bg-transparent border-none focus:ring-0 text-body-sm w-full ml-2 text-on-surface placeholder-outline" placeholder="Search configuration..." type="text"/></div><div class="flex items-center gap-stack-lg"><div class="flex items-center gap-stack-sm"><span class="flex h-2 w-2 rounded-full bg-status-done"></span><span class="text-label-sm text-on-surface-variant">All systems operational</span></div><div class="flex items-center gap-stack-md"><button class="text-on-surface-variant hover:text-on-surface transition-colors p-stack-xs"><span class="material-symbols-outlined">help</span></button><button class="text-on-surface-variant hover:text-on-surface transition-colors p-stack-xs relative"><span class="material-symbols-outlined">notifications</span><span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span></button><div class="flex items-center gap-stack-sm ml-stack-sm pl-stack-md border-l border-outline-variant/20"><div class="flex flex-col items-end"><span class="text-label-md text-on-surface">Enterprise Admin</span><span class="text-label-sm text-on-surface-variant">Admin ID: 4920</span></div><img alt="Profile" class="w-9 h-9 rounded-full border border-primary/20" src="https://lh3.googleusercontent.com/aida/AP1WRLt-HBiFvm5HCwYwd3f1z6I9fbj9w7uLDAF0TrWVOSG2UB_XjuAlohUJGibOs87Vtd8QHLA6syhQ54b1LkIcjFt2cyZDyv9KRozh_VUohAJqruAxTg3Ah3aP-CBiLi4Bq66UDQpbTB3XTHGVT3OAN6Zd_qdxhYxb6WbKZcrpzAGW89kMEdgHjt8-UcXOVzN17neuoIt6U2KbSqOkPNvzW6ywAZ16DBLYZnSoASv-Q5XWToUXDUscbMcdh_k"/></div></div></div></header><main class="flex-1 pt-16 bg-surface p-margin-desktop max-w-container-max mx-auto w-full"><div class="flex flex-col w-full h-full max-h-full">
+<div class="flex justify-between items-center mb-stack-lg">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-stack-xs">Log Audit Sistem</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Lacak semua aktivitas dan perubahan keamanan dalam workspace Anda.</p>
+</div>
+<div class="flex gap-stack-sm">
+<button class="bg-surface-container-high hover:bg-surface-bright text-on-surface border border-outline-variant rounded-lg px-stack-md py-stack-sm font-label-md flex items-center transition-colors">
+<span class="material-symbols-outlined mr-2 text-[18px]">download</span>
+                Ekspor CSV
+            </button>
+<button class="bg-primary text-on-primary hover:brightness-110 rounded-lg px-stack-md py-stack-sm font-label-md flex items-center transition-all">
+<span class="material-symbols-outlined mr-2 text-[18px]">picture_as_pdf</span>
+                Ekspor Laporan PDF
+            </button>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="bg-surface-container border border-outline-variant/30 rounded-xl p-stack-md mb-stack-lg flex flex-wrap gap-stack-md items-end">
+<div class="flex-1 min-w-[200px]">
+<label class="block font-label-sm text-label-sm text-outline mb-stack-xs uppercase tracking-wider">Rentang Waktu</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-stack-sm top-1/2 -translate-y-1/2 text-outline-variant text-[18px]">calendar_today</span>
+<input class="w-full bg-surface border border-outline-variant/30 rounded-lg pl-10 pr-stack-sm py-stack-sm font-body-sm text-on-surface focus:border-primary focus:outline-none transition-colors" placeholder="7 Hari Terakhir" type="text"/>
+</div>
+</div>
+<div class="flex-1 min-w-[200px]">
+<label class="block font-label-sm text-label-sm text-outline mb-stack-xs uppercase tracking-wider">Aktor</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-stack-sm top-1/2 -translate-y-1/2 text-outline-variant text-[18px]">person</span>
+<input class="w-full bg-surface border border-outline-variant/30 rounded-lg pl-10 pr-stack-sm py-stack-sm font-body-sm text-on-surface focus:border-primary focus:outline-none transition-colors" placeholder="Semua Pengguna" type="text"/>
+</div>
+</div>
+<div class="flex-1 min-w-[200px]">
+<label class="block font-label-sm text-label-sm text-outline mb-stack-xs uppercase tracking-wider">Tipe Event</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-stack-sm top-1/2 -translate-y-1/2 text-outline-variant text-[18px]">category</span>
+<select class="w-full bg-surface border border-outline-variant/30 rounded-lg pl-10 pr-stack-sm py-stack-sm font-body-sm text-on-surface focus:border-primary focus:outline-none appearance-none transition-colors">
+<option>Semua Event</option>
+<option>Keamanan</option>
+<option>Akses</option>
+<option>Perubahan Data</option>
+</select>
+</div>
+</div>
+<div class="flex-1 min-w-[200px]">
+<label class="block font-label-sm text-label-sm text-outline mb-stack-xs uppercase tracking-wider">Status</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-stack-sm top-1/2 -translate-y-1/2 text-outline-variant text-[18px]">rule</span>
+<select class="w-full bg-surface border border-outline-variant/30 rounded-lg pl-10 pr-stack-sm py-stack-sm font-body-sm text-on-surface focus:border-primary focus:outline-none appearance-none transition-colors">
+<option>Semua Status</option>
+<option>Berhasil</option>
+<option>Gagal</option>
+</select>
+</div>
+</div>
+<div>
+<button aria-label="Filter Lanjutan" class="bg-surface-variant hover:bg-surface-container-highest text-on-surface-variant border border-outline-variant/30 rounded-lg p-stack-sm flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="bg-surface-container border border-outline-variant/30 rounded-xl overflow-hidden flex-1 flex flex-col min-h-0">
+<div class="overflow-x-auto overflow-y-auto flex-1">
+<table class="w-full text-left border-collapse whitespace-nowrap">
+<thead class="bg-surface-container-high sticky top-0 z-10 shadow-[0_1px_0_rgba(255,255,255,0.05)]">
+<tr>
+<th class="px-stack-md py-stack-sm font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium w-48">Waktu (WIB)</th>
+<th class="px-stack-md py-stack-sm font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium">Aktor</th>
+<th class="px-stack-md py-stack-sm font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium">Aksi</th>
+<th class="px-stack-md py-stack-sm font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium">Sumber Daya</th>
+<th class="px-stack-md py-stack-sm font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium">Alamat IP</th>
+<th class="px-stack-md py-stack-sm font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium">Status</th>
+<th class="px-stack-md py-stack-sm font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium w-16 text-right">Detail</th>
+</tr>
+</thead>
+<tbody class="font-body-sm divide-y divide-outline-variant/10 text-on-surface">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-highest/50 transition-colors group cursor-pointer" onclick="document.getElementById('audit-drawer').classList.remove('translate-x-full')">
+<td class="px-stack-md py-stack-sm">
+<div class="font-mono text-mono text-on-surface-variant">24 Okt 2023, 14:32:01</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="flex items-center gap-stack-sm">
+<img class="w-6 h-6 rounded-full object-cover" data-alt="Corporate headshot of an Asian male executive in his 30s with short dark hair, wearing a dark grey suit jacket and crisp white shirt, neutral background, professional studio lighting, hyper-realistic, 8k resolution, maintaining kinetic enterprise dark mode aesthetics" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq1Yhiy0BQG-NdaL6bVPv2VpWbdIRaT0Vj7PzejBEEXsRLVqRu9bXSdowVzGczsgUjCeaP4HQAbYVFVZNT4DnJkU3dgaiJJxiFUgRD9-GxmY0E7Jr0Qx2WCx177Us-dOtoVuKtHkGizEVkNxEZ2tRNTcUu7tSt4jg7LXEE9MbYGhtTSLJ2W32MzZ5omNCvTOFr9rUdDef7EpTlROU_6XmmGozi1JwVcbu29WxrOz6xOOlMhet_K_GC"/>
+<div>
+<div class="font-medium">Budi Santoso</div>
+<div class="text-[11px] text-outline">budi.s@kinetic.ai</div>
+</div>
+</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<span class="font-medium text-warning-amber">Update Permission</span>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="font-mono text-[12px] bg-surface rounded px-2 py-0.5 border border-outline-variant/20 inline-block text-on-surface-variant">role:admin_finance</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="font-mono text-mono text-on-surface-variant">192.168.1.105</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-status-done/10 border border-status-done/20">
+<span class="w-1.5 h-1.5 rounded-full bg-status-done"></span>
+<span class="text-[11px] font-medium text-status-done uppercase tracking-wider">Sukses</span>
+</div>
+</td>
+<td class="px-stack-md py-stack-sm text-right">
+<button class="text-outline hover:text-primary transition-colors opacity-0 group-hover:opacity-100 p-1">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-highest/50 transition-colors group cursor-pointer">
+<td class="px-stack-md py-stack-sm">
+<div class="font-mono text-mono text-on-surface-variant">24 Okt 2023, 14:15:22</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="flex items-center gap-stack-sm">
+<div class="w-6 h-6 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-label-sm border border-outline-variant/30">
+                                    SYS
+                                </div>
+<div>
+<div class="font-medium">System Automated</div>
+<div class="text-[11px] text-outline">cron_job_01</div>
+</div>
+</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<span class="font-medium text-status-done">Backup Database</span>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="font-mono text-[12px] bg-surface rounded px-2 py-0.5 border border-outline-variant/20 inline-block text-on-surface-variant">db_cluster_prod_01</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="font-mono text-mono text-on-surface-variant">10.0.0.12</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-status-done/10 border border-status-done/20">
+<span class="w-1.5 h-1.5 rounded-full bg-status-done"></span>
+<span class="text-[11px] font-medium text-status-done uppercase tracking-wider">Sukses</span>
+</div>
+</td>
+<td class="px-stack-md py-stack-sm text-right">
+<button class="text-outline hover:text-primary transition-colors opacity-0 group-hover:opacity-100 p-1">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-highest/50 transition-colors group cursor-pointer bg-error-container/5">
+<td class="px-stack-md py-stack-sm">
+<div class="font-mono text-mono text-on-surface-variant">24 Okt 2023, 13:58:45</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="flex items-center gap-stack-sm">
+<img class="w-6 h-6 rounded-full object-cover" data-alt="Corporate headshot of a Caucasian female manager in her 40s, wearing glasses and a navy blazer, confident expression, dark neutral background, studio lighting, hyper-realistic, 8k resolution, kinetic enterprise dark mode aesthetics" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1VIDrva5XsP7_rHRDfqDbwSGn5CZKQxGJUyZsFTs96NuDv56_Ec3iZZqKgMfS0Z9gxwxwQ8w-fiY20AOpvC3oB7Mu9vvhUB_0ZJidF5Q9cXya2ruSIk53XJsRCvidEz-U5MTOf0TMlwG01TqryvKzRBE-MtW_ie9DkHr5oRvVlGqTlHISN6fLRbILpSg6IMHiH9rKwGglZVwJWgu8PeYCyhpaJ3m3zuOMM-bDUp8FKCXL7E5BJ7f1"/>
+<div>
+<div class="font-medium">Sarah Jenkins</div>
+<div class="text-[11px] text-outline">s.jenkins@kinetic.ai</div>
+</div>
+</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<span class="font-medium text-status-blocked">Delete Project</span>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="font-mono text-[12px] bg-surface rounded px-2 py-0.5 border border-outline-variant/20 inline-block text-on-surface-variant">prj_q4_marketing</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="font-mono text-mono text-on-surface-variant">203.0.113.42</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-status-blocked/10 border border-status-blocked/20">
+<span class="w-1.5 h-1.5 rounded-full bg-status-blocked"></span>
+<span class="text-[11px] font-medium text-status-blocked uppercase tracking-wider">Gagal</span>
+</div>
+</td>
+<td class="px-stack-md py-stack-sm text-right">
+<button class="text-outline hover:text-primary transition-colors opacity-0 group-hover:opacity-100 p-1">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-highest/50 transition-colors group cursor-pointer">
+<td class="px-stack-md py-stack-sm">
+<div class="font-mono text-mono text-on-surface-variant">24 Okt 2023, 11:20:05</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="flex items-center gap-stack-sm">
+<img class="w-6 h-6 rounded-full object-cover" data-alt="Corporate headshot of an Asian male executive in his 30s with short dark hair, wearing a dark grey suit jacket and crisp white shirt, neutral background, professional studio lighting, hyper-realistic, 8k resolution, maintaining kinetic enterprise dark mode aesthetics" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqk2Jd7eesD4FDsseIDA7RXGTxzYjUXVdfETTQzJtrFD1k9p_4w33n42w4yv_XWz1OfLtLzqLzjdHAwfCmtdYHVb4Y_ac6Nxm0MrFgsvL9_miFkJMvphn-SD5417fA0wTDwPnYnRF04Gn43YlOBnM24svnm9JlQEmuhFmWkokj7g7cK93HxoHaAOlDnt3zy97q3M9FX0vPh8Tg832GTH2z-hDG60gm_GWWFqzYrQsTc3f80quSUgmT"/>
+<div>
+<div class="font-medium">Budi Santoso</div>
+<div class="text-[11px] text-outline">budi.s@kinetic.ai</div>
+</div>
+</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<span class="font-medium text-status-inprogress">Regenerate API Key</span>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="font-mono text-[12px] bg-surface rounded px-2 py-0.5 border border-outline-variant/20 inline-block text-on-surface-variant">api_key_prod_v2</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="font-mono text-mono text-on-surface-variant">192.168.1.105</div>
+</td>
+<td class="px-stack-md py-stack-sm">
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-status-done/10 border border-status-done/20">
+<span class="w-1.5 h-1.5 rounded-full bg-status-done"></span>
+<span class="text-[11px] font-medium text-status-done uppercase tracking-wider">Sukses</span>
+</div>
+</td>
+<td class="px-stack-md py-stack-sm text-right">
+<button class="text-outline hover:text-primary transition-colors opacity-0 group-hover:opacity-100 p-1">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="bg-surface-container-high border-t border-outline-variant/20 p-stack-sm flex items-center justify-between">
+<span class="font-body-sm text-outline ml-stack-sm">Menampilkan 1-4 dari 1,248 log</span>
+<div class="flex items-center gap-stack-xs mr-stack-sm">
+<button class="p-1 rounded text-outline-variant hover:text-on-surface hover:bg-surface-variant transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded bg-primary-container text-on-primary-container font-label-md flex items-center justify-center">1</button>
+<button class="w-8 h-8 rounded hover:bg-surface-variant text-on-surface-variant font-label-md flex items-center justify-center transition-colors">2</button>
+<button class="w-8 h-8 rounded hover:bg-surface-variant text-on-surface-variant font-label-md flex items-center justify-center transition-colors">3</button>
+<span class="text-outline-variant px-1">...</span>
+<button class="w-8 h-8 rounded hover:bg-surface-variant text-on-surface-variant font-label-md flex items-center justify-center transition-colors">125</button>
+<button class="p-1 rounded text-outline hover:text-on-surface hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Drawer / Detail View (Overlay) -->
+<div class="fixed inset-y-0 right-0 w-[600px] bg-surface-container-low border-l border-outline-variant/30 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col" id="audit-drawer">
+<!-- Drawer Header -->
+<div class="flex items-center justify-between p-stack-lg border-b border-outline-variant/20 bg-surface-container-low sticky top-0 z-10">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Detail Log Audit</h2>
+<div class="font-mono text-mono text-outline-variant mt-1">Req ID: req_8f72a9b3c4d5</div>
+</div>
+<div class="flex items-center gap-stack-sm">
+<button class="p-2 rounded-lg text-outline hover:text-on-surface hover:bg-surface-variant transition-colors" title="Ekspor Detail">
+<span class="material-symbols-outlined text-[20px]">download</span>
+</button>
+<button class="p-2 rounded-lg text-outline hover:text-on-surface hover:bg-surface-variant transition-colors" onclick="document.getElementById('audit-drawer').classList.add('translate-x-full')">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</div>
+<!-- Drawer Content -->
+<div class="flex-1 overflow-y-auto p-stack-lg space-y-stack-lg">
+<!-- Summary Section -->
+<div class="bg-surface-container rounded-xl p-stack-md border border-outline-variant/20">
+<div class="grid grid-cols-2 gap-stack-md">
+<div>
+<span class="block font-label-sm text-outline uppercase tracking-wider mb-1">Aksi</span>
+<div class="font-medium text-warning-amber">Update Permission</div>
+</div>
+<div>
+<span class="block font-label-sm text-outline uppercase tracking-wider mb-1">Status</span>
+<div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-status-done/10 border border-status-done/20">
+<span class="w-1.5 h-1.5 rounded-full bg-status-done"></span>
+<span class="text-[11px] font-medium text-status-done uppercase tracking-wider">Sukses</span>
+</div>
+</div>
+<div>
+<span class="block font-label-sm text-outline uppercase tracking-wider mb-1">Aktor</span>
+<div class="flex items-center gap-2 mt-1">
+<img class="w-5 h-5 rounded-full object-cover" data-alt="Corporate headshot of an Asian male executive in his 30s, thumbnail size, dark neutral background, studio lighting, hyper-realistic, 8k resolution, kinetic enterprise dark mode aesthetics" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ4ZeBzH2Z8Q2vffnWtX51T0emnBB8OvxLF_-ZSYsTpnA6JJ7iW6ubTOoSMOPpAs5vTYW8fBBzaIzUAcHeg3PNa3nTPR-t4V_SEPi4qloccchxXrCeZDd1Q3QCHTHMQs3EDoNzSu16l_LTUvfc1c24i-e0FNdZc0oJlIlNRtfM7RRe_2vLr_ezsd4RRatw7mmI4Y_j_ab35XlNUP10Ez6_Xo_mX9kSQbgg7pWtbxHazwDzyyiaq-Wq"/>
+<span class="font-body-sm text-on-surface">Budi Santoso</span>
+</div>
+</div>
+<div>
+<span class="block font-label-sm text-outline uppercase tracking-wider mb-1">Waktu</span>
+<div class="font-mono text-[13px] text-on-surface mt-1">24 Okt 2023, 14:32:01 WIB</div>
+</div>
+</div>
+</div>
+<!-- Request Details -->
+<div>
+<h3 class="font-label-md text-on-surface uppercase tracking-wider mb-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline">dns</span>
+                Informasi Request
+            </h3>
+<div class="bg-surface-container rounded-xl border border-outline-variant/20 overflow-hidden">
+<table class="w-full text-left border-collapse">
+<tbody class="font-mono text-[12px] divide-y divide-outline-variant/10">
+<tr>
+<td class="py-2 px-stack-sm text-outline w-1/3 border-r border-outline-variant/10 bg-surface-container-high/50">IP Address</td>
+<td class="py-2 px-stack-sm text-on-surface">192.168.1.105</td>
+</tr>
+<tr>
+<td class="py-2 px-stack-sm text-outline border-r border-outline-variant/10 bg-surface-container-high/50">User Agent</td>
+<td class="py-2 px-stack-sm text-on-surface text-wrap break-all">Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36</td>
+</tr>
+<tr>
+<td class="py-2 px-stack-sm text-outline border-r border-outline-variant/10 bg-surface-container-high/50">Resource URI</td>
+<td class="py-2 px-stack-sm text-on-surface">/api/v2/roles/admin_finance/permissions</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Diff Viewer -->
+<div>
+<h3 class="font-label-md text-on-surface uppercase tracking-wider mb-stack-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline">difference</span>
+                Riwayat Perubahan (JSON)
+            </h3>
+<div class="grid grid-cols-2 gap-px bg-outline-variant/30 border border-outline-variant/30 rounded-xl overflow-hidden">
+<!-- Before -->
+<div class="bg-surface-container flex flex-col">
+<div class="bg-status-blocked/10 border-b border-status-blocked/20 px-stack-sm py-1.5 flex items-center justify-between">
+<span class="font-label-sm text-status-blocked uppercase tracking-wider">Nilai Sebelum</span>
+<span class="material-symbols-outlined text-[14px] text-status-blocked">remove</span>
+</div>
+<pre class="p-stack-sm font-mono text-[11px] text-on-surface-variant overflow-x-auto whitespace-pre-wrap flex-1">{
+  "role_id": "admin_finance",
+  "permissions": [
+    "view_reports",
+    "export_data"
+  ],
+  "api_token_preview": "sk_test_51Nx..."
+}
+</pre>
+</div>
+<!-- After -->
+<div class="bg-surface-container flex flex-col">
+<div class="bg-status-done/10 border-b border-status-done/20 px-stack-sm py-1.5 flex items-center justify-between">
+<span class="font-label-sm text-status-done uppercase tracking-wider">Nilai Sesudah</span>
+<span class="material-symbols-outlined text-[14px] text-status-done">add</span>
+</div>
+<pre class="p-stack-sm font-mono text-[11px] text-on-surface-variant overflow-x-auto whitespace-pre-wrap flex-1">{
+  "role_id": "admin_finance",
+  "permissions": [
+    "view_reports",
+    "export_data",
+    <span class="bg-status-done/20 text-status-done px-1 rounded">"manage_billing"</span>,
+    <span class="bg-status-done/20 text-status-done px-1 rounded">"approve_invoices"</span>
+  ],
+  "api_token_preview": "****************"
+}
+</pre>
+</div>
+</div>
+<div class="mt-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-warning-amber">info</span>
+<span class="font-body-sm text-[12px] text-outline-variant">Data sensitif (API Token) secara otomatis disamarkan (****).</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+    // Handle clicking outside the drawer to close it
+    document.addEventListener('click', function(event) {
+        const drawer = document.getElementById('audit-drawer');
+        const isClickInsideDrawer = drawer.contains(event.target);
+        // We also need to check if the click was on a row that opens the drawer to prevent immediate closing.
+        // A more robust implementation would manage state properly, but this is a simple vanilla fallback.
+        const isClickOnRow = event.target.closest('tr');
+        
+        if (!isClickInsideDrawer && !isClickOnRow && !drawer.classList.contains('translate-x-full')) {
+            drawer.classList.add('translate-x-full');
+        }
+    });
+</script></main></div></body></html>

@@ -1,0 +1,373 @@
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"zinc-surface":"#09090B","on-secondary-fixed":"#09006b","primary":"#c3c0ff","primary-container":"#4f46e5","on-tertiary-container":"#67f4b7","on-primary-fixed":"#0f0069","surface-container":"#102034","secondary-fixed-dim":"#c1c1ff","surface-dim":"#031427","tertiary-fixed-dim":"#4edea3","zinc-border":"#27272A","tertiary-container":"#006e4b","on-secondary":"#1400a8","error":"#ffb4ab","status-todo":"#3B82F6","tertiary":"#4edea3","surface-container-lowest":"#000f21","error-container":"#93000a","on-error":"#690005","status-backlog":"#94A3B8","tertiary-fixed":"#6ffbbe","secondary":"#c1c1ff","primary-fixed-dim":"#c3c0ff","inverse-on-surface":"#213145","on-surface-variant":"#c7c4d8","secondary-container":"#2f27d0","secondary-fixed":"#e1dfff","outline-variant":"#464555","on-tertiary-fixed-variant":"#005236","inverse-primary":"#4d44e3","on-tertiary-fixed":"#002113","outline":"#918fa1","status-blocked":"#EF4444","surface-container-highest":"#26364a","surface-bright":"#2a3a4f","on-primary":"#1d00a5","on-surface":"#d3e4fe","on-secondary-fixed-variant":"#2c24ce","background":"#031427","surface-tint":"#c3c0ff","status-review":"#8B5CF6","surface-variant":"#26364a","on-primary-container":"#dad7ff","on-error-container":"#ffdad6","on-background":"#d3e4fe","on-primary-fixed-variant":"#3323cc","warning-amber":"#F59E0B","status-done":"#10B981","surface":"#031427","on-secondary-container":"#b1b1ff","surface-container-low":"#0b1c30","inverse-surface":"#d3e4fe","status-cancelled":"#475569","on-tertiary":"#003824","status-inprogress":"#4F46E5","primary-fixed":"#e2dfff","surface-container-high":"#1b2b3f"},"fontFamily":{"headline-lg":["Geist"],"headline-sm":["Geist"],"body-sm":["Inter"],"body-md":["Inter"],"headline-lg-mobile":["Geist"],"label-md":["Geist"],"mono":["Geist"],"display":["Geist"],"body-lg":["Inter"],"label-sm":["Geist"],"headline-md":["Geist"]}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/></head><body class="bg-background font-body-md text-on-background"><main class="min-h-screen flex flex-col p-4 md:p-8"><div class="flex flex-col w-full max-w-[1440px] mx-auto text-on-surface bg-surface gap-6">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-end pb-6">
+<div class="flex flex-col gap-1">
+<span class="text-label-md text-on-surface-variant uppercase tracking-widest font-mono">WORKSPACE</span>
+<h1 class="text-display font-display text-on-surface m-0 leading-none">Scrum Master</h1>
+</div>
+<div class="flex items-center gap-4 mt-4 md:mt-0">
+<span class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full text-label-md border border-surface-container-high shadow-sm">
+<span class="material-symbols-outlined text-primary text-[18px]">calendar_today</span>
+                Sprint 42: Alpha Release
+            </span>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg text-label-md font-mono hover:bg-primary-fixed transition-colors shadow-md">
+                End Sprint
+            </button>
+</div>
+</header>
+<!-- 1. Sprint Health Dashboard -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+<!-- Days Remaining -->
+<div class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-between shadow-sm border border-surface-container">
+<div class="flex items-center justify-between">
+<span class="text-label-sm text-on-surface-variant font-mono uppercase tracking-wide">Days Remaining</span>
+<span class="material-symbols-outlined text-status-todo text-[18px]">schedule</span>
+</div>
+<div class="mt-4">
+<span class="text-headline-lg font-mono">04</span>
+<span class="text-body-sm text-on-surface-variant ml-1">/ 14</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 mt-6 rounded-full overflow-hidden">
+<div class="bg-status-todo h-full w-[70%] rounded-full"></div>
+</div>
+</div>
+<!-- Completion % -->
+<div class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-between shadow-sm border border-surface-container">
+<div class="flex items-center justify-between">
+<span class="text-label-sm text-on-surface-variant font-mono uppercase tracking-wide">Completion</span>
+<span class="material-symbols-outlined text-status-done text-[18px]">check_circle</span>
+</div>
+<div class="mt-4 flex items-end gap-2">
+<span class="text-headline-lg font-mono">68%</span>
+</div>
+<div class="mt-6 flex gap-1">
+<div class="h-1.5 w-full bg-status-done rounded-full"></div>
+<div class="h-1.5 w-full bg-status-done rounded-full opacity-50"></div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full"></div>
+</div>
+</div>
+<!-- Burn Rate -->
+<div class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-between col-span-1 md:col-span-2 shadow-sm border border-surface-container relative overflow-hidden">
+<div class="flex items-center justify-between relative z-10">
+<span class="text-label-sm text-on-surface-variant font-mono uppercase tracking-wide">Burn Rate</span>
+<span class="material-symbols-outlined text-warning-amber text-[18px]">local_fire_department</span>
+</div>
+<div class="mt-4 relative z-10">
+<span class="text-headline-md font-mono text-warning-amber">+12% vs Ideal</span>
+</div>
+<!-- Sparkline SVG -->
+<svg class="absolute bottom-0 left-0 w-full h-1/2 opacity-20 pointer-events-none" preserveaspectratio="none" viewbox="0 0 100 30">
+<path d="M0,30 L10,25 L20,28 L30,20 L40,15 L50,18 L60,10 L70,12 L80,5 L90,8 L100,2" fill="none" stroke="var(--color-warning-amber)" stroke-width="2"></path>
+<path d="M0,30 L100,0" fill="none" stroke="var(--color-on-surface-variant)" stroke-dasharray="2 2" stroke-width="1"></path>
+</svg>
+</div>
+<!-- Story Points -->
+<div class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-between shadow-sm border border-surface-container">
+<div class="flex items-center justify-between mb-4">
+<span class="text-label-sm text-on-surface-variant font-mono uppercase tracking-wide">Story Points</span>
+<span class="material-symbols-outlined text-secondary-fixed text-[18px]">data_usage</span>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center text-body-sm font-mono">
+<span class="text-status-done flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-status-done"></span>Completed</span>
+<span class="text-on-surface">54</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-mono">
+<span class="text-status-inprogress flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-status-inprogress"></span>In Progress</span>
+<span class="text-on-surface">21</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-mono">
+<span class="text-status-todo flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-status-todo"></span>To Do</span>
+<span class="text-on-surface">13</span>
+</div>
+</div>
+</div>
+<!-- Confidence & Scope -->
+<div class="bg-surface-container-low rounded-xl p-6 flex flex-col justify-between shadow-sm border border-primary/20 bg-gradient-to-br from-surface-container-low to-surface-container relative overflow-hidden">
+<div class="flex items-center justify-between relative z-10">
+<span class="text-label-sm text-primary font-mono uppercase tracking-wide flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">psychology</span> AI Confidence
+                </span>
+</div>
+<div class="mt-4 relative z-10 flex flex-col gap-3">
+<span class="text-headline-md font-mono text-tertiary">High (82%)</span>
+<div class="flex items-center gap-2 text-label-sm bg-surface-container/50 px-3 py-1.5 rounded-md w-fit border border-surface-container-high">
+<span class="material-symbols-outlined text-status-blocked text-[14px]">arrow_upward</span>
+<span class="text-on-surface-variant">+3 pts scope added</span>
+</div>
+</div>
+<div class="absolute -bottom-4 -right-4 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
+</div>
+</section>
+<!-- Middle Row: Blockers & Daily Standup -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
+<!-- 2. Blocker Center (Takes up 2/3 width on large screens) -->
+<section class="xl:col-span-2 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-sm font-display flex items-center gap-2">
+<span class="material-symbols-outlined text-status-blocked">warning</span>
+                    Blocker Center
+                </h2>
+<button class="text-label-sm font-mono text-primary hover:text-primary-fixed transition-colors">View All</button>
+</div>
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm border border-surface-container">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-surface-container-high text-label-sm text-on-surface-variant font-mono uppercase tracking-wide">
+<th class="p-5 font-medium">Task</th>
+<th class="p-5 font-medium hidden md:table-cell">Owner</th>
+<th class="p-5 font-medium text-center">Impact</th>
+<th class="p-5 font-medium text-right">AI Action</th>
+</tr>
+</thead>
+<tbody class="text-body-sm align-middle">
+<tr class="border-b border-surface-container-high/50 hover:bg-surface-container/50 transition-colors">
+<td class="p-5">
+<div class="font-mono text-status-blocked font-medium">ENG-402</div>
+<div class="text-on-surface mt-1">Database migration script failing in staging</div>
+<div class="text-on-surface-variant text-label-sm mt-1.5 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">timer</span> 14h elapsed
+                                </div>
+</td>
+<td class="p-5 hidden md:table-cell">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center text-label-sm font-mono text-on-surface">SD</div>
+<span class="text-on-surface">Sarah D.</span>
+</div>
+</td>
+<td class="p-5 text-center">
+<span class="inline-flex px-3 py-1 bg-error-container/20 text-error text-label-sm rounded-md font-mono border border-error/20">HIGH</span>
+</td>
+<td class="p-5 text-right">
+<button class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary/10 text-primary hover:bg-primary/20 rounded-md transition-colors text-label-sm font-medium border border-primary/20">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span>
+                                    Draft Escalation
+                                </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container/50 transition-colors">
+<td class="p-5">
+<div class="font-mono text-warning-amber font-medium">UI-118</div>
+<div class="text-on-surface mt-1">Missing assets for onboarding flow</div>
+<div class="text-on-surface-variant text-label-sm mt-1.5 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">timer</span> 4h elapsed
+                                </div>
+</td>
+<td class="p-5 hidden md:table-cell">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center text-label-sm font-mono text-on-surface">MJ</div>
+<span class="text-on-surface">Mike J.</span>
+</div>
+</td>
+<td class="p-5 text-center">
+<span class="inline-flex px-3 py-1 bg-warning-amber/10 text-warning-amber text-label-sm rounded-md font-mono border border-warning-amber/20">MED</span>
+</td>
+<td class="p-5 text-right">
+<button class="inline-flex items-center gap-1.5 px-4 py-2 bg-surface-container-high text-on-surface hover:bg-surface-bright rounded-md transition-colors text-label-sm font-medium border border-surface-variant">
+                                    Ping Design Team
+                                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- 4. Scope Changes & Risks -->
+<section class="flex flex-col gap-4">
+<h2 class="text-headline-sm font-display flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">insights</span>
+                    Sprint Risk AI
+                </h2>
+<div class="bg-surface-container-low rounded-xl p-6 shadow-sm border border-surface-container flex flex-col gap-6 h-full">
+<!-- Risk Item 1 -->
+<div class="flex flex-col gap-3 pb-6 border-b border-surface-container-high/50">
+<div class="flex justify-between items-start">
+<span class="text-label-md font-mono text-warning-amber flex items-center gap-2 font-medium">
+                            Bottleneck Predicted
+                        </span>
+<span class="text-label-sm bg-warning-amber/10 text-warning-amber px-2.5 py-1 rounded-md border border-warning-amber/20">Med Sev</span>
+</div>
+<p class="text-body-sm text-on-surface">Code review queue is growing faster than merge rate.</p>
+<div class="text-label-sm text-on-surface-variant font-mono bg-surface-container/50 p-3 rounded-md border border-surface-container-high">
+<span class="font-medium text-on-surface block mb-1">Evidence:</span>
+                        • 8 PRs pending &gt; 24hrs
+                    </div>
+<button class="mt-2 text-left text-label-sm text-primary hover:text-primary-fixed flex items-center gap-1.5 w-fit font-medium transition-colors">
+<span class="material-symbols-outlined text-[16px]">bolt</span> Reallocate Reviewers
+                    </button>
+</div>
+<!-- Scope Change -->
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<span class="text-label-md font-mono text-on-surface flex items-center gap-2 font-medium">
+<span class="material-symbols-outlined text-[16px] text-status-todo">change_history</span>
+                            Scope Changes
+                        </span>
+</div>
+<ul class="text-body-sm text-on-surface-variant space-y-3 mt-1">
+<li class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-md bg-status-blocked/10 flex items-center justify-center text-status-blocked border border-status-blocked/20"><span class="material-symbols-outlined text-[16px]">add</span></div>
+<div><span class="font-mono text-on-surface">API-99</span> added (+3 pts)</div>
+</li>
+<li class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-md bg-status-done/10 flex items-center justify-center text-status-done border border-status-done/20"><span class="material-symbols-outlined text-[16px]">remove</span></div>
+<div><span class="font-mono text-on-surface">UI-12</span> scoped down (-1 pt)</div>
+</li>
+</ul>
+</div>
+</div>
+</section>
+</div>
+<!-- Bottom Row: Stand-up & Workload -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-6">
+<!-- 3. Daily Stand-up Summary -->
+<section class="flex flex-col gap-4 overflow-hidden">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-sm font-display flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">groups</span>
+                    Stand-up Pulse
+                </h2>
+<div class="flex gap-3">
+<button class="p-2 hover:bg-surface-container-low rounded-md text-on-surface-variant transition-colors" title="Copy Text">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-low hover:bg-surface-container border border-surface-container-high shadow-sm rounded-md text-label-sm font-mono transition-colors">
+<span class="material-symbols-outlined text-[16px] text-[#E01E5A]">tag</span> Send to Slack
+                    </button>
+</div>
+</div>
+<!-- Horizontal Scroll Container -->
+<div class="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory">
+<!-- Member Card 1 -->
+<div class="min-w-[300px] bg-surface-container-low rounded-xl p-6 shadow-sm border border-surface-container snap-start flex-shrink-0 flex flex-col gap-5">
+<div class="flex items-center justify-between border-b border-surface-container-high pb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-mono text-label-md text-primary font-medium">SD</div>
+<span class="font-display text-body-lg font-medium">Sarah D.</span>
+</div>
+<div class="flex items-center gap-1.5 text-label-sm font-mono text-status-done bg-status-done/10 px-2 py-1 rounded-md border border-status-done/20">
+<span>80%</span>
+<div class="w-1.5 h-1.5 rounded-full bg-status-done"></div>
+</div>
+</div>
+<div class="flex flex-col gap-4 text-body-sm">
+<div>
+<span class="text-label-sm text-on-surface-variant uppercase tracking-wide font-mono block mb-1.5">Yesterday</span>
+<span class="text-on-surface">Merged auth service PR.</span>
+</div>
+<div>
+<span class="text-label-sm text-on-surface-variant uppercase tracking-wide font-mono block mb-1.5">Today</span>
+<span class="text-on-surface">Debugging staging DB.</span>
+</div>
+<div class="bg-error-container/10 p-3 rounded-md border border-error/20">
+<span class="text-label-sm text-error uppercase tracking-wide font-mono block mb-1 flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px]">block</span> Blocker</span>
+<span class="text-on-surface font-mono font-medium">ENG-402</span>
+</div>
+</div>
+</div>
+<!-- Member Card 2 -->
+<div class="min-w-[300px] bg-surface-container-low rounded-xl p-6 shadow-sm border border-surface-container snap-start flex-shrink-0 flex flex-col gap-5">
+<div class="flex items-center justify-between border-b border-surface-container-high pb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center font-mono text-label-md text-secondary font-medium">MJ</div>
+<span class="font-display text-body-lg font-medium">Mike J.</span>
+</div>
+<div class="flex items-center gap-1.5 text-label-sm font-mono text-warning-amber bg-warning-amber/10 px-2 py-1 rounded-md border border-warning-amber/20">
+<span>110%</span>
+<div class="w-1.5 h-1.5 rounded-full bg-warning-amber animate-pulse"></div>
+</div>
+</div>
+<div class="flex flex-col gap-4 text-body-sm">
+<div>
+<span class="text-label-sm text-on-surface-variant uppercase tracking-wide font-mono block mb-1.5">Yesterday</span>
+<span class="text-on-surface">Completed settings UI.</span>
+</div>
+<div>
+<span class="text-label-sm text-on-surface-variant uppercase tracking-wide font-mono block mb-1.5">Today</span>
+<span class="text-on-surface">Starting onboarding flow.</span>
+</div>
+<div class="bg-surface-container p-3 rounded-md border border-surface-container-high">
+<span class="text-label-sm text-on-surface-variant uppercase tracking-wide font-mono block mb-1">Active</span>
+<span class="text-status-inprogress font-mono font-medium">UI-118, UI-119</span>
+</div>
+</div>
+</div>
+<!-- Member Card 3 (Placeholder for more) -->
+<div class="min-w-[300px] bg-surface-container-lowest border-2 border-surface-container border-dashed rounded-xl p-6 snap-start flex-shrink-0 flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors cursor-pointer shadow-sm">
+<div class="flex flex-col items-center gap-3 font-mono text-label-md">
+<span class="material-symbols-outlined text-[32px]">add_circle</span>
+                        Add Member Note
+                    </div>
+</div>
+</div>
+</section>
+<!-- 5. Team Workload Visualization -->
+<section class="flex flex-col gap-4">
+<h2 class="text-headline-sm font-display flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">bar_chart</span>
+                Capacity &amp; Workload
+            </h2>
+<div class="bg-surface-container-low rounded-xl p-8 shadow-sm border border-surface-container flex flex-col justify-center h-[calc(100%-48px)] relative">
+<!-- Chart Legend -->
+<div class="absolute top-6 right-8 flex gap-6 text-label-sm font-mono text-on-surface-variant">
+<div class="flex items-center gap-2"><div class="w-2.5 h-2.5 bg-status-done rounded-full shadow-sm"></div> Done</div>
+<div class="flex items-center gap-2"><div class="w-2.5 h-2.5 bg-status-inprogress rounded-full shadow-sm"></div> Active</div>
+<div class="flex items-center gap-2"><div class="w-2.5 h-2.5 bg-status-blocked rounded-full shadow-sm"></div> Blocked</div>
+</div>
+<!-- Bar Chart Area -->
+<div class="flex flex-col gap-8 mt-8">
+<!-- Dev 1 -->
+<div class="flex items-center gap-5">
+<div class="w-10 text-right font-mono text-label-md font-medium">SD</div>
+<div class="flex-1 h-3.5 bg-surface-container-high rounded-full flex overflow-hidden shadow-inner">
+<div class="h-full bg-status-done w-[40%]"></div>
+<div class="h-full bg-status-inprogress w-[20%]"></div>
+<div class="h-full bg-status-blocked w-[15%] relative group cursor-pointer">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-surface-container-highest text-on-surface text-label-sm px-3 py-1.5 rounded hidden group-hover:block whitespace-nowrap z-20 shadow-lg border border-surface-variant font-mono">3 pts blocked</div>
+</div>
+</div>
+<div class="w-14 text-left font-mono text-label-sm text-on-surface-variant font-medium">75%</div>
+</div>
+<!-- Dev 2 -->
+<div class="flex items-center gap-5">
+<div class="w-10 text-right font-mono text-label-md text-warning-amber font-medium">MJ</div>
+<div class="flex-1 h-3.5 bg-surface-container-high rounded-full flex overflow-hidden relative shadow-inner">
+<div class="absolute right-[10%] top-0 bottom-0 w-0.5 bg-error z-10 opacity-80"></div>
+<div class="h-full bg-status-done w-[30%]"></div>
+<div class="h-full bg-status-inprogress w-[80%]"></div>
+</div>
+<div class="w-14 text-left font-mono text-label-sm text-warning-amber flex items-center font-medium"><span class="material-symbols-outlined text-[16px] mr-1">warning</span>110%</div>
+</div>
+<!-- Dev 3 -->
+<div class="flex items-center gap-5">
+<div class="w-10 text-right font-mono text-label-md font-medium">AK</div>
+<div class="flex-1 h-3.5 bg-surface-container-high rounded-full flex overflow-hidden shadow-inner">
+<div class="h-full bg-status-done w-[60%]"></div>
+<div class="h-full bg-status-inprogress w-[25%]"></div>
+</div>
+<div class="w-14 text-left font-mono text-label-sm text-on-surface-variant font-medium">85%</div>
+</div>
+</div>
+<!-- X-Axis Line -->
+<div class="w-full h-px bg-surface-container-high mt-8"></div>
+<div class="flex justify-between text-label-sm font-mono text-on-surface-variant mt-3 px-[60px]">
+<span>0</span>
+<span>Capacity (pts)</span>
+<span>Max</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+<script>
+    // Micro-interaction for hover states on horizontal scroll cards
+    document.querySelectorAll('.snap-start').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.classList.add('shadow-md', '-translate-y-1', 'transition-all', 'duration-200');
+        });
+        card.addEventListener('mouseleave', () => {
+            card.classList.remove('shadow-md', '-translate-y-1', 'transition-all', 'duration-200');
+        });
+    });
+</script></main></body></html>

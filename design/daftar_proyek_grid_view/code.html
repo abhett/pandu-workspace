@@ -1,0 +1,188 @@
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-error-container":"#ffdad6","outline-variant":"#464555","surface-container-high":"#1b2b3f","primary-fixed-dim":"#c3c0ff","error-container":"#93000a","on-tertiary-container":"#67f4b7","on-tertiary":"#003824","inverse-on-surface":"#213145","status-cancelled":"#475569","surface-container-low":"#0b1c30","on-primary":"#1d00a5","tertiary-container":"#006e4b","on-primary-fixed-variant":"#3323cc","primary":"#c3c0ff","on-tertiary-fixed-variant":"#005236","background":"#031427","zinc-surface":"#09090B","tertiary-fixed-dim":"#4edea3","on-surface-variant":"#c7c4d8","status-backlog":"#94A3B8","on-primary-container":"#dad7ff","warning-amber":"#F59E0B","primary-container":"#4f46e5","on-secondary-fixed":"#09006b","on-secondary-container":"#b1b1ff","surface-bright":"#2a3a4f","on-tertiary-fixed":"#002113","status-review":"#8B5CF6","inverse-primary":"#4d44e3","surface-container":"#102034","surface-dim":"#031427","inverse-surface":"#d3e4fe","on-error":"#690005","status-blocked":"#EF4444","error":"#ffb4ab","secondary-fixed":"#e1dfff","status-todo":"#3B82F6","on-secondary-fixed-variant":"#2c24ce","secondary":"#c1c1ff","outline":"#918fa1","zinc-border":"#27272A","on-primary-fixed":"#0f0069","tertiary-fixed":"#6ffbbe","surface-variant":"#26364a","surface-container-lowest":"#000f21","status-inprogress":"#4F46E5","on-secondary":"#1400a8","primary-fixed":"#e2dfff","tertiary":"#4edea3","on-surface":"#d3e4fe","surface":"#031427","surface-container-highest":"#26364a","secondary-fixed-dim":"#c1c1ff","surface-tint":"#c3c0ff","status-done":"#10B981","secondary-container":"#2f27d0","on-background":"#d3e4fe"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin-mobile":"16px","container-max":"1440px","stack-sm":"8px","stack-xs":"4px","stack-md":"16px","unit":"8px","margin-desktop":"32px","stack-lg":"24px","gutter":"24px"},"fontFamily":{"mono":["Geist"],"label-sm":["Geist"],"label-md":["Geist"],"headline-lg-mobile":["Geist"],"body-md":["Inter"],"headline-lg":["Geist"],"body-lg":["Inter"],"headline-md":["Geist"],"headline-sm":["Geist"],"body-sm":["Inter"],"display":["Geist"]},"fontSize":{"mono":["13px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"500"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","fontWeight":"600"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}],"body-sm":["14px",{"lineHeight":"20px","fontWeight":"400"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.04em","fontWeight":"700"}]}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/></head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container/80 backdrop-blur-md"><div class="h-16 flex items-center justify-between px-margin-mobile lg:px-margin-desktop"><div></div><div class="flex items-center gap-stack-md"><div class="h-8 w-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-label-md">U</div></div></div></header><aside class="fixed top-16 left-0 bottom-0 w-64 bg-surface-container-low hidden lg:flex flex-col border-r border-outline-variant/30"><nav class="flex-1 p-stack-md flex flex-col gap-stack-xs" data-active-classes="bg-primary-container text-on-primary-container font-label-md rounded-lg"><a class="px-stack-md py-stack-sm text-on-surface-variant hover:bg-surface-variant/50 rounded-lg transition-colors" data-path="dashboard" href="#">Dashboard</a><a aria-current="page" class="px-stack-md py-stack-sm transition-colors bg-primary-container text-on-primary-container font-label-md rounded-lg" data-path="daftar-project" href="#">Daftar Project</a><a class="px-stack-md py-stack-sm text-on-surface-variant hover:bg-surface-variant/50 rounded-lg transition-colors" data-path="settings" href="#">Pengaturan</a></nav></aside><main class="pt-16 lg:pl-64 min-h-screen"><div class="p-margin-mobile lg:p-margin-desktop max-w-container-max mx-auto"><div class="flex flex-col w-full h-full p-stack-lg gap-stack-lg animate-[fadeIn_0.5s_ease-out]">
+<!-- Header & Toolbar -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-stack-md bg-surface-container-low p-stack-md rounded-xl shadow-sm">
+<div class="flex flex-col gap-stack-xs">
+<h1 class="font-headline-lg text-on-surface">Daftar Proyek</h1>
+<p class="font-body-sm text-on-surface-variant">Kelola dan pantau seluruh proyek aktif Anda.</p>
+</div>
+<div class="flex flex-wrap items-center gap-stack-sm">
+<div class="relative w-full lg:w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-surface-container h-10 pl-10 pr-4 rounded-lg font-body-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary transition-shadow" placeholder="Cari proyek..." type="text"/>
+</div>
+<button class="h-10 px-4 bg-surface-container hover:bg-surface-variant text-on-surface font-label-md rounded-lg flex items-center gap-2 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">filter_list</span> Filter
+      </button>
+<div class="flex bg-surface-container rounded-lg p-1 shadow-sm">
+<button class="h-8 w-10 flex items-center justify-center bg-primary-container text-on-primary-container rounded-md shadow-sm transition-colors" title="Grid View">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+</button>
+<button class="h-8 w-10 flex items-center justify-center text-on-surface-variant hover:text-on-surface rounded-md transition-colors" title="Table View">
+<span class="material-symbols-outlined text-[20px]">table_rows</span>
+</button>
+</div>
+<button class="h-10 px-6 bg-primary hover:bg-primary-fixed-dim text-on-primary font-label-md rounded-lg flex items-center gap-2 transition-all shadow-md hover:shadow-lg hover:-translate-y-[1px]">
+<span class="material-symbols-outlined text-[20px]">add</span> Buat Proyek
+      </button>
+</div>
+</div>
+<!-- Filter Chips (Mockup) -->
+<div class="flex gap-stack-sm overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-3 py-1.5 bg-surface-container-highest text-on-surface font-label-sm rounded-full whitespace-nowrap flex items-center gap-1 shadow-sm"><span class="material-symbols-outlined text-[14px]">done_all</span> Status: Aktif</button>
+<button class="px-3 py-1.5 bg-surface-container text-on-surface-variant hover:bg-surface-container-highest font-label-sm rounded-full whitespace-nowrap transition-colors shadow-sm">Owner</button>
+<button class="px-3 py-1.5 bg-surface-container text-on-surface-variant hover:bg-surface-container-highest font-label-sm rounded-full whitespace-nowrap transition-colors shadow-sm">Tim</button>
+<button class="px-3 py-1.5 bg-surface-container text-on-surface-variant hover:bg-surface-container-highest font-label-sm rounded-full whitespace-nowrap transition-colors shadow-sm">Metodologi</button>
+<button class="px-3 py-1.5 bg-surface-container text-on-surface-variant hover:bg-surface-container-highest font-label-sm rounded-full whitespace-nowrap transition-colors shadow-sm">Tanggal</button>
+<button class="px-3 py-1.5 bg-surface-container text-on-surface-variant hover:bg-surface-container-highest font-label-sm rounded-full whitespace-nowrap transition-colors shadow-sm">Health</button>
+<button class="px-3 py-1.5 bg-surface-container text-on-surface-variant hover:bg-surface-container-highest font-label-sm rounded-full whitespace-nowrap transition-colors shadow-sm"><span class="material-symbols-outlined text-[14px]">star</span> Favorit</button>
+</div>
+<!-- Project Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Card 1: WMS -->
+<div class="group bg-surface-container-low rounded-2xl p-stack-md flex flex-col gap-stack-md hover:bg-surface-container transition-all duration-300 shadow-sm hover:shadow-md relative overflow-hidden">
+<!-- Decorative background blur -->
+<div class="absolute -right-20 -top-20 w-40 h-40 bg-status-done/10 rounded-full blur-3xl pointer-events-none transition-opacity group-hover:opacity-100 opacity-50"></div>
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center font-mono text-on-surface shadow-sm">WMS</div>
+<div>
+<h3 class="font-headline-sm text-on-surface group-hover:text-primary transition-colors">Warehouse Mgt System</h3>
+<p class="font-mono text-on-surface-variant text-[11px] uppercase tracking-wider">Scrum • SPRINT 14</p>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<p class="font-body-sm text-on-surface-variant line-clamp-2 z-10">Modernisasi sistem pergudangan pusat dengan integrasi IoT dan real-time tracking.</p>
+<!-- Progress & Metrics -->
+<div class="flex flex-col gap-stack-xs z-10">
+<div class="flex justify-between font-label-sm">
+<span class="text-on-surface-variant">Progress</span>
+<span class="text-status-done">68%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-status-done rounded-full w-[68%] relative overflow-hidden">
+<div class="absolute inset-0 bg-white/20 animate-[shimmer_2s_infinite]"></div>
+</div>
+</div>
+<div class="flex justify-between font-label-sm mt-1 text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">task_alt</span> 12/20 Tasks</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">event</span> 15 Nov 2024</span>
+</div>
+</div>
+<div class="h-[1px] w-full bg-surface-variant/50 z-10 my-1"></div>
+<!-- Footer Info -->
+<div class="flex justify-between items-center z-10">
+<div class="flex -space-x-2">
+<img alt="Andi Pratama" class="w-8 h-8 rounded-full shadow-sm ring-2 ring-surface-container-low object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLt-HBiFvm5HCwYwd3f1z6I9fbj9w7uLDAF0TrWVOSG2UB_XjuAlohUJGibOs87Vtd8QHLA6syhQ54b1LkIcjFt2cyZDyv9KRozh_VUohAJqruAxTg3Ah3aP-CBiLi4Bq66UDQpbTB3XTHGVT3OAN6Zd_qdxhYxb6WbKZcrpzAGW89kMEdgHjt8-UcXOVzN17neuoIt6U2KbSqOkPNvzW6ywAZ16DBLYZnSoASv-Q5XWToUXDUscbMcdh_k" title="Andi Pratama (Owner)"/>
+<div class="w-8 h-8 rounded-full shadow-sm ring-2 ring-surface-container-low bg-surface-bright flex items-center justify-center font-label-sm text-on-surface text-[10px]">DS</div>
+<div class="w-8 h-8 rounded-full shadow-sm ring-2 ring-surface-container-low bg-surface-bright flex items-center justify-center font-label-sm text-on-surface text-[10px]">+3</div>
+</div>
+<div class="px-2.5 py-1 rounded-md bg-status-done/10 text-status-done font-label-sm flex items-center gap-1 shadow-sm">
+<div class="w-1.5 h-1.5 rounded-full bg-status-done animate-pulse"></div> On Track
+        </div>
+</div>
+</div>
+<!-- Card 2: AI Engine -->
+<div class="group bg-surface-container-low rounded-2xl p-stack-md flex flex-col gap-stack-md hover:bg-surface-container transition-all duration-300 shadow-sm hover:shadow-md relative overflow-hidden">
+<div class="absolute -right-20 -top-20 w-40 h-40 bg-status-blocked/10 rounded-full blur-3xl pointer-events-none transition-opacity group-hover:opacity-100 opacity-50"></div>
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center font-mono text-on-surface shadow-sm">AIE</div>
+<div>
+<h3 class="font-headline-sm text-on-surface group-hover:text-primary transition-colors">AI Recommendation Engine</h3>
+<p class="font-mono text-on-surface-variant text-[11px] uppercase tracking-wider">Kanban</p>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<p class="font-body-sm text-on-surface-variant line-clamp-2 z-10">Implementasi model ML untuk personalisasi produk pada dashboard pengguna B2B.</p>
+<!-- Progress & Metrics -->
+<div class="flex flex-col gap-stack-xs z-10">
+<div class="flex justify-between font-label-sm">
+<span class="text-on-surface-variant">Progress</span>
+<span class="text-status-blocked">32%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-status-blocked rounded-full w-[32%] relative overflow-hidden">
+<div class="absolute inset-0 bg-white/20 animate-[shimmer_2s_infinite]"></div>
+</div>
+</div>
+<div class="flex justify-between font-label-sm mt-1 text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">task_alt</span> 15/48 Tasks</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">event</span> 02 Des 2024</span>
+</div>
+</div>
+<div class="h-[1px] w-full bg-surface-variant/50 z-10 my-1"></div>
+<!-- Footer Info -->
+<div class="flex justify-between items-center z-10">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full shadow-sm ring-2 ring-surface-container-low bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-label-sm text-[10px]" title="Budi (Owner)">BR</div>
+<div class="w-8 h-8 rounded-full shadow-sm ring-2 ring-surface-container-low bg-surface-bright flex items-center justify-center font-label-sm text-on-surface text-[10px]">LM</div>
+<div class="w-8 h-8 rounded-full shadow-sm ring-2 ring-surface-container-low bg-surface-bright flex items-center justify-center font-label-sm text-on-surface text-[10px]">+1</div>
+</div>
+<div class="px-2.5 py-1 rounded-md bg-status-blocked/10 text-status-blocked font-label-sm flex items-center gap-1 shadow-sm">
+<div class="w-1.5 h-1.5 rounded-full bg-status-blocked"></div> At Risk
+        </div>
+</div>
+</div>
+<!-- Card 3: Marketing Ops -->
+<div class="group bg-surface-container-low rounded-2xl p-stack-md flex flex-col gap-stack-md hover:bg-surface-container transition-all duration-300 shadow-sm hover:shadow-md relative overflow-hidden">
+<div class="absolute -right-20 -top-20 w-40 h-40 bg-status-done/10 rounded-full blur-3xl pointer-events-none transition-opacity group-hover:opacity-100 opacity-50"></div>
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center font-mono text-on-surface shadow-sm">MOP</div>
+<div>
+<h3 class="font-headline-sm text-on-surface group-hover:text-primary transition-colors">Q4 Marketing Ops</h3>
+<p class="font-mono text-on-surface-variant text-[11px] uppercase tracking-wider">Waterfall</p>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<p class="font-body-sm text-on-surface-variant line-clamp-2 z-10">Kampanye akhir tahun dan optimasi funnel akuisisi untuk produk Enterprise.</p>
+<!-- Progress & Metrics -->
+<div class="flex flex-col gap-stack-xs z-10">
+<div class="flex justify-between font-label-sm">
+<span class="text-on-surface-variant">Progress</span>
+<span class="text-status-done">85%</span>
+</div>
+<div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-status-done rounded-full w-[85%] relative overflow-hidden">
+<div class="absolute inset-0 bg-white/20 animate-[shimmer_2s_infinite]"></div>
+</div>
+</div>
+<div class="flex justify-between font-label-sm mt-1 text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">task_alt</span> 34/40 Tasks</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">event</span> 30 Nov 2024</span>
+</div>
+</div>
+<div class="h-[1px] w-full bg-surface-variant/50 z-10 my-1"></div>
+<!-- Footer Info -->
+<div class="flex justify-between items-center z-10">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full shadow-sm ring-2 ring-surface-container-low bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-sm text-[10px]" title="Siti (Owner)">SW</div>
+<div class="w-8 h-8 rounded-full shadow-sm ring-2 ring-surface-container-low bg-surface-bright flex items-center justify-center font-label-sm text-on-surface text-[10px]">KL</div>
+<div class="w-8 h-8 rounded-full shadow-sm ring-2 ring-surface-container-low bg-surface-bright flex items-center justify-center font-label-sm text-on-surface text-[10px]">RT</div>
+<div class="w-8 h-8 rounded-full shadow-sm ring-2 ring-surface-container-low bg-surface-bright flex items-center justify-center font-label-sm text-on-surface text-[10px]">+5</div>
+</div>
+<div class="px-2.5 py-1 rounded-md bg-status-done/10 text-status-done font-label-sm flex items-center gap-1 shadow-sm">
+<div class="w-1.5 h-1.5 rounded-full bg-status-done animate-pulse"></div> On Track
+        </div>
+</div>
+</div>
+</div>
+<style>
+    @keyframes shimmer {
+      100% {
+        transform: translateX(100%);
+      }
+    }
+  </style>
+</div></div></main></body></html>

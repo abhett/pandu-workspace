@@ -290,6 +290,10 @@ class TaskController extends Controller
             'subtasks.assignees',
             'subtasks.status',
             'activities.user',
+            'comments.user',
+            'comments.replies.user',
+            'checklists.completedByUser',
+            'attachments.uploader',
         ]);
 
         $taskData = [
@@ -349,6 +353,49 @@ class TaskController extends Controller
                 'user' => $a->user ? [
                     'id' => $a->user->id,
                     'name' => $a->user->name,
+                ] : null,
+            ])->all(),
+            'comments' => $task->comments->map(fn ($c) => [
+                'id' => $c->id,
+                'content' => $c->content,
+                'created_at' => $c->created_at?->diffForHumans(),
+                'user' => [
+                    'id' => $c->user->id,
+                    'name' => $c->user->name,
+                ],
+                'replies' => $c->replies->map(fn ($r) => [
+                    'id' => $r->id,
+                    'content' => $r->content,
+                    'created_at' => $r->created_at?->diffForHumans(),
+                    'user' => [
+                        'id' => $r->user->id,
+                        'name' => $r->user->name,
+                    ],
+                ])->all(),
+            ])->all(),
+            'checklists' => $task->checklists->map(fn ($ck) => [
+                'id' => $ck->id,
+                'title' => $ck->title,
+                'is_completed' => $ck->is_completed,
+                'position' => $ck->position,
+                'completed_at' => $ck->completed_at?->diffForHumans(),
+                'completed_by' => $ck->completedByUser ? [
+                    'id' => $ck->completedByUser->id,
+                    'name' => $ck->completedByUser->name,
+                ] : null,
+            ])->all(),
+            'attachments' => $task->attachments->map(fn ($att) => [
+                'id' => $att->id,
+                'filename' => $att->filename,
+                'size_bytes' => $att->size_bytes,
+                'size_human' => $att->size_bytes > 1048576
+                    ? round($att->size_bytes / 1048576, 1).' MB'
+                    : round($att->size_bytes / 1024, 1).' KB',
+                'mime_type' => $att->mime_type,
+                'created_at' => $att->created_at?->diffForHumans(),
+                'uploader' => $att->uploader ? [
+                    'id' => $att->uploader->id,
+                    'name' => $att->uploader->name,
                 ] : null,
             ])->all(),
         ];

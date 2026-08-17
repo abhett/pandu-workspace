@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUuid('organization_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('project_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('status_id')->constrained('workflow_statuses')->cascadeOnDelete();
-            $table->foreignUuid('parent_id')->nullable()->constrained('tasks')->nullOnDelete();
+            $table->uuid('parent_id')->nullable();
 
             $table->integer('sequence_number');
             $table->string('key', 30);
@@ -41,6 +41,10 @@ return new class extends Migration
             $table->index(['organization_id', 'project_id']);
             $table->index(['project_id', 'type']);
             $table->index(['project_id', 'priority']);
+        });
+
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->foreign('parent_id')->references('id')->on('tasks')->nullOnDelete();
         });
     }
 

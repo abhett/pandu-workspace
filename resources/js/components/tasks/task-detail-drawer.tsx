@@ -32,6 +32,15 @@ import {
     Calendar,
     Hash,
     UserCircle,
+    MessageSquare,
+    Paperclip,
+    Download,
+    Send,
+    FileText,
+    CornerDownRight,
+    Square,
+    Check,
+    Sparkles,
 } from 'lucide-react';
 
 interface Member {
@@ -68,6 +77,33 @@ interface ActivityItem {
     user?: { id: number; name: string } | null;
 }
 
+interface CommentItem {
+    id: string;
+    content: string;
+    created_at: string;
+    user: { id: number; name: string };
+    replies?: CommentItem[];
+}
+
+interface ChecklistItem {
+    id: string;
+    title: string;
+    is_completed: boolean;
+    position: number;
+    completed_at?: string | null;
+    completed_by?: { id: number; name: string } | null;
+}
+
+interface AttachmentItem {
+    id: string;
+    filename: string;
+    size_bytes: number;
+    size_human: string;
+    mime_type: string;
+    created_at: string;
+    uploader?: { id: number; name: string } | null;
+}
+
 export interface TaskDetailData {
     id: string;
     key: string;
@@ -87,6 +123,9 @@ export interface TaskDetailData {
     assignees: Member[];
     subtasks?: Subtask[];
     activities?: ActivityItem[];
+    comments?: CommentItem[];
+    checklists?: ChecklistItem[];
+    attachments?: AttachmentItem[];
     creator?: { id: number; name: string } | null;
 }
 
@@ -118,12 +157,138 @@ export function TaskDetailDrawer({
     const [type, setType] = useState(task.type);
     const [priority, setPriority] = useState(task.priority);
     const [statusId, setStatusId] = useState(task.status_id);
-    const [estimatePoints, setEstimatePoints] = useState(task.estimate_points ? String(task.estimate_points) : '');
+    const [estimatePoints, setEstimatePoints] = useState<string>(task.estimate_points ? String(task.estimate_points) : '');
     const [dueDate, setDueDate] = useState(task.due_date || '');
-    const [selectedAssignees, setSelectedAssignees] = useState<number[]>(task.assignees.map((a) => a.id));
+    const [selectedAssigneeIds, setSelectedAssigneeIds] = useState<number[]>(
+        task.assignees ? task.assignees.map((a) => a.id) : []
+    );
+
+    const [activeTab, setActiveTab] = useState('details');
     const [isSaving, setIsSaving] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    // Subtasks State
     const [newSubtaskTitle, setNewSubtaskTitle] = useState('');
     const [isAddingSubtask, setIsAddingSubtask] = useState(false);
+
+    // Comments State
+    const [newCommentContent, setNewCommentContent] = useState('');
+    const [isPostingComment, setIsPostingComment] = useState(false);
+    const [replyingToCommentId, setReplyingToCommentId] = useState<string | null>(null);
+    const [replyContent, setReplyContent] = useState('');
+
+    // Checklist State
+    const [newChecklistTitle, setNewChecklistTitle] = useState('');
+    const [isAddingChecklist, setIsAddingChecklist] = useState(false);
+
+    // AI Assistant State
+    const [isGeneratingBreakdown, setIsGeneratingBreakdown] = useState(false);
+    const [aiSuggestedSubtasks, setAiSuggestedSubtasks] = useState<any[] | null>(null);
+    const [isGeneratingCriteria, setIsGeneratingCriteria] = useState(false);
+    const [aiSuggestedCriteria, setAiSuggestedCriteria] = useState<string[] | null>(null);
+
+    // Attachment State
+    const [isUploadingAttachment, setIsUploadingAttachment] = useState(false);
+
+    const handleAiTaskBreakdown = () => {
+        setIsGeneratingBreakdown(true);
+        setAiSuggestedSubtasks(null);
+
+        fetch(`/projects/${projectId}/ai/task-breakdown`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify({
+                title,
+                description,
+                type,
+                priority,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success && data.data?.suggested_subtasks) {
+                    setAiSuggestedSubtasks(data.data.suggested_subtasks);
+                } else {
+                    alert(data.error || 'Gagal memproses dekomposisi subtask AI.');
+                }
+                setIsGeneratingBreakdown(false);
+            })
+            .catch(() => {
+                alert('Terjadi kesalahan jaringan.');
+                setIsGeneratingBreakdown(false);
+            });
+    };
+
+    const handleApplySuggestedSubtask = (st: any) => {
+        router.post(
+            `/projects/${projectId}/tasks`,
+            {
+                parent_id: task.id,
+                title: st.title,
+                type: st.type || 'subtask',
+                priority: st.priority || 'medium',
+                estimate_points: st.estimate_points || null,
+                status_id: statuses[0]?.id,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setAiSuggestedSubtasks((prev) => prev ? prev.filter((item) => item.title !== st.title) : null);
+                    if (onTaskUpdated) onTaskUpdated();
+                },
+            }
+        );
+    };
+
+    const handleAiAcceptanceCriteria = () => {
+        setIsGeneratingCriteria(true);
+        setAiSuggestedCriteria(null);
+
+        fetch(`/projects/${projectId}/ai/acceptance-criteria`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify({
+                title,
+                description,
+                type,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success && data.data?.criteria_list) {
+                    setAiSuggestedCriteria(data.data.criteria_list);
+                } else {
+                    alert(data.error || 'Gagal menghasilkan Acceptance Criteria AI.');
+                }
+                setIsGeneratingCriteria(false);
+            })
+            .catch(() => {
+                alert('Terjadi kesalahan jaringan.');
+                setIsGeneratingCriteria(false);
+            });
+    };
+
+    const handleApplySuggestedCriterion = (criterion: string) => {
+        router.post(
+            `/tasks/${task.id}/checklists`,
+            { title: criterion },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setAiSuggestedCriteria((prev) => prev ? prev.filter((c) => c !== criterion) : null);
+                    if (onTaskUpdated) onTaskUpdated();
+                },
+            }
+        );
+    };
 
     useEffect(() => {
         if (task) {
@@ -134,82 +299,68 @@ export function TaskDetailDrawer({
             setStatusId(task.status_id);
             setEstimatePoints(task.estimate_points ? String(task.estimate_points) : '');
             setDueDate(task.due_date || '');
-            setSelectedAssignees(task.assignees.map((a) => a.id));
+            setSelectedAssigneeIds(task.assignees ? task.assignees.map((a) => a.id) : []);
         }
     }, [task]);
 
-    const handleSaveMainDetails = (e?: React.FormEvent) => {
-        if (e) e.preventDefault();
+    const handleSaveDetails = async () => {
         setIsSaving(true);
-
-        router.put(
-            `/projects/${projectId}/tasks/${task.id}`,
-            {
-                title,
-                description,
-                type,
-                priority,
-                status_id: statusId,
-                estimate_points: estimatePoints !== '' ? Number(estimatePoints) : null,
-                due_date: dueDate || null,
-                assignee_ids: selectedAssignees,
-                expected_version: task.version,
-            },
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    setIsSaving(false);
-                    if (onTaskUpdated) onTaskUpdated();
+        try {
+            await router.put(
+                `/projects/${projectId}/tasks/${task.id}`,
+                {
+                    title,
+                    description,
+                    type,
+                    priority,
+                    status_id: statusId,
+                    estimate_points: estimatePoints ? parseFloat(estimatePoints) : null,
+                    due_date: dueDate || null,
+                    assignee_ids: selectedAssigneeIds,
                 },
-                onError: () => {
-                    setIsSaving(false);
-                },
-            }
-        );
+                {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        setIsSaving(false);
+                        if (onTaskUpdated) onTaskUpdated();
+                    },
+                    onError: () => setIsSaving(false),
+                }
+            );
+        } catch {
+            setIsSaving(false);
+        }
     };
 
     const handleQuickStatusChange = (newStatusId: string) => {
         setStatusId(newStatusId);
-        setIsSaving(true);
-        router.put(
-            `/projects/${projectId}/tasks/${task.id}`,
+        router.patch(
+            `/projects/${projectId}/tasks/${task.id}/move`,
             {
                 status_id: newStatusId,
-                expected_version: task.version,
+                version: task.version,
             },
             {
                 preserveScroll: true,
                 onSuccess: () => {
-                    setIsSaving(false);
                     if (onTaskUpdated) onTaskUpdated();
                 },
-                onError: () => setIsSaving(false),
             }
         );
     };
 
-    const toggleAssignee = (userId: number) => {
-        let updated: number[];
-        if (selectedAssignees.includes(userId)) {
-            updated = selectedAssignees.filter((id) => id !== userId);
-        } else {
-            updated = [...selectedAssignees, userId];
-        }
-        setSelectedAssignees(updated);
+    const handleDeleteTask = () => {
+        if (!confirm(`Hapus tugas ${task.key}? Tindakan ini tidak dapat dibatalkan.`)) return;
 
-        router.put(
-            `/projects/${projectId}/tasks/${task.id}`,
-            {
-                assignee_ids: updated,
-                expected_version: task.version,
+        setIsDeleting(true);
+        router.delete(`/projects/${projectId}/tasks/${task.id}`, {
+            onSuccess: () => {
+                setIsDeleting(false);
+                onOpenChange(false);
+                if (onTaskDeleted) onTaskDeleted();
             },
-            {
-                preserveScroll: true,
-                onSuccess: () => {
-                    if (onTaskUpdated) onTaskUpdated();
-                },
-            }
-        );
+            onError: () => setIsDeleting(false),
+        });
     };
 
     const handleAddSubtask = (e: React.FormEvent) => {
@@ -220,11 +371,11 @@ export function TaskDetailDrawer({
         router.post(
             `/projects/${projectId}/tasks`,
             {
-                title: newSubtaskTitle,
                 parent_id: task.id,
+                title: newSubtaskTitle,
                 type: 'subtask',
-                priority: task.priority,
-                status_id: task.status_id,
+                status_id: statuses[0]?.id,
+                priority: 'medium',
             },
             {
                 preserveScroll: true,
@@ -238,14 +389,124 @@ export function TaskDetailDrawer({
         );
     };
 
-    const handleDelete = () => {
-        if (!confirm(`Hapus tugas "${task.key}: ${task.title}"?`)) return;
+    const handlePostComment = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newCommentContent.trim()) return;
 
-        router.delete(`/projects/${projectId}/tasks/${task.id}`, {
+        setIsPostingComment(true);
+        router.post(
+            `/tasks/${task.id}/comments`,
+            { content: newCommentContent },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setNewCommentContent('');
+                    setIsPostingComment(false);
+                    if (onTaskUpdated) onTaskUpdated();
+                },
+                onError: () => setIsPostingComment(false),
+            }
+        );
+    };
+
+    const handlePostReply = (parentId: string) => {
+        if (!replyContent.trim()) return;
+
+        router.post(
+            `/tasks/${task.id}/comments`,
+            {
+                content: replyContent,
+                parent_id: parentId,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setReplyContent('');
+                    setReplyingToCommentId(null);
+                    if (onTaskUpdated) onTaskUpdated();
+                },
+            }
+        );
+    };
+
+    const handleDeleteComment = (commentId: string) => {
+        if (!confirm('Hapus komentar ini?')) return;
+
+        router.delete(`/tasks/${task.id}/comments/${commentId}`, {
             preserveScroll: true,
             onSuccess: () => {
-                onOpenChange(false);
-                if (onTaskDeleted) onTaskDeleted();
+                if (onTaskUpdated) onTaskUpdated();
+            },
+        });
+    };
+
+    const handleAddChecklist = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newChecklistTitle.trim()) return;
+
+        setIsAddingChecklist(true);
+        router.post(
+            `/tasks/${task.id}/checklists`,
+            { title: newChecklistTitle },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setNewChecklistTitle('');
+                    setIsAddingChecklist(false);
+                    if (onTaskUpdated) onTaskUpdated();
+                },
+                onError: () => setIsAddingChecklist(false),
+            }
+        );
+    };
+
+    const handleToggleChecklist = (checklistId: string) => {
+        router.patch(
+            `/tasks/${task.id}/checklists/${checklistId}/toggle`,
+            {},
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    if (onTaskUpdated) onTaskUpdated();
+                },
+            }
+        );
+    };
+
+    const handleDeleteChecklist = (checklistId: string) => {
+        router.delete(`/tasks/${task.id}/checklists/${checklistId}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                if (onTaskUpdated) onTaskUpdated();
+            },
+        });
+    };
+
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploadingAttachment(true);
+        const formData = new FormData();
+        formData.append('file', file);
+
+        router.post(`/tasks/${task.id}/attachments`, formData, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setIsUploadingAttachment(false);
+                if (onTaskUpdated) onTaskUpdated();
+            },
+            onError: () => setIsUploadingAttachment(false),
+        });
+    };
+
+    const handleDeleteAttachment = (attachmentId: string) => {
+        if (!confirm('Hapus lampiran ini?')) return;
+
+        router.delete(`/attachments/${attachmentId}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                if (onTaskUpdated) onTaskUpdated();
             },
         });
     };
@@ -259,47 +520,44 @@ export function TaskDetailDrawer({
         }
     };
 
-    const getPriorityBadge = (p: string) => {
-        switch (p) {
-            case 'highest': return <Badge variant="destructive" className="text-[10px] uppercase font-bold">🔴 Highest</Badge>;
-            case 'high': return <Badge variant="outline" className="text-[10px] text-orange-500 border-orange-500/30 uppercase font-bold">🟠 High</Badge>;
-            case 'medium': return <Badge variant="outline" className="text-[10px] text-amber-500 border-amber-500/30 uppercase font-bold">🟡 Medium</Badge>;
-            case 'low': return <Badge variant="outline" className="text-[10px] text-blue-500 border-blue-500/30 uppercase font-bold">🔵 Low</Badge>;
-            default: return <Badge variant="outline" className="text-[10px] text-slate-400 border-slate-500/30 uppercase font-bold">⚪ Lowest</Badge>;
-        }
-    };
+    const completedChecklists = task.checklists?.filter((c) => c.is_completed) || [];
+    const totalChecklists = task.checklists?.length || 0;
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
-            <SheetContent className="w-full sm:max-w-2xl lg:max-w-3xl overflow-y-auto p-0 bg-card border-l border-border flex flex-col">
+            <SheetContent className="sm:max-w-2xl w-full p-0 overflow-y-auto border-l border-border bg-card">
                 {/* Header */}
-                <div className="p-6 border-b border-border bg-card/60 sticky top-0 z-10 backdrop-blur-md">
-                    <div className="flex items-center justify-between gap-4 mb-2">
+                <SheetHeader className="p-6 border-b border-border bg-card/60 backdrop-blur sticky top-0 z-10">
+                    <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-2">
-                            {getTypeIcon(type)}
-                            <span className="font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                                {task.key}
+                            <span className="p-1 rounded bg-muted">
+                                {getTypeIcon(type)}
                             </span>
-                            <span className="text-muted-foreground/40">•</span>
-                            {getPriorityBadge(priority)}
+                            <SheetTitle className="font-mono text-sm tracking-tight text-primary font-bold">
+                                {task.key}
+                            </SheetTitle>
+                            <Badge variant="outline" className="text-xs capitalize font-mono">
+                                v{task.version}
+                            </Badge>
                         </div>
 
                         <div className="flex items-center gap-2">
                             <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={handleSaveMainDetails}
+                                onClick={handleSaveDetails}
                                 disabled={isSaving}
-                                className="h-8 text-xs gap-1.5 font-semibold bg-primary/10 text-primary hover:bg-primary/20 border-primary/30"
+                                className="text-xs gap-1.5 h-8 font-semibold bg-primary text-primary-foreground hover:bg-primary/90"
                             >
                                 <Save className="h-3.5 w-3.5" />
                                 <span>{isSaving ? 'Menyimpan...' : 'Simpan'}</span>
                             </Button>
                             <Button
                                 variant="ghost"
-                                size="sm"
-                                onClick={handleDelete}
-                                className="h-8 w-8 p-0 text-muted-foreground hover:text-red-500 hover:bg-red-500/10"
+                                size="icon"
+                                onClick={handleDeleteTask}
+                                disabled={isDeleting}
+                                className="h-8 w-8 text-destructive hover:bg-destructive/10"
                                 title="Hapus Tugas"
                             >
                                 <Trash2 className="h-4 w-4" />
@@ -307,93 +565,411 @@ export function TaskDetailDrawer({
                         </div>
                     </div>
 
-                    <Input
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        onBlur={handleSaveMainDetails}
-                        className="text-lg font-bold bg-transparent border-transparent hover:border-border focus:border-primary px-2 -ml-2 transition-all"
-                        placeholder="Judul Tugas..."
-                    />
-                </div>
+                    {/* Title Input */}
+                    <div className="mt-4">
+                        <Input
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            className="font-bold text-base bg-transparent border-transparent hover:border-border focus:border-primary px-2 -ml-2 transition-colors"
+                            placeholder="Judul Tugas..."
+                        />
+                    </div>
+                </SheetHeader>
 
-                {/* Body: 2 Columns */}
-                <div className="flex-1 p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* Left Column: Tabs for Description, Subtasks, Activity */}
+                {/* Content Body Grid */}
+                <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Left Column: Tabs Content */}
                     <div className="md:col-span-2 space-y-6">
-                        <Tabs defaultValue="details" className="w-full">
-                            <TabsList className="grid w-full grid-cols-3 bg-muted/60">
-                                <TabsTrigger value="details" className="text-xs">Detail</TabsTrigger>
-                                <TabsTrigger value="subtasks" className="text-xs flex items-center gap-1.5">
-                                    <CheckSquare className="h-3.5 w-3.5" />
-                                    <span>Subtasks ({task.subtasks?.length || 0})</span>
+                        <Tabs value={activeTab} onValueChange={setActiveTab}>
+                            <TabsList className="grid grid-cols-5 w-full bg-muted/60 text-xs">
+                                <TabsTrigger value="details">Detail</TabsTrigger>
+                                <TabsTrigger value="checklists" className="gap-1">
+                                    <CheckSquare className="h-3 w-3" />
+                                    <span>Checklist</span>
                                 </TabsTrigger>
-                                <TabsTrigger value="activity" className="text-xs flex items-center gap-1.5">
-                                    <History className="h-3.5 w-3.5" />
-                                    <span>Riwayat</span>
+                                <TabsTrigger value="comments" className="gap-1">
+                                    <MessageSquare className="h-3 w-3" />
+                                    <span>Komentar</span>
                                 </TabsTrigger>
+                                <TabsTrigger value="attachments" className="gap-1">
+                                    <Paperclip className="h-3 w-3" />
+                                    <span>Lampiran</span>
+                                </TabsTrigger>
+                                <TabsTrigger value="activity">Riwayat</TabsTrigger>
                             </TabsList>
 
-                            {/* Tab 1: Description & Details */}
+                            {/* Tab 1: Details & Description */}
                             <TabsContent value="details" className="space-y-4 pt-4">
-                                <div className="space-y-1.5">
+                                <div className="space-y-2">
                                     <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                                         Deskripsi
                                     </label>
                                     <Textarea
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
-                                        onBlur={handleSaveMainDetails}
-                                        placeholder="Tambahkan detail deskripsi untuk tugas ini..."
-                                        rows={8}
-                                        className="bg-background font-mono text-sm leading-relaxed"
+                                        placeholder="Tambahkan penjelasan mendalam mengenai tugas ini..."
+                                        className="min-h-[140px] text-xs leading-relaxed bg-background/50 resize-y"
                                     />
+                                </div>
+
+                                {/* Subtasks overview */}
+                                <div className="space-y-3 pt-2">
+                                    <div className="flex items-center justify-between">
+                                        <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                                            <Layers className="h-3.5 w-3.5" />
+                                            Subtasks ({task.subtasks?.length || 0})
+                                        </label>
+
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={handleAiTaskBreakdown}
+                                            disabled={isGeneratingBreakdown}
+                                            className="h-7 text-[11px] gap-1 text-primary hover:bg-primary/10 font-semibold"
+                                        >
+                                            <Sparkles className="size-3" />
+                                            <span>{isGeneratingBreakdown ? 'Menganalisis...' : 'AI Breakdown'}</span>
+                                        </Button>
+                                    </div>
+
+                                    {/* AI Suggested Subtasks Card */}
+                                    {aiSuggestedSubtasks && aiSuggestedSubtasks.length > 0 && (
+                                        <div className="p-3 rounded-xl border border-primary/40 bg-primary/5 space-y-2 text-xs">
+                                            <div className="flex items-center justify-between">
+                                                <span className="font-bold text-primary flex items-center gap-1">
+                                                    <Sparkles className="size-3.5" />
+                                                    Usulan Subtask dari AI
+                                                </span>
+                                                <button
+                                                    onClick={() => setAiSuggestedSubtasks(null)}
+                                                    className="text-[10px] text-muted-foreground hover:text-foreground"
+                                                >
+                                                    Tutup
+                                                </button>
+                                            </div>
+                                            <div className="space-y-1.5">
+                                                {aiSuggestedSubtasks.map((st, idx) => (
+                                                    <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-card border border-border/60">
+                                                        <div>
+                                                            <p className="font-semibold text-foreground">{st.title}</p>
+                                                            <span className="text-[10px] text-muted-foreground">
+                                                                {st.estimate_points ? `${st.estimate_points} SP` : ''} • Prioritas: {st.priority}
+                                                            </span>
+                                                        </div>
+                                                        <Button
+                                                            size="sm"
+                                                            onClick={() => handleApplySuggestedSubtask(st)}
+                                                            className="h-6 text-[11px] gap-1 bg-primary text-primary-foreground"
+                                                        >
+                                                            <Plus className="size-3" />
+                                                            Terapkan
+                                                        </Button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <form onSubmit={handleAddSubtask} className="flex gap-2">
+                                        <Input
+                                            value={newSubtaskTitle}
+                                            onChange={(e) => setNewSubtaskTitle(e.target.value)}
+                                            placeholder="Tambah subtask baru..."
+                                            className="text-xs bg-background"
+                                        />
+                                        <Button type="submit" size="sm" disabled={isAddingSubtask || !newSubtaskTitle.trim()} className="text-xs gap-1">
+                                            <Plus className="h-3.5 w-3.5" />
+                                            <span>Tambah</span>
+                                        </Button>
+                                    </form>
+                                    <div className="space-y-1.5">
+                                        {task.subtasks && task.subtasks.map((st) => (
+                                            <div key={st.id} className="flex items-center justify-between p-2 rounded-lg border border-border/60 bg-muted/20 text-xs">
+                                                <span className="font-mono font-semibold text-muted-foreground">{st.key}</span>
+                                                <span className="font-medium text-foreground">{st.title}</span>
+                                                <Badge variant="outline" className="text-[10px]" style={{ borderColor: st.status_color }}>
+                                                    {st.status_name || 'Subtask'}
+                                                </Badge>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </TabsContent>
 
-                            {/* Tab 2: Subtasks */}
-                            <TabsContent value="subtasks" className="space-y-4 pt-4">
-                                <form onSubmit={handleAddSubtask} className="flex gap-2">
+                            {/* Tab 2: Checklists */}
+                            <TabsContent value="checklists" className="space-y-4 pt-4">
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between text-xs">
+                                        <span className="text-muted-foreground font-semibold">Progres Checklist:</span>
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={handleAiAcceptanceCriteria}
+                                                disabled={isGeneratingCriteria}
+                                                className="h-6 text-[11px] gap-1 text-primary hover:bg-primary/10 font-semibold"
+                                            >
+                                                <Sparkles className="size-3" />
+                                                <span>{isGeneratingCriteria ? 'Membuat...' : 'AI Criteria Generator'}</span>
+                                            </Button>
+                                            <span className="font-mono text-primary font-bold">
+                                                {completedChecklists.length} / {totalChecklists} Selesai
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+                                        <div
+                                            className="h-full bg-emerald-500 transition-all duration-300"
+                                            style={{
+                                                width: `${totalChecklists > 0 ? Math.round((completedChecklists.length / totalChecklists) * 100) : 0}%`,
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* AI Suggested Criteria Card */}
+                                {aiSuggestedCriteria && aiSuggestedCriteria.length > 0 && (
+                                    <div className="p-3 rounded-xl border border-primary/40 bg-primary/5 space-y-2 text-xs">
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-bold text-primary flex items-center gap-1">
+                                                <Sparkles className="size-3.5" />
+                                                Usulan Acceptance Criteria (Given-When-Then)
+                                            </span>
+                                            <button
+                                                onClick={() => setAiSuggestedCriteria(null)}
+                                                className="text-[10px] text-muted-foreground hover:text-foreground"
+                                            >
+                                                Tutup
+                                            </button>
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            {aiSuggestedCriteria.map((crit, idx) => (
+                                                <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-card border border-border/60 gap-2">
+                                                    <p className="text-[11px] text-foreground leading-snug flex-1">{crit}</p>
+                                                    <Button
+                                                        size="sm"
+                                                        onClick={() => handleApplySuggestedCriterion(crit)}
+                                                        className="h-6 text-[10px] gap-1 bg-primary text-primary-foreground shrink-0"
+                                                    >
+                                                        <Plus className="size-3" />
+                                                        Tambah
+                                                    </Button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <form onSubmit={handleAddChecklist} className="flex gap-2">
                                     <Input
-                                        value={newSubtaskTitle}
-                                        onChange={(e) => setNewSubtaskTitle(e.target.value)}
-                                        placeholder="Tambah subtask baru..."
+                                        value={newChecklistTitle}
+                                        onChange={(e) => setNewChecklistTitle(e.target.value)}
+                                        placeholder="Tambah item checklist..."
                                         className="text-xs bg-background"
                                     />
-                                    <Button type="submit" size="sm" disabled={isAddingSubtask || !newSubtaskTitle.trim()} className="text-xs gap-1">
+                                    <Button type="submit" size="sm" disabled={isAddingChecklist || !newChecklistTitle.trim()} className="text-xs gap-1">
                                         <Plus className="h-3.5 w-3.5" />
                                         <span>Tambah</span>
                                     </Button>
                                 </form>
 
                                 <div className="space-y-2">
-                                    {task.subtasks && task.subtasks.length > 0 ? (
-                                        task.subtasks.map((st) => (
+                                    {task.checklists && task.checklists.length > 0 ? (
+                                        task.checklists.map((ck) => (
                                             <div
-                                                key={st.id}
-                                                className="flex items-center justify-between p-2.5 rounded-lg border border-border/60 bg-muted/20 hover:bg-muted/40 transition-colors"
+                                                key={ck.id}
+                                                className="group flex items-center justify-between p-2.5 rounded-lg border border-border/60 bg-muted/20 hover:bg-muted/40 transition-colors"
                                             >
-                                                <div className="flex items-center gap-2.5">
-                                                    <span className="font-mono text-[11px] text-muted-foreground font-semibold">
-                                                        {st.key}
-                                                    </span>
-                                                    <span className="text-xs font-medium text-foreground">
-                                                        {st.title}
+                                                <div
+                                                    onClick={() => handleToggleChecklist(ck.id)}
+                                                    className="flex items-center gap-2.5 cursor-pointer flex-1"
+                                                >
+                                                    <div className={`size-4 rounded border flex items-center justify-center transition-colors ${
+                                                        ck.is_completed ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-border bg-card'
+                                                    }`}>
+                                                        {ck.is_completed && <Check className="size-3 stroke-[3]" />}
+                                                    </div>
+                                                    <span className={`text-xs font-medium ${ck.is_completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                                                        {ck.title}
                                                     </span>
                                                 </div>
-                                                <Badge variant="outline" className="text-[10px]" style={{ borderColor: st.status_color }}>
-                                                    {st.status_name || 'Subtask'}
-                                                </Badge>
+
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => handleDeleteChecklist(ck.id)}
+                                                    className="size-6 text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-destructive"
+                                                >
+                                                    <Trash2 className="size-3.5" />
+                                                </Button>
                                             </div>
                                         ))
                                     ) : (
                                         <p className="text-xs text-muted-foreground italic text-center py-6">
-                                            Belum ada subtask untuk tugas ini.
+                                            Belum ada item checklist. Tambahkan item di atas untuk melacak langkah pengerjaan.
                                         </p>
                                     )}
                                 </div>
                             </TabsContent>
 
-                            {/* Tab 3: Activity Audit Log */}
+                            {/* Tab 3: Comments Stream */}
+                            <TabsContent value="comments" className="space-y-4 pt-4">
+                                <form onSubmit={handlePostComment} className="space-y-2">
+                                    <Textarea
+                                        value={newCommentContent}
+                                        onChange={(e) => setNewCommentContent(e.target.value)}
+                                        placeholder="Tulis komentar atau sebut rekan tim (@name)..."
+                                        className="text-xs bg-background min-h-[70px]"
+                                    />
+                                    <div className="flex justify-end">
+                                        <Button
+                                            type="submit"
+                                            size="sm"
+                                            disabled={isPostingComment || !newCommentContent.trim()}
+                                            className="text-xs gap-1.5 font-semibold"
+                                        >
+                                            <Send className="size-3.5" />
+                                            <span>Kirim Komentar</span>
+                                        </Button>
+                                    </div>
+                                </form>
+
+                                <div className="space-y-3 pt-2">
+                                    {task.comments && task.comments.length > 0 ? (
+                                        task.comments.map((comment) => (
+                                            <div key={comment.id} className="rounded-lg border border-border/60 bg-muted/20 p-3 text-xs space-y-2">
+                                                <div className="flex items-center justify-between">
+                                                    <span className="font-bold text-foreground">{comment.user.name}</span>
+                                                    <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                                                        <span>{comment.created_at}</span>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => handleDeleteComment(comment.id)}
+                                                            className="size-5 hover:text-destructive"
+                                                        >
+                                                            <Trash2 className="size-3" />
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                                <p className="text-foreground whitespace-pre-wrap">{comment.content}</p>
+
+                                                {/* Reply button / form */}
+                                                {replyingToCommentId === comment.id ? (
+                                                    <div className="mt-2 pl-4 border-l-2 border-primary space-y-2">
+                                                        <Input
+                                                            value={replyContent}
+                                                            onChange={(e) => setReplyContent(e.target.value)}
+                                                            placeholder="Tulis balasan..."
+                                                            className="text-xs bg-background h-8"
+                                                        />
+                                                        <div className="flex gap-2">
+                                                            <Button size="sm" onClick={() => handlePostReply(comment.id)} className="h-7 text-xs">
+                                                                Kirim Balasan
+                                                            </Button>
+                                                            <Button variant="ghost" size="sm" onClick={() => setReplyingToCommentId(null)} className="h-7 text-xs">
+                                                                Batal
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setReplyingToCommentId(comment.id)}
+                                                        className="text-[11px] text-primary hover:underline flex items-center gap-1 font-semibold"
+                                                    >
+                                                        <CornerDownRight className="size-3" />
+                                                        Balas
+                                                    </button>
+                                                )}
+
+                                                {/* Nested Replies */}
+                                                {comment.replies && comment.replies.length > 0 && (
+                                                    <div className="pl-4 border-l-2 border-border/80 space-y-2 mt-2">
+                                                        {comment.replies.map((reply) => (
+                                                            <div key={reply.id} className="p-2 rounded bg-card text-xs space-y-1">
+                                                                <div className="flex items-center justify-between">
+                                                                    <span className="font-semibold text-foreground">{reply.user.name}</span>
+                                                                    <span className="text-[10px] text-muted-foreground">{reply.created_at}</span>
+                                                                </div>
+                                                                <p className="text-muted-foreground">{reply.content}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-xs text-muted-foreground italic text-center py-6">
+                                            Belum ada komentar untuk tugas ini.
+                                        </p>
+                                    )}
+                                </div>
+                            </TabsContent>
+
+                            {/* Tab 4: Attachments */}
+                            <TabsContent value="attachments" className="space-y-4 pt-4">
+                                <div className="rounded-lg border-2 border-dashed border-border p-4 text-center">
+                                    <Paperclip className="mx-auto size-6 text-muted-foreground mb-1" />
+                                    <label className="cursor-pointer font-semibold text-xs text-primary hover:underline block">
+                                        {isUploadingAttachment ? 'Mengunggah...' : 'Pilih file untuk dilampirkan'}
+                                        <input
+                                            type="file"
+                                            className="hidden"
+                                            onChange={handleFileUpload}
+                                            disabled={isUploadingAttachment}
+                                        />
+                                    </label>
+                                    <span className="text-[10px] text-muted-foreground block mt-0.5">
+                                        Maksimal 25MB (Dokumen, PDF, Gambar, Zip)
+                                    </span>
+                                </div>
+
+                                <div className="space-y-2">
+                                    {task.attachments && task.attachments.length > 0 ? (
+                                        task.attachments.map((att) => (
+                                            <div
+                                                key={att.id}
+                                                className="flex items-center justify-between p-2.5 rounded-lg border border-border/60 bg-muted/20 hover:bg-muted/40 transition-colors"
+                                            >
+                                                <div className="flex items-center gap-2.5 overflow-hidden">
+                                                    <FileText className="size-4 text-primary shrink-0" />
+                                                    <div className="overflow-hidden">
+                                                        <p className="text-xs font-semibold text-foreground truncate">{att.filename}</p>
+                                                        <span className="text-[10px] text-muted-foreground">
+                                                            {att.size_human} • {att.created_at} {att.uploader ? `oleh ${att.uploader.name}` : ''}
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-center gap-1 shrink-0">
+                                                    <Button asChild variant="ghost" size="icon" className="size-7 text-primary hover:bg-primary/10">
+                                                        <a href={`/attachments/${att.id}/download`} download>
+                                                            <Download className="size-3.5" />
+                                                        </a>
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={() => handleDeleteAttachment(att.id)}
+                                                        className="size-7 text-destructive hover:bg-destructive/10"
+                                                    >
+                                                        <Trash2 className="size-3.5" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-xs text-muted-foreground italic text-center py-6">
+                                            Belum ada file lampiran pada tugas ini.
+                                        </p>
+                                    )}
+                                </div>
+                            </TabsContent>
+
+                            {/* Tab 5: Activity Log */}
                             <TabsContent value="activity" className="space-y-3 pt-4">
                                 {task.activities && task.activities.length > 0 ? (
                                     <div className="relative pl-6 space-y-4 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-border">
@@ -413,6 +989,7 @@ export function TaskDetailDrawer({
                                                     {act.action === 'created' && 'Membuat tugas ini.'}
                                                     {act.action === 'status_changed' && `Mengubah status ke "${act.changes?.to_status_name || 'status baru'}"`}
                                                     {act.action === 'updated' && 'Memperbarui rincian tugas.'}
+                                                    {act.action === 'comment_added' && 'Menambahkan komentar pada tugas.'}
                                                     {act.action === 'reordered' && 'Menggeser urutan kartu di papan.'}
                                                     {act.action === 'deleted' && 'Menghapus tugas.'}
                                                 </p>
@@ -457,95 +1034,93 @@ export function TaskDetailDrawer({
                         {/* Priority */}
                         <div className="space-y-1.5">
                             <label className="text-xs font-medium text-muted-foreground">Prioritas</label>
-                            <Select
-                                value={priority}
-                                onValueChange={(v) => {
-                                    setPriority(v);
-                                    router.put(`/projects/${projectId}/tasks/${task.id}`, { priority: v }, { preserveScroll: true, onSuccess: onTaskUpdated });
-                                }}
-                            >
+                            <Select value={priority} onValueChange={setPriority}>
                                 <SelectTrigger className="bg-background text-xs">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="highest" className="text-xs text-red-500">🔴 Highest</SelectItem>
-                                    <SelectItem value="high" className="text-xs text-orange-500">🟠 High</SelectItem>
-                                    <SelectItem value="medium" className="text-xs text-amber-500">🟡 Medium</SelectItem>
-                                    <SelectItem value="low" className="text-xs text-blue-500">🔵 Low</SelectItem>
-                                    <SelectItem value="lowest" className="text-xs text-slate-400">⚪ Lowest</SelectItem>
+                                    <SelectItem value="lowest">Lowest</SelectItem>
+                                    <SelectItem value="low">Low</SelectItem>
+                                    <SelectItem value="medium">Medium</SelectItem>
+                                    <SelectItem value="high">High</SelectItem>
+                                    <SelectItem value="highest">Highest</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
 
-                        {/* Story Points */}
+                        {/* Type */}
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-medium text-muted-foreground">Tipe Tugas</label>
+                            <Select value={type} onValueChange={setType}>
+                                <SelectTrigger className="bg-background text-xs">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="task">Task</SelectItem>
+                                    <SelectItem value="bug">Bug</SelectItem>
+                                    <SelectItem value="story">Story</SelectItem>
+                                    <SelectItem value="epic">Epic</SelectItem>
+                                    <SelectItem value="subtask">Subtask</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Estimate Points */}
                         <div className="space-y-1.5">
                             <label className="text-xs font-medium text-muted-foreground">Story Points</label>
-                            <Input
-                                type="number"
-                                step="0.5"
-                                value={estimatePoints}
-                                onChange={(e) => setEstimatePoints(e.target.value)}
-                                onBlur={handleSaveMainDetails}
-                                placeholder="0"
-                                className="text-xs bg-background"
-                            />
+                            <div className="relative">
+                                <Hash className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
+                                <Input
+                                    type="number"
+                                    step="0.5"
+                                    min="0"
+                                    value={estimatePoints}
+                                    onChange={(e) => setEstimatePoints(e.target.value)}
+                                    placeholder="0"
+                                    className="pl-8 text-xs bg-background"
+                                />
+                            </div>
                         </div>
 
                         {/* Due Date */}
                         <div className="space-y-1.5">
                             <label className="text-xs font-medium text-muted-foreground">Tenggat Waktu</label>
-                            <Input
-                                type="date"
-                                value={dueDate}
-                                onChange={(e) => setDueDate(e.target.value)}
-                                onBlur={handleSaveMainDetails}
-                                className="text-xs bg-background"
-                            />
-                        </div>
-
-                        {/* Multi-Assignees */}
-                        <div className="space-y-2 pt-2 border-t border-border">
-                            <label className="text-xs font-medium text-muted-foreground">Anggota Bertugas</label>
-                            <div className="flex flex-wrap gap-1">
-                                {members.map((m) => {
-                                    const isAssigned = selectedAssignees.includes(m.id);
-                                    return (
-                                        <button
-                                            key={m.id}
-                                            type="button"
-                                            onClick={() => toggleAssignee(m.id)}
-                                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] transition-colors ${
-                                                isAssigned
-                                                    ? 'bg-primary text-primary-foreground font-semibold'
-                                                    : 'bg-muted hover:bg-muted/80 text-muted-foreground border border-border/60'
-                                            }`}
-                                        >
-                                            <span className="h-3.5 w-3.5 rounded-full bg-background/20 flex items-center justify-center text-[9px]">
-                                                {m.name.charAt(0).toUpperCase()}
-                                            </span>
-                                            <span>{m.name}</span>
-                                        </button>
-                                    );
-                                })}
+                            <div className="relative">
+                                <Calendar className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
+                                <Input
+                                    type="date"
+                                    value={dueDate}
+                                    onChange={(e) => setDueDate(e.target.value)}
+                                    className="pl-8 text-xs bg-background"
+                                />
                             </div>
                         </div>
 
-                        {/* Meta Info */}
-                        <div className="pt-3 border-t border-border space-y-1.5 text-[11px] text-muted-foreground font-mono">
-                            <div className="flex justify-between">
-                                <span>Versi Concurrency:</span>
-                                <span className="font-semibold text-foreground">v{task.version}</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span>Dibuat Oleh:</span>
-                                <span>{task.creator?.name || 'Sistem'}</span>
-                            </div>
-                            {task.created_at && (
-                                <div className="flex justify-between">
-                                    <span>Dibuat Pada:</span>
-                                    <span>{task.created_at}</span>
-                                </div>
-                            )}
+                        {/* Assignee */}
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-medium text-muted-foreground">Penerima Tugas</label>
+                            <Select
+                                value={selectedAssigneeIds[0] ? String(selectedAssigneeIds[0]) : 'unassigned'}
+                                onValueChange={(val) => {
+                                    if (val === 'unassigned') {
+                                        setSelectedAssigneeIds([]);
+                                    } else {
+                                        setSelectedAssigneeIds([parseInt(val, 10)]);
+                                    }
+                                }}
+                            >
+                                <SelectTrigger className="bg-background text-xs">
+                                    <SelectValue placeholder="Belum ditugaskan" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="unassigned">Belum Ditugaskan</SelectItem>
+                                    {members.map((m) => (
+                                        <SelectItem key={m.id} value={String(m.id)} className="text-xs">
+                                            {m.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
                 </div>

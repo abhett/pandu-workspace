@@ -1,0 +1,5884 @@
+
+
+
+AI WORK MANAGEMENT SYSTEM
+
+Implementation Blueprint
+
+Laravel 13 · React · PostgreSQL · Multi-Provider AI
+
+
+Status
+Implementation-ready baseline
+Version
+1.0
+Prepared
+28 July 2026
+Target
+Enterprise / self-hosted / cloud-ready
+Primary architecture
+Modular monolith with event-driven workers
+Source draft
+Implementation Plan - AI Work Management System
+
+
+Dokumen ini melengkapi draft awal menjadi spesifikasi kebutuhan, desain data/API/AI, kontrol keamanan, rencana delivery, dan prompt pack untuk pengembangan berbantuan Antigravity.
+
+
+
+Document Control
+Item
+Definition
+
+Purpose
+
+A single implementation baseline for product, architecture, engineering, QA, security, DevOps, and AI governance.
+
+Audience
+
+Product owner, PMO, Scrum Master, architects, Laravel/React developers, QA, security, DevOps, and administrators.
+
+Normative language
+
+MUST = mandatory for release; SHOULD = recommended unless a documented exception exists; MAY = optional.
+
+Change control
+
+Architecture Decision Records (ADRs), versioned OpenAPI, database migrations, and approved security exceptions.
+
+Out of scope for MVP
+
+Native mobile applications, marketplace, full billing, cross-company federation, and custom ML training.
+
+
+
+
+Table of Contents
+1. Executive Summary and Product Vision
+2. Recommended Architecture and Technology Stack
+3. Software Requirements Specification (SRS)
+4. UX, Scrum Master, and Draggable Kanban Design
+5. ERD and PostgreSQL Database Schema
+6. REST API and Real-Time Specification
+7. AI System Design Document
+8. Security, Privacy, and Compliance
+9. Implementation Blueprint and Code Baseline
+10. Development Roadmap and Delivery Governance
+11. Antigravity Prompt Pack
+12. Deployment, Observability, and Operations
+13. Appendices
+Source alignment — The original draft establishes the enterprise vision, personas, core modules, multi-agent AI concept, development phases, security direction, and initial table inventory. This blueprint preserves those objectives while defining implementation details, acceptance criteria, and operational controls.
+
+
+
+
+
+1. Executive Summary and Product Vision
+The proposed product is a multi-tenant, AI-assisted work management platform comparable in workflow depth to Jira and ClickUp. It supports portfolio governance, projects, Scrum and Kanban execution, collaboration, time tracking, reporting, automation, and explainable AI recommendations. The product is designed for organizations that require self-hosted or cloud deployment without becoming dependent on one AI vendor or object-storage provider.
+
+
+1.1 Product Goals
+
+
+Create one trusted system of record for portfolios, projects, sprints, tasks, decisions, risks, time, documents, and audit evidence.
+
+
+Enable fluid execution through accessible drag-and-drop Kanban, backlog refinement, sprint planning, WIP controls, and real-time collaboration.
+
+
+Provide Scrum Master and PMO workspaces with impediment detection, delivery forecasts, health scores, and evidence-based interventions.
+
+
+Allow administrators to configure OpenAI, Gemini, Ollama/local, or OpenAI-compatible models per use case with fallbacks, budgets, privacy rules, and human approval.
+
+
+Support secure enterprise deployment using tenant isolation, least privilege, MFA/SSO readiness, encrypted secrets, immutable audit events, and tested recovery procedures.
+
+
+1.2 Success Metrics
+Area
+Metric
+Initial Target
+
+Adoption
+
+Weekly active users / licensed users
+
+&gt;= 70% after 90 days
+
+Delivery
+
+Reduction in overdue work
+
+&gt;= 25% within two quarters
+
+Planning
+
+Committed vs completed sprint points
+
+80-120% healthy band
+
+Flow
+
+Median cycle-time reduction
+
+&gt;= 15%
+
+Quality
+
+Escaped high-severity defects
+
+&lt; 2 per release
+
+Availability
+
+Monthly application availability
+
+&gt;= 99.9% after stabilization
+
+AI usefulness
+
+Accepted or positively rated AI recommendations
+
+&gt;= 60%
+
+AI safety
+
+Unauthorized AI write actions
+
+0
+
+Performance
+
+p95 task-list API latency
+
+&lt; 500 ms at target load
+
+Recovery
+
+Restore test success
+
+100% quarterly
+
+
+
+
+1.3 Personas and Responsibilities
+Persona
+Primary Responsibilities
+Key Capabilities
+
+Super Admin
+
+Platform configuration and governance
+
+Tenants, identity, permissions, providers, feature flags, audit, retention, integrations.
+
+Executive / Director
+
+Portfolio outcomes and decisions
+
+Executive dashboard, strategic objectives, KPIs, AI summaries, approvals.
+
+PMO / Portfolio Manager
+
+Portfolio governance
+
+Prioritization, dependencies, capacity, risks, benefits, milestones, health.
+
+Project Manager / Product Owner
+
+Delivery scope and value
+
+Roadmap, backlog, releases, acceptance, stakeholders, budget.
+
+Scrum Master
+
+Team flow and continuous improvement
+
+Sprint ceremonies, impediments, WIP, predictability, retrospectives, coaching signals.
+
+Team Lead
+
+Technical coordination
+
+Assignment, review, capacity, technical risks, dependency resolution.
+
+Member
+
+Execution and collaboration
+
+Tasks, checklist, comments, time, attachments, mentions, notifications.
+
+Auditor / Read-only
+
+Independent evidence review
+
+Reports, audit trail, access reviews, export with scoped permissions.
+
+AI Agent
+
+Advisory and approved automation
+
+Plan, monitor, report, retrieve knowledge, propose actions, execute approved tools.
+
+
+
+
+1.4 Scope by Release
+Release
+Included
+Excluded / Deferred
+
+MVP
+
+IAM, organization/team, projects, tasks/subtasks, customizable statuses, Kanban, Scrum backlog/sprints, comments, attachments, notifications, audit, basic dashboards, AI chat/read-only summaries.
+
+Advanced portfolio finance, marketplace, native mobile, custom ML training.
+
+R1
+
+Portfolio, roadmap, dependencies, risks, workload, time tracking, automations, webhooks, provider routing, RAG, exports, SSO.
+
+Public plugin SDK and complex billing.
+
+R2
+
+Advanced analytics, scenario planning, cross-project capacity, richer AI tools, data residency controls, optional search cluster.
+
+Features requiring separate commercial agreements unless approved.
+
+
+
+
+
+2. Recommended Architecture and Technology Stack
+
+
+
+
+Figure 1 — Logical architecture and primary component boundaries.
+
+
+2.1 Architecture Style
+Use a modular monolith for the initial product: one Laravel deployment unit, strict domain modules, internal events, independently scalable queue and WebSocket processes, and explicit interfaces around AI, storage, search, notifications, and integrations. This minimizes distributed-system overhead while preserving a path to extract high-load services later.
+Decision
+Recommendation
+Rationale / Guardrail
+
+Backend
+
+Laravel 13, PHP 8.3+, REST API, Actions/Services, Policies, Resources
+
+Stable productivity baseline; domain modules MUST not access another module’s internal tables without an application contract.
+
+Frontend
+
+React 19 + TypeScript + Vite; TanStack Query; React Router; dnd-kit; React Hook Form + Zod
+
+SPA experience, optimistic updates, accessible drag-and-drop, typed validation.
+
+Database
+
+PostgreSQL 18; UUIDv7 identifiers; JSONB only for flexible metadata; pgvector for embeddings
+
+Transactional source of truth, FTS first, vector retrieval without a separate service at MVP.
+
+Cache / Queue
+
+Valkey or Redis-compatible protocol; Laravel Cache, locks, Horizon queues
+
+Prefer an open-source-compatible deployment; isolate cache, session, queue, and lock namespaces.
+
+Real time
+
+Laravel Reverb + Echo
+
+Board movements, comments, presence, and notifications; authorization on every private channel.
+
+Object storage
+
+Laravel S3 driver; SeaweedFS for free self-hosted baseline, or managed S3-compatible service
+
+Storage abstraction avoids lock-in. Use presigned upload/download, checksum, malware scan, lifecycle, and versioning.
+
+Search
+
+PostgreSQL FTS + trigram + pgvector initially; OpenSearch only after measured need
+
+Do not operate Elasticsearch/OpenSearch before scale or query requirements justify it.
+
+AI
+
+Laravel AI SDK with provider adapters: OpenAI, Gemini, Ollama/local, OpenAI-compatible
+
+Admin-configured routing by use case, privacy class, capability, cost, latency, and fallback.
+
+Observability
+
+OpenTelemetry, structured JSON logs, Prometheus-compatible metrics, error tracking
+
+Use trace IDs across API, queue jobs, AI runs, and WebSocket events.
+
+Deployment
+
+Docker Compose for development; Kubernetes or managed container platform for production when required
+
+Start simple; production requires rolling deploy, health probes, backups, and separation of web/worker/scheduler/Reverb.
+
+
+
+
+2.2 Bounded Modules
+Module
+Owns
+Publishes / Consumes
+
+Identity &amp; Access
+
+Users, sessions, MFA, roles, permissions, service accounts
+
+UserActivated, MembershipChanged, AccessRevoked.
+
+Organization
+
+Organizations, departments, teams, memberships, calendars
+
+TeamCapacityChanged, OrganizationPolicyChanged.
+
+Portfolio
+
+Portfolios, objectives, initiatives, benefits, funding metadata
+
+PortfolioPriorityChanged, InitiativeApproved.
+
+Project
+
+Projects, members, releases, milestones, risks, dependencies
+
+ProjectCreated, MilestoneAtRisk, RiskEscalated.
+
+Work
+
+Tasks, subtasks, statuses, labels, custom fields, dependencies, checklists
+
+TaskCreated, TaskMoved, TaskCompleted, AssignmentChanged.
+
+Agile
+
+Boards, columns, backlog, sprints, estimates, retrospectives, impediments
+
+SprintStarted, SprintClosed, WipLimitExceeded.
+
+Collaboration
+
+Comments, mentions, watchers, attachments, activity feed
+
+CommentAdded, MentionCreated, FileScanned.
+
+Reporting
+
+Snapshots, aggregates, dashboards, exports
+
+ReportGenerated, HealthScoreChanged.
+
+Automation
+
+Rules, triggers, conditions, actions, schedules, executions
+
+AutomationSucceeded/Failed.
+
+AI
+
+Providers, models, policies, conversations, runs, tools, knowledge, evaluations
+
+AiRunCompleted, ToolApprovalRequested.
+
+Audit &amp; Compliance
+
+Append-only security and business audit events, retention jobs
+
+Consumes security-sensitive events from all modules.
+
+
+
+
+2.3 Deployment Topology
+
+
+
+
+Figure 2 — Recommended production topology. Components may share hosts at small scale but remain separate processes.
+
+
+2.4 Key Architecture Decisions
+ADR
+Decision
+Consequence
+
+ADR-001
+
+Modular monolith before microservices
+
+Faster delivery and simpler consistency; module boundaries and architecture tests are mandatory.
+
+ADR-002
+
+Tenant key on all tenant-owned rows plus database RLS defense-in-depth
+
+Every query is scoped; background jobs MUST carry organization_id and re-establish context.
+
+ADR-003
+
+Fractional ranking for board order
+
+Moves update one task in the common case; periodic rebalance avoids unbounded rank growth.
+
+ADR-004
+
+Optimistic concurrency using version and If-Match
+
+Prevents silent overwrites during concurrent board edits.
+
+ADR-005
+
+Outbox pattern for integration and critical domain events
+
+Database commit and event publication remain consistent; consumers are idempotent.
+
+ADR-006
+
+AI is advisory by default; write tools need policy and approval
+
+No autonomous destructive or high-impact changes without explicit authorization.
+
+ADR-007
+
+PostgreSQL search first
+
+Lower operational cost; introduce a search cluster only after benchmarked thresholds.
+
+ADR-008
+
+S3-compatible storage via application abstraction
+
+Allows SeaweedFS, cloud S3, or another compatible target without domain changes.
+
+
+
+
+
+3. Software Requirements Specification (SRS)
+
+
+3.1 System Context and Assumptions
+
+
+Each organization is a security and billing boundary. A user MAY belong to multiple organizations, but every request has exactly one active organization context.
+
+
+All timestamps are stored in UTC and displayed in the user or organization time zone. Business calendars define working days and holidays.
+
+
+Projects MAY use Scrum, Kanban, or hybrid methodology. Workflow statuses and board columns are configurable within governed constraints.
+
+
+External AI providers are optional. Core work-management functions MUST remain usable when AI is unavailable.
+
+
+External integrations use versioned APIs, OAuth or scoped tokens, idempotency keys, signed webhooks, and explicit organization consent.
+
+
+The application is responsive and keyboard-accessible; drag-and-drop is never the only way to move work.
+
+
+3.2 Functional Requirements
+
+
+Identity, Access, and Administration
+ID
+Requirement
+
+FR-IAM-001
+
+The system MUST support email/password authentication with verified email and configurable password policy.
+
+FR-IAM-002
+
+The system MUST support MFA using TOTP and recovery codes; WebAuthn SHOULD be added in R1.
+
+FR-IAM-003
+
+The system MUST support personal sessions, device/session revocation, and forced logout after security-sensitive changes.
+
+FR-IAM-004
+
+The system MUST provide roles, granular permissions, project roles, and policy checks on every read/write operation.
+
+FR-IAM-005
+
+The system MUST support SSO/OIDC configuration per organization in R1 and map approved claims to memberships.
+
+FR-IAM-006
+
+Administrators MUST be able to configure organization settings, feature flags, retention, time zone, locale, and business calendar.
+
+FR-IAM-007
+
+Administrators MUST be able to invite, suspend, reactivate, and offboard users; offboarding MUST revoke sessions and tokens.
+
+FR-IAM-008
+
+The system MUST provide scoped service accounts and personal access tokens with expiration, last-used metadata, and revocation.
+
+
+
+
+Organization, Portfolio, and Project
+ID
+Requirement
+
+FR-ORG-001
+
+Authorized users MUST manage departments, teams, team memberships, managers, skills, and capacity metadata.
+
+FR-PORT-001
+
+PMO users MUST create portfolios, strategic objectives, initiatives, priorities, owners, target dates, and benefit indicators.
+
+FR-PORT-002
+
+The system MUST visualize portfolio health, milestones, risks, dependencies, capacity, and aggregate delivery status.
+
+FR-PROJ-001
+
+Authorized users MUST create projects from templates with key, name, methodology, owner, dates, privacy, and workflow.
+
+FR-PROJ-002
+
+Project managers MUST manage project members, roles, milestones, releases, risks, decisions, and cross-project dependencies.
+
+FR-PROJ-003
+
+Project templates MUST support default statuses, issue types, fields, board configuration, automations, and permissions.
+
+FR-PROJ-004
+
+Project archives MUST be read-only, searchable according to retention policy, and restorable by authorized users.
+
+
+
+
+Work Items and Collaboration
+ID
+Requirement
+
+FR-WORK-001
+
+Users with permission MUST create task types including epic, story, task, bug, subtask, risk, and custom types.
+
+FR-WORK-002
+
+A work item MUST support title, rich description, status, priority, reporter, assignees, dates, estimate, story points, labels, custom fields, watchers, and parent.
+
+FR-WORK-003
+
+The system MUST support task dependencies with validated types: blocks, is_blocked_by, relates_to, duplicates, and custom types.
+
+FR-WORK-004
+
+Users MUST manage ordered checklists with assignee, due date, completion state, and completion metadata.
+
+FR-WORK-005
+
+Users MUST add comments with mentions, reactions, edit history, deletion policy, and threaded replies when enabled.
+
+FR-WORK-006
+
+Users MUST upload attachments through presigned URLs; the system MUST validate size/type/checksum and quarantine until scan completion.
+
+FR-WORK-007
+
+The system MUST expose a complete activity timeline for material work-item changes.
+
+FR-WORK-008
+
+Users MUST bulk edit permitted fields with preview, validation, partial-failure reporting, and one audit correlation ID.
+
+FR-WORK-009
+
+Users MUST save personal or shared filters, views, sort order, visible columns, and grouping rules.
+
+FR-WORK-010
+
+Users MUST log work with date, duration, description, billable flag, and approval state where configured.
+
+
+
+
+Scrum, Kanban, and Scrum Master
+ID
+Requirement
+
+FR-AGILE-001
+
+A project MUST support a backlog ordered independently from active board columns.
+
+FR-AGILE-002
+
+Authorized users MUST create, plan, start, complete, and cancel sprints with goal, capacity, dates, and committed scope.
+
+FR-AGILE-003
+
+Starting a sprint MUST validate dates, active-sprint policy, unestimated items, capacity, and unresolved blockers according to project rules.
+
+FR-AGILE-004
+
+Completing a sprint MUST move incomplete work using an explicit destination and generate a sprint snapshot.
+
+FR-AGILE-005
+
+Boards MUST support configurable columns, status mappings, swimlanes, quick filters, WIP limits, and collapse state.
+
+FR-AGILE-006
+
+Users MUST move cards by pointer, touch, or keyboard; the server MUST validate workflow transitions, permissions, WIP, and concurrency.
+
+FR-AGILE-007
+
+The UI MUST use optimistic updates and reconcile or roll back after the authoritative server response.
+
+FR-AGILE-008
+
+All connected clients MUST receive authorized TaskMoved and board-refresh events in near real time.
+
+FR-SM-001
+
+The Scrum Master workspace MUST surface blockers, aging WIP, WIP breaches, scope changes, carry-over, unassigned work, and ceremony readiness.
+
+FR-SM-002
+
+The workspace MUST provide sprint burndown/burnup, velocity trend, cycle time, throughput, cumulative flow, predictability, and blocked-time metrics.
+
+FR-SM-003
+
+The system MUST support retrospective sessions with private idea entry, themes, voting, action items, owners, and due dates.
+
+FR-SM-004
+
+AI MAY propose coaching observations but MUST show evidence, confidence, and limitations; it MUST NOT rate individual employee performance by default.
+
+
+
+
+Notifications, Automation, Reporting
+ID
+Requirement
+
+FR-NOTIF-001
+
+Users MUST receive in-app notifications for assignment, mention, due date, approval, status, and watched-item changes.
+
+FR-NOTIF-002
+
+Users MUST configure channel and event preferences, quiet hours, and digest frequency within organization policy.
+
+FR-AUTO-001
+
+Authorized users MUST configure automation rules using trigger, conditions, and allow-listed actions.
+
+FR-AUTO-002
+
+Automation executions MUST be idempotent, traceable, rate-limited, and protected from recursion.
+
+FR-AUTO-003
+
+The scheduler MUST execute reminders, recurring work, reports, cleanup, retention, and health checks with overlap prevention.
+
+FR-REP-001
+
+The system MUST provide project, sprint, team-flow, workload, risk, portfolio, and executive dashboards scoped by permission.
+
+FR-REP-002
+
+Reports MUST display metric definitions, time range, filters, data freshness, and drill-down links.
+
+FR-REP-003
+
+Authorized users MUST export CSV/XLSX/PDF asynchronously with status, expiration, audit, and download authorization.
+
+
+
+
+AI and Knowledge
+ID
+Requirement
+
+FR-AI-001
+
+Administrators MUST configure multiple AI providers and models without exposing raw credentials to normal application users.
+
+FR-AI-002
+
+Administrators MUST select a primary model and ordered fallbacks per use case, organization policy, and data classification.
+
+FR-AI-003
+
+The AI router MUST evaluate capability, availability, data policy, context length, budget, rate limit, and latency target.
+
+FR-AI-004
+
+The system MUST support planning, monitoring, reporting, knowledge, and automation agents with versioned prompts and tool allow-lists.
+
+FR-AI-005
+
+The knowledge agent MUST retrieve only documents and records the requesting principal is authorized to read.
+
+FR-AI-006
+
+AI-generated structured outputs MUST pass schema validation; invalid outputs MUST be retried safely or rejected.
+
+FR-AI-007
+
+AI tool calls that create, modify, notify, export sensitive data, or invoke integrations MUST require policy evaluation and, where configured, human approval.
+
+FR-AI-008
+
+Every AI run MUST record model, prompt version, redaction state, retrieved source IDs, tool calls, token usage, latency, outcome, and trace ID.
+
+FR-AI-009
+
+Users MUST be able to rate an AI result, report a problem, inspect evidence links, and distinguish generated content from authoritative records.
+
+FR-AI-010
+
+AI services MUST degrade gracefully; provider failure MUST not block core project/task transactions.
+
+
+
+
+Audit and Integration
+ID
+Requirement
+
+FR-AUD-001
+
+The system MUST append audit events for authentication, authorization changes, exports, AI configuration, sensitive reads, data mutation, and administrative actions.
+
+FR-AUD-002
+
+Audit records MUST include actor, organization, action, resource, before/after summary, IP/device metadata, correlation ID, and timestamp.
+
+FR-INT-001
+
+The platform MUST provide versioned REST APIs and publish an OpenAPI document.
+
+FR-INT-002
+
+Webhook subscriptions MUST use signed payloads, event IDs, replay protection, retry policy, dead-letter handling, and delivery logs.
+
+FR-INT-003
+
+Import jobs MUST validate mapping and data before commit, provide an error report, and support idempotent restart.
+
+
+
+
+3.3 Non-Functional Requirements
+ID
+Category
+Requirement
+
+NFR-SEC-001
+
+Security
+
+The release MUST meet an OWASP ASVS Level 2-aligned verification checklist and address applicable OWASP Top 10 and API Security Top 10 risks.
+
+NFR-SEC-002
+
+Isolation
+
+Automated tests MUST prove tenant isolation at HTTP, policy, repository, queue, broadcast, export, search, and AI retrieval layers.
+
+NFR-PERF-001
+
+API performance
+
+At target load, p95 read APIs &lt; 500 ms and p95 normal writes &lt; 800 ms, excluding external AI and bulk exports.
+
+NFR-PERF-002
+
+Board experience
+
+A card move SHOULD feel immediate (&lt; 100 ms local optimistic response) and receive server acknowledgement in &lt; 800 ms p95.
+
+NFR-SCALE-001
+
+Initial scale
+
+Baseline supports 100 organizations, 10,000 registered users, 2,000 concurrent sessions, 2 million work items, and 500 queue jobs/minute after validated load testing.
+
+NFR-AVAIL-001
+
+Availability
+
+Production target &gt;= 99.9% monthly after stabilization; planned maintenance excluded by policy.
+
+NFR-DR-001
+
+Recovery
+
+Target RPO &lt;= 15 minutes and RTO &lt;= 4 hours for production; restore drills at least quarterly.
+
+NFR-OBS-001
+
+Observability
+
+All entry points MUST emit structured logs and metrics; critical flows MUST propagate a correlation/trace ID.
+
+NFR-A11Y-001
+
+Accessibility
+
+Core workflows SHOULD conform to WCAG 2.2 AA, including keyboard alternatives for drag-and-drop and visible focus.
+
+NFR-I18N-001
+
+Localization
+
+UI strings, dates, numbers, and time zones MUST be localizable; English and Indonesian are initial locales.
+
+NFR-MAINT-001
+
+Maintainability
+
+Static analysis, formatting, architecture tests, unit/integration tests, migrations, and generated API docs MUST run in CI.
+
+NFR-COMP-001
+
+Compatibility
+
+Current evergreen browsers and the two latest major mobile browser versions are supported.
+
+NFR-AI-001
+
+AI latency
+
+Interactive AI time-to-first-token target &lt; 3 seconds p95 when the selected provider is healthy; asynchronous jobs for long tasks.
+
+NFR-AI-002
+
+AI budget
+
+Per-organization quotas and alert thresholds MUST be enforceable; usage and estimated cost MUST be visible to authorized administrators.
+
+NFR-DATA-001
+
+Data lifecycle
+
+Retention, legal hold, deletion, export, and anonymization rules MUST be configurable and auditable.
+
+
+
+
+3.4 Business Rules
+Rule
+Definition
+
+BR-001
+
+A task status transition is valid only when allowed by the project workflow and all configured validators pass.
+
+BR-002
+
+A task may appear in at most one active sprint unless the project explicitly enables a non-standard policy.
+
+BR-003
+
+WIP enforcement can be warning or hard-block by board/column; administrators cannot bypass hard-block without an auditable override permission.
+
+BR-004
+
+The sprint baseline is frozen at start. Scope added/removed later is recorded separately for reporting.
+
+BR-005
+
+Story points represent relative complexity and MUST NOT be directly converted into individual productivity scores.
+
+BR-006
+
+Deleting a project uses soft delete and retention workflow; hard deletion is a separately authorized and audited operation.
+
+BR-007
+
+AI output never becomes an authoritative task/status/decision until a permitted actor or approved tool execution commits it.
+
+BR-008
+
+Attachment download requires current authorization even when the object key is known; URLs are short-lived.
+
+BR-009
+
+A user cannot grant a permission they do not possess unless they hold an explicit delegated-administration permission.
+
+BR-010
+
+All cross-organization references are invalid and MUST fail closed without revealing resource existence.
+
+
+
+
+3.5 Critical Use Cases and Acceptance Criteria
+Use Case
+Primary Flow
+Acceptance Criteria
+
+UC-01 Create project
+
+Select template -&gt; define key/name/owner -&gt; configure membership -&gt; create.
+
+Unique project key within organization; default workflow/board installed atomically; owner gets correct role; audit event and ProjectCreated outbox event exist.
+
+UC-02 Move Kanban card
+
+Drag or keyboard move -&gt; optimistic UI -&gt; API validates -&gt; commit -&gt; broadcast.
+
+Unauthorized/invalid/WIP-conflicting moves fail safely; version conflict returns 409; order remains stable; all authorized clients converge.
+
+UC-03 Start sprint
+
+Review goal, dates, capacity, committed scope -&gt; validate -&gt; start.
+
+Only authorized role; active sprint policy respected; baseline snapshot created; event broadcast; metrics start from immutable baseline.
+
+UC-04 Ask project AI
+
+Enter question -&gt; authorize context -&gt; retrieve evidence -&gt; route model -&gt; answer.
+
+No unauthorized source is retrieved; citations link to permitted records; model/prompt/source IDs and token usage logged; failure produces a safe retry path.
+
+UC-05 AI creates plan
+
+Request plan -&gt; agent proposes structured tasks -&gt; user reviews -&gt; approves -&gt; transaction creates work.
+
+Schema validated; duplicate/idempotency protection; actor sees exact proposed changes; approval recorded; all created work auditable.
+
+UC-06 Offboard user
+
+Suspend -&gt; revoke sessions/tokens -&gt; reassign owned work -&gt; preserve history.
+
+Access stops immediately; no audit history changes; reassignment report generated; pending approvals are surfaced.
+
+UC-07 Export report
+
+Choose report/filters -&gt; create async export -&gt; notify -&gt; authorized download.
+
+Export honors row-level permissions; file encrypted at rest, expires, and is logged; repeated request with same idempotency key does not duplicate work.
+
+
+
+
+3.6 Definition of Done
+
+
+Acceptance criteria approved and linked to tests.
+
+
+API and database changes versioned; migration includes rollback/forward strategy.
+
+
+Authorization, validation, tenant scope, audit, idempotency, and error behavior implemented.
+
+
+Unit, feature, integration, UI, accessibility, and security tests pass at required levels.
+
+
+Logs/metrics/traces and operational runbook updated.
+
+
+No unresolved critical/high vulnerabilities; threat-model deltas reviewed.
+
+
+User documentation, release notes, and administrator configuration guidance updated.
+
+
+Feature flag and rollback plan exist for high-risk changes.
+
+
+
+4. UX, Scrum Master, and Draggable Kanban Design
+
+
+4.1 Information Architecture
+Workspace
+Main Screens
+Primary Users
+
+My Work
+
+Assigned, watched, due soon, calendar, notifications, saved views
+
+All users
+
+Project
+
+Overview, backlog, board, list, sprint, timeline, calendar, files, reports, settings
+
+Project team
+
+Scrum Master
+
+Flow signals, impediments, ceremonies, retrospectives, action items, health evidence
+
+Scrum Master, team lead
+
+Portfolio
+
+Objectives, initiatives, roadmap, health, capacity, dependencies, benefits
+
+PMO, executive
+
+AI Workspace
+
+Chat, planning, report generation, recommendations, approvals, run history
+
+Permission-dependent
+
+Administration
+
+Identity, roles, integrations, AI, audit, retention, feature flags
+
+Administrators
+
+
+
+
+4.2 Kanban Interaction Model
+The board uses a normalized status workflow and a separate visual column configuration. A column may map one or more statuses. The card stores status_id and rank; it does not store pixel position. The client sends semantic placement: destination status/column, before_task_id or after_task_id, and the version it last observed.
+Concern
+Design
+
+Drag library
+
+Use dnd-kit with PointerSensor, TouchSensor, and KeyboardSensor. Provide a move dialog and keyboard shortcuts as equivalent actions.
+
+Ordering
+
+Use lexicographic/fractional rank strings. Generate a rank between neighboring cards; schedule a deterministic rebalance when rank density crosses a threshold.
+
+Optimistic UI
+
+Apply movement locally, mark card pending, submit mutation, replace with server result, and roll back with an explanatory toast on failure.
+
+Concurrency
+
+Every task has version bigint. Client sends If-Match or expected_version. Server locks task, validates, increments version, and returns 409 on stale state.
+
+Workflow validation
+
+Evaluate role/policy, transition rule, required fields, approvals, WIP limit, sprint state, blocked dependency, and custom validators.
+
+Realtime convergence
+
+Broadcast TaskMoved after commit to organization/project private channels. Clients ignore their own matching operation_id and reconcile server rank/version.
+
+Large boards
+
+Virtualize cards, paginate/cursor by column, lazy-load non-visible columns, and show aggregate counts. Avoid rendering thousands of DOM nodes.
+
+Accessibility
+
+Visible focus, ARIA descriptions, keyboard pickup/move/drop, screen-reader announcements, high-contrast states, and no color-only meaning.
+
+Undo
+
+A short-lived undo creates a new authorized move; it never rewinds the audit trail.
+
+Failure modes
+
+Handle 403 permission, 409 conflict, 422 transition/WIP validation, 423 temporary lock, and 503 transient dependency.
+
+
+
+
+4.3 Move Algorithm
+
+
+1. Client captures task_id, source column/status, destination, neighbors, expected_version, operation_id.
+
+
+2. Client applies optimistic movement and disables duplicate mutation for that card.
+
+
+3. API establishes organization context, authenticates, authorizes task.update, and validates input.
+
+
+4. Transaction locks the task; workflow service validates transition and WIP policy.
+
+
+5. RankService calculates rankBetween(previous_rank, next_rank); task status/rank/version are updated.
+
+
+6. Activity, audit, and outbox rows are inserted in the same database transaction.
+
+
+7. After commit, TaskMoved is broadcast. The API returns canonical task, rank, version, and warnings.
+
+
+8. Client reconciles. A 409 refreshes neighbors and lets the user retry; validation errors roll back with details.
+
+
+4.4 Scrum Master Workspace
+Panel
+Signals
+Actions
+
+Today
+
+Blocked items, aging WIP, WIP breach, overdue sprint work, unassigned urgent work
+
+Open item, assign owner, flag impediment, facilitate discussion.
+
+Sprint readiness
+
+Goal, capacity, unestimated scope, dependency risks, acceptance completeness
+
+Refine backlog, remove scope, request estimate, record risk.
+
+Flow health
+
+Cycle time percentiles, throughput, cumulative flow, blocked time, arrival/completion rate
+
+Inspect bottleneck, adjust WIP, create improvement experiment.
+
+Predictability
+
+Commitment vs completion, scope churn, carry-over, forecast range
+
+Reset expectations, replan, discuss systemic causes.
+
+Ceremonies
+
+Upcoming daily/sprint review/retro, agenda, notes, decisions
+
+Start ceremony mode, capture decisions and action items.
+
+Team safety
+
+Anonymized retro themes and workload distribution; no default individual scoring
+
+Escalate systemic issues, request capacity change, preserve psychological safety.
+
+AI coach
+
+Evidence-backed observations with confidence and suggested questions
+
+Accept, dismiss, save as experiment, or request explanation.
+
+
+
+
+4.5 Design System and Accessibility
+
+
+Use reusable tokens for spacing, typography, semantic color, elevation, focus ring, density, and motion. Provide comfortable and compact density modes.
+
+
+Every status/priority uses text plus icon; user-controlled themes MUST retain contrast. Respect prefers-reduced-motion.
+
+
+Dialogs trap focus, return focus on close, and support Escape. Validation errors are associated to fields and summarized.
+
+
+Board, table, and charts provide non-visual equivalents. Charts expose underlying data tables and metric definitions.
+
+
+Use skeletons for predictable loading, explicit empty states, actionable error states, and offline/reconnect indicators for real-time screens.
+
+
+
+5. ERD and PostgreSQL Database Schema
+
+
+5.1 Core Work ERD
+
+
+
+
+Figure 3 — Simplified identity, organization, portfolio, project, Scrum, and work-item ERD.
+
+
+5.2 AI ERD
+
+
+
+
+Figure 4 — AI configuration, conversation, run, tool-call, retrieval, and evaluation ERD.
+
+
+5.3 Data Modeling Conventions
+Convention
+Rule
+
+Primary keys
+
+UUIDv7 generated by the application or database extension; never expose sequential internal IDs.
+
+Tenant ownership
+
+Every tenant-owned table contains organization_id NOT NULL, indexed, and protected by application scope plus PostgreSQL RLS where practical.
+
+Timestamps
+
+timestamptz in UTC: created_at, updated_at; deleted_at for soft-deletable records.
+
+Optimistic locking
+
+Mutable collaborative entities contain version bigint NOT NULL DEFAULT 1.
+
+Money
+
+numeric(19,4) plus ISO currency code; never floating point.
+
+Flexible data
+
+jsonb only for settings, provider capabilities, custom-field values, or event payloads with a documented schema.
+
+Enums
+
+Prefer lookup/configuration tables for business workflows; use PostgreSQL enum only for highly stable technical states.
+
+Audit
+
+Audit events are append-only; store safe field deltas, not raw secrets or full sensitive payloads.
+
+Secrets
+
+Store only encrypted credential references/ciphertext with key version; never log or embed secrets in JSON responses.
+
+Deletion
+
+Soft delete business records; retention workers perform approved purge/anonymization. Foreign keys default RESTRICT unless lifecycle is explicit.
+
+
+
+
+5.4 Physical Table Catalog
+
+
+Identity &amp; Organization
+Table
+Key Columns
+Key Constraints / Indexes
+
+organizations
+
+id, name, slug, status, timezone, locale, settings, created_at
+
+UQ slug; IDX status
+
+users
+
+id, email, password, name, status, locale, timezone, last_login_at
+
+UQ lower(email); IDX status
+
+organization_memberships
+
+organization_id, user_id, title, status, joined_at
+
+PK org/user; IDX user/status
+
+departments
+
+id, organization_id, parent_id, name, code
+
+UQ org/code; IDX parent
+
+teams
+
+id, organization_id, department_id, name, lead_id, settings
+
+IDX org/department
+
+team_members
+
+team_id, user_id, team_role, allocation_percent
+
+PK team/user
+
+roles
+
+id, organization_id nullable, name, scope, system
+
+UQ org/name/scope
+
+permissions
+
+id, key, description
+
+UQ key
+
+role_permissions
+
+role_id, permission_id
+
+PK role/permission
+
+role_assignments
+
+organization_id, user_id, role_id, scope_type, scope_id
+
+IDX principal/scope
+
+sessions
+
+id, user_id, ip_hash, user_agent_hash, last_activity_at
+
+IDX user/activity
+
+personal_access_tokens
+
+id, tokenable, name, token_hash, abilities, expires_at
+
+UQ token_hash; IDX tokenable
+
+mfa_methods
+
+id, user_id, type, secret_ciphertext, confirmed_at
+
+IDX user/type
+
+service_accounts
+
+id, organization_id, name, status, expires_at
+
+IDX org/status
+
+
+
+
+Portfolio &amp; Project
+Table
+Key Columns
+Key Constraints / Indexes
+
+portfolios
+
+id, organization_id, owner_id, name, status, start_at, end_at
+
+IDX org/status/owner
+
+strategic_objectives
+
+id, organization_id, code, name, target_value, period
+
+UQ org/code
+
+portfolio_objectives
+
+portfolio_id, objective_id, weight
+
+PK portfolio/objective
+
+projects
+
+id, organization_id, portfolio_id, key, name, methodology, owner_id, status, version
+
+UQ org/key; IDX portfolio/status
+
+project_members
+
+project_id, user_id, project_role_id, allocation_percent
+
+PK project/user
+
+project_templates
+
+id, organization_id nullable, name, definition jsonb, version
+
+IDX org/name
+
+milestones
+
+id, project_id, name, due_at, status, owner_id
+
+IDX project/due/status
+
+releases
+
+id, project_id, name, start_at, release_at, status
+
+IDX project/status
+
+risks
+
+id, project_id, title, probability, impact, score, owner_id, status
+
+IDX project/status/score
+
+decisions
+
+id, project_id, title, decision, decided_by, decided_at
+
+IDX project/decided_at
+
+project_dependencies
+
+id, source_project_id, target_project_id, type, status
+
+UQ source/target/type
+
+
+
+
+Workflow, Scrum, and Work
+Table
+Key Columns
+Key Constraints / Indexes
+
+work_item_types
+
+id, organization_id nullable, project_id nullable, key, name, hierarchy_level
+
+UQ scope/key
+
+workflows
+
+id, organization_id, name, version, active
+
+IDX org/active
+
+workflow_statuses
+
+id, workflow_id, key, name, category, position
+
+UQ workflow/key
+
+workflow_transitions
+
+id, workflow_id, from_status_id, to_status_id, rules jsonb
+
+UQ workflow/from/to
+
+boards
+
+id, project_id, name, type, filter_definition, settings
+
+IDX project/type
+
+board_columns
+
+id, board_id, name, position, wip_limit, wip_mode
+
+UQ board/position
+
+board_column_statuses
+
+column_id, status_id, position
+
+PK column/status
+
+sprints
+
+id, project_id, name, goal, start_at, end_at, state, baseline jsonb, version
+
+IDX project/state/dates
+
+tasks
+
+id, organization_id, project_id, parent_id, type_id, status_id, sprint_id nullable, key, title, description, priority, rank, version, dates, estimates
+
+UQ project/key; IDX project/status/rank; GIN FTS
+
+task_assignees
+
+task_id, user_id, assigned_at
+
+PK task/user; IDX user/task
+
+task_dependencies
+
+id, source_task_id, target_task_id, type
+
+UQ source/target/type
+
+labels
+
+id, organization_id, name, color_token
+
+UQ org/lower(name)
+
+task_labels
+
+task_id, label_id
+
+PK task/label
+
+custom_field_definitions
+
+id, organization_id, project_id nullable, key, type, config, required
+
+UQ scope/key
+
+custom_field_values
+
+field_id, task_id, value_jsonb, value_text, value_number, value_date
+
+PK field/task; typed indexes
+
+checklists
+
+id, task_id, title, position
+
+IDX task/position
+
+checklist_items
+
+id, checklist_id, title, position, assignee_id, due_at, completed_at
+
+IDX checklist/position
+
+time_logs
+
+id, task_id, user_id, work_date, minutes, description, billable, approval_state
+
+IDX user/date; task/date
+
+impediments
+
+id, project_id, sprint_id, task_id nullable, title, severity, owner_id, status, resolved_at
+
+IDX sprint/status/severity
+
+retrospectives
+
+id, sprint_id, state, started_at, closed_at
+
+UQ sprint
+
+retrospective_items
+
+id, retrospective_id, author_id nullable, lane, body_ciphertext, anonymous, votes
+
+IDX retro/lane
+
+improvement_actions
+
+id, retrospective_id, title, owner_id, due_at, status
+
+IDX owner/status/due
+
+
+
+
+Collaboration, Reporting, and Platform
+Table
+Key Columns
+Key Constraints / Indexes
+
+comments
+
+id, organization_id, task_id, parent_id, author_id, body, edited_at, deleted_at
+
+IDX task/created; parent
+
+comment_reactions
+
+comment_id, user_id, emoji
+
+PK comment/user/emoji
+
+watchers
+
+resource_type, resource_id, user_id
+
+PK resource/user
+
+attachments
+
+id, organization_id, resource_type, resource_id, uploader_id, object_key, filename, mime, size, checksum, scan_status
+
+IDX resource; checksum; scan_status
+
+activities
+
+id, organization_id, resource_type, resource_id, actor_id, verb, data, created_at
+
+IDX resource/time; org/time
+
+notifications
+
+id, organization_id, user_id, type, data, read_at, created_at
+
+IDX user/read/time
+
+notification_preferences
+
+organization_id, user_id, event_key, channels, digest
+
+PK org/user/event
+
+automation_rules
+
+id, organization_id, project_id, name, trigger, conditions, actions, active, version
+
+IDX project/active
+
+automation_executions
+
+id, rule_id, event_id, status, attempts, started_at, finished_at, error_code
+
+UQ rule/event; IDX status
+
+report_snapshots
+
+id, organization_id, scope_type, scope_id, metric_date, data, generated_at
+
+UQ scope/date
+
+exports
+
+id, organization_id, requested_by, type, filters, status, object_key, expires_at
+
+IDX requester/status
+
+outbox_events
+
+id, organization_id, aggregate_type, aggregate_id, event_type, payload, occurred_at, published_at
+
+IDX unpublished/occurred
+
+webhook_subscriptions
+
+id, organization_id, endpoint_ciphertext, secret_ciphertext, events, active
+
+IDX org/active
+
+webhook_deliveries
+
+id, subscription_id, event_id, attempt, status, response_code, next_attempt_at
+
+UQ subscription/event/attempt
+
+audit_logs
+
+id, organization_id, actor_type, actor_id, action, resource_type, resource_id, diff, ip_hash, correlation_id, created_at
+
+IDX org/time; actor/time; resource/time
+
+
+
+
+AI and Knowledge
+Table
+Key Columns
+Key Constraints / Indexes
+
+ai_providers
+
+id, organization_id nullable, type, name, credentials_ciphertext, base_url, enabled, data_policy, version
+
+IDX org/type/enabled
+
+ai_models
+
+id, provider_id, model_key, display_name, capabilities, limits, pricing, enabled
+
+UQ provider/model_key
+
+ai_routing_policies
+
+id, organization_id, use_case, primary_model_id, fallback_model_ids, max_cost, timeout_ms, rules
+
+UQ org/use_case
+
+ai_prompt_versions
+
+id, organization_id nullable, agent_type, version, template, schema, active
+
+UQ scope/agent/version
+
+ai_conversations
+
+id, organization_id, user_id, context_type, context_id, title, created_at
+
+IDX org/user/time
+
+ai_messages
+
+id, conversation_id, role, content, content_redacted, model_id, token_usage, created_at
+
+IDX conversation/time
+
+ai_runs
+
+id, organization_id, conversation_id, message_id, agent_type, model_id, prompt_version_id, status, trace_id, latency_ms, token_usage, estimated_cost
+
+IDX org/time; trace; status
+
+ai_tool_calls
+
+id, ai_run_id, tool_name, input, approval_state, approved_by, output, status
+
+IDX run/status/approval
+
+knowledge_sources
+
+id, organization_id, source_type, source_id, classification, checksum, indexed_at
+
+UQ org/source
+
+knowledge_chunks
+
+id, organization_id, source_id, chunk_no, content, metadata, embedding vector
+
+IDX source/chunk; vector index
+
+ai_evaluations
+
+id, ai_run_id, evaluator, metric, score, notes, created_at
+
+IDX run/metric
+
+
+
+
+5.5 Critical PostgreSQL Controls
+
+
+-- Tenant context is established per transaction, never trusted from request JSON.
+
+
+SELECT set_config('app.current_organization_id', :organization_id::text, true);
+
+
+
+
+
+ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
+
+
+CREATE POLICY tasks_tenant_isolation ON tasks
+
+
+USING (organization_id = current_setting('app.current_organization_id', true)::uuid)
+
+
+WITH CHECK (organization_id = current_setting('app.current_organization_id', true)::uuid);
+
+
+
+
+
+CREATE UNIQUE INDEX tasks_project_key_uq ON tasks(project_id, key) WHERE deleted_at IS NULL;
+
+
+CREATE INDEX tasks_board_order_idx ON tasks(project_id, status_id, rank) WHERE deleted_at IS NULL;
+
+
+CREATE INDEX tasks_search_idx ON tasks USING gin
+
+
+(to_tsvector('simple', coalesce(title,'') || ' ' || coalesce(description,'')));
+
+
+CREATE INDEX activities_resource_time_idx ON activities(resource_type, resource_id, created_at DESC);
+
+
+CREATE INDEX outbox_unpublished_idx ON outbox_events(occurred_at) WHERE published_at IS NULL;
+
+
+5.6 Migration and Data Integrity Strategy
+
+
+Use expand-and-contract migrations for zero-downtime changes. Never combine an irreversible large backfill with a request-path schema change.
+
+
+Create foreign keys and CHECK constraints. Add heavy constraints as NOT VALID, validate asynchronously, then enforce.
+
+
+Backfills are resumable jobs keyed by primary-key cursor, rate-limited, observable, and safe to retry.
+
+
+Use database transactions for aggregate changes and outbox insertion. External calls occur after commit.
+
+
+Partition append-heavy audit/activity/AI-run data by month only after measured size warrants it; retain a stable querying abstraction.
+
+
+Run migration tests on a production-sized anonymized snapshot and document lock/rollback behavior before release.
+
+
+
+6. REST API and Real-Time Specification
+
+
+6.1 API Standards
+Area
+Standard
+
+Base URL
+
+/api/v1. Breaking changes require /v2; additive fields are backward-compatible.
+
+Authentication
+
+Sanctum session for first-party SPA; scoped bearer token or OAuth/OIDC integration for external clients.
+
+Tenant context
+
+Derived from authenticated membership and selected organization header/subdomain; never accepted as an unverified body field.
+
+Content
+
+application/json; UTF-8. Large uploads use presigned multipart object-storage flow.
+
+Identifiers
+
+UUID strings. Work-item human key (e.g., ENG-123) is a display/search identifier, not the primary key.
+
+Pagination
+
+Cursor pagination: page[after], page[before], page[limit] (default 50, maximum 200).
+
+Filtering
+
+filter[field], filter[status][], filter[query], include, fields[type], and sort with an allow-list.
+
+Idempotency
+
+POST endpoints that can duplicate side effects accept Idempotency-Key. Persist request hash and response for a bounded period.
+
+Concurrency
+
+ETag/If-Match or expected_version on collaborative writes. Conflict returns 409 with current version and safe metadata.
+
+Errors
+
+Problem-details-inspired JSON with machine code, human message, field errors, trace_id, and optional remediation.
+
+Rate limits
+
+Per principal, organization, token, endpoint class, and provider. Return RateLimit headers and Retry-After.
+
+Audit
+
+Sensitive endpoints append security/business audit events with correlation ID.
+
+
+
+
+6.2 Endpoint Catalog
+Method
+Path
+Purpose
+
+POST
+
+/auth/login
+
+Authenticate; issue secure first-party session.
+
+POST
+
+/auth/logout
+
+Revoke current session.
+
+POST
+
+/auth/mfa/challenge
+
+Complete MFA challenge.
+
+GET
+
+/me
+
+Current user, active organization, capabilities.
+
+GET
+
+/organizations
+
+List authorized organizations.
+
+POST
+
+/organizations
+
+Create organization (platform permission).
+
+GET
+
+/organizations/{org}
+
+Read organization settings.
+
+PATCH
+
+/organizations/{org}
+
+Update organization settings.
+
+GET
+
+/members
+
+List organization memberships.
+
+POST
+
+/members/invitations
+
+Invite a member.
+
+PATCH
+
+/members/{user}
+
+Update status/profile/roles.
+
+DELETE
+
+/members/{user}
+
+Offboard/revoke organization access.
+
+GET
+
+/teams
+
+List teams.
+
+POST
+
+/teams
+
+Create team.
+
+PATCH
+
+/teams/{team}
+
+Update team.
+
+POST
+
+/teams/{team}/members
+
+Add/update membership.
+
+GET
+
+/portfolios
+
+List portfolios.
+
+POST
+
+/portfolios
+
+Create portfolio.
+
+GET
+
+/portfolios/{id}/health
+
+Portfolio health and evidence.
+
+GET
+
+/projects
+
+List authorized projects.
+
+POST
+
+/projects
+
+Create project from template.
+
+GET
+
+/projects/{project}
+
+Read project.
+
+PATCH
+
+/projects/{project}
+
+Update project with version check.
+
+POST
+
+/projects/{project}/archive
+
+Archive project.
+
+GET
+
+/projects/{project}/members
+
+List project members.
+
+PUT
+
+/projects/{project}/members/{user}
+
+Upsert project role/allocation.
+
+GET
+
+/projects/{project}/tasks
+
+Query work items.
+
+POST
+
+/projects/{project}/tasks
+
+Create work item.
+
+GET
+
+/tasks/{task}
+
+Read work item and permitted includes.
+
+PATCH
+
+/tasks/{task}
+
+Update fields with version check.
+
+DELETE
+
+/tasks/{task}
+
+Soft delete work item.
+
+POST
+
+/tasks/{task}/move
+
+Move card/status/rank atomically.
+
+POST
+
+/tasks/{task}/transitions/{transition}
+
+Execute explicit workflow transition.
+
+POST
+
+/tasks/bulk
+
+Validate and execute bulk mutation.
+
+POST
+
+/tasks/{task}/assignees
+
+Assign users.
+
+DELETE
+
+/tasks/{task}/assignees/{user}
+
+Unassign user.
+
+POST
+
+/tasks/{task}/dependencies
+
+Create dependency.
+
+DELETE
+
+/task-dependencies/{id}
+
+Remove dependency.
+
+GET
+
+/tasks/{task}/comments
+
+List comments.
+
+POST
+
+/tasks/{task}/comments
+
+Create comment.
+
+PATCH
+
+/comments/{comment}
+
+Edit own/permitted comment.
+
+DELETE
+
+/comments/{comment}
+
+Delete/soft redact comment.
+
+POST
+
+/uploads
+
+Create presigned upload intent.
+
+POST
+
+/uploads/{id}/complete
+
+Verify object and enqueue scan.
+
+GET
+
+/attachments/{id}/download
+
+Return authorized short-lived download URL.
+
+GET
+
+/projects/{project}/boards
+
+List boards.
+
+GET
+
+/boards/{board}
+
+Board configuration.
+
+GET
+
+/boards/{board}/cards
+
+Cursor load cards by column/filter.
+
+PATCH
+
+/boards/{board}
+
+Update board settings.
+
+GET
+
+/projects/{project}/backlog
+
+Load ordered backlog.
+
+POST
+
+/projects/{project}/sprints
+
+Create sprint.
+
+POST
+
+/sprints/{sprint}/start
+
+Start and baseline sprint.
+
+POST
+
+/sprints/{sprint}/complete
+
+Complete sprint and route unfinished work.
+
+GET
+
+/projects/{project}/scrum-master
+
+Scrum Master signals and evidence.
+
+POST
+
+/sprints/{sprint}/retrospective
+
+Create/start retrospective.
+
+POST
+
+/retrospectives/{id}/actions
+
+Create improvement action.
+
+GET
+
+/reports/project-health
+
+Project health.
+
+GET
+
+/reports/sprint/{sprint}
+
+Sprint report.
+
+POST
+
+/exports
+
+Create asynchronous export.
+
+GET
+
+/exports/{export}
+
+Export status and authorized URL.
+
+GET
+
+/notifications
+
+List notifications.
+
+POST
+
+/notifications/read
+
+Mark selected/all read.
+
+GET
+
+/notification-preferences
+
+Read preferences.
+
+PUT
+
+/notification-preferences
+
+Update preferences.
+
+GET
+
+/automations
+
+List rules.
+
+POST
+
+/automations
+
+Create rule.
+
+POST
+
+/automations/{id}/test
+
+Dry-run rule against sample/event.
+
+PATCH
+
+/automations/{id}
+
+Update/version rule.
+
+GET
+
+/ai/providers
+
+List safe provider metadata.
+
+POST
+
+/ai/providers
+
+Create encrypted provider configuration.
+
+POST
+
+/ai/providers/{id}/test
+
+Connectivity/capability test without exposing secrets.
+
+PUT
+
+/ai/routing-policies/{useCase}
+
+Set model/fallback/budget policy.
+
+POST
+
+/ai/conversations
+
+Create contextual conversation.
+
+POST
+
+/ai/conversations/{id}/messages
+
+Stream an AI response.
+
+GET
+
+/ai/runs/{run}
+
+Read trace-safe run details.
+
+POST
+
+/ai/tool-calls/{id}/approve
+
+Approve an eligible proposed action.
+
+POST
+
+/ai/tool-calls/{id}/deny
+
+Deny with reason.
+
+GET
+
+/audit-logs
+
+Permission-scoped audit search.
+
+POST
+
+/webhooks
+
+Create subscription.
+
+GET
+
+/webhooks/{id}/deliveries
+
+Inspect deliveries.
+
+POST
+
+/webhooks/{id}/rotate-secret
+
+Rotate signing secret.
+
+
+
+
+6.3 Standard Response and Error Envelopes
+
+
+HTTP/1.1 200 OK
+
+
+{
+
+
+  "data": { "id": "...", "type": "task", "attributes": { ... } },
+
+
+  "meta": { "trace_id": "01J...", "version": 18 }
+
+
+}
+
+
+
+
+
+HTTP/1.1 422 Unprocessable Entity
+
+
+{
+
+
+  "error": {
+
+
+    "code": "WORKFLOW_TRANSITION_INVALID",
+
+
+    "message": "The task cannot move to Done.",
+
+
+    "details": { "fields": { "resolution": ["Required for this transition."] } },
+
+
+    "trace_id": "01J...",
+
+
+    "remediation": "Set the required fields and retry."
+
+
+  }
+
+
+}
+
+
+6.4 Move Card Contract
+
+
+POST /api/v1/tasks/019.../move
+
+
+Idempotency-Key: 4a42...
+
+
+If-Match: "17"
+
+
+
+
+
+{
+
+
+  "board_id": "019...",
+
+
+  "destination_column_id": "019...",
+
+
+  "destination_status_id": "019...",
+
+
+  "before_task_id": "019...",
+
+
+  "after_task_id": null,
+
+
+  "operation_id": "client-uuid",
+
+
+  "reason": null
+
+
+}
+
+
+
+
+
+200 OK
+
+
+{
+
+
+  "data": {
+
+
+    "id": "019...",
+
+
+    "status_id": "019...",
+
+
+    "rank": "a0V",
+
+
+    "version": 18,
+
+
+    "updated_at": "2026-07-28T14:30:00Z"
+
+
+  },
+
+
+  "meta": { "operation_id": "client-uuid", "warnings": [] }
+
+
+}
+
+
+
+
+
+409 CONFLICT -&gt; TASK_VERSION_CONFLICT
+
+
+422 UNPROCESSABLE ENTITY -&gt; WIP_LIMIT_EXCEEDED or WORKFLOW_TRANSITION_INVALID
+
+
+6.5 Real-Time Channels and Events
+Channel
+Authorization
+Events
+
+private-org.{organizationId}
+
+Active membership and event-specific permission
+
+NotificationCreated, OrganizationPolicyChanged.
+
+private-project.{projectId}
+
+Project read permission
+
+TaskCreated, TaskUpdated, TaskMoved, CommentAdded, SprintChanged, PresenceSummary.
+
+private-user.{userId}
+
+Same authenticated user
+
+Personal notifications, export completed, approval requested.
+
+presence-project.{projectId}
+
+Project read permission and presence policy
+
+Who is viewing/editing; no sensitive profile fields.
+
+private-ai-run.{runId}
+
+Run owner or authorized auditor
+
+AiTokenDelta, AiToolProposed, AiRunCompleted/Failed.
+
+
+Events contain minimal identifiers and safe changed-field summaries. Clients fetch authoritative records when needed. Broadcast authorization MUST apply the same tenant and resource policies as REST reads.
+
+
+6.6 Webhook Contract
+
+
+POST https://subscriber.example/hooks/wms
+
+
+X-WMS-Event-Id: 019...
+
+
+X-WMS-Event-Type: task.moved.v1
+
+
+X-WMS-Timestamp: 1785250000
+
+
+X-WMS-Signature: v1=&lt;HMAC-SHA256(timestamp + "." + raw_body)&gt;
+
+
+
+
+
+{
+
+
+  "id": "019...",
+
+
+  "type": "task.moved.v1",
+
+
+  "occurred_at": "2026-07-28T14:30:00Z",
+
+
+  "organization_id": "019...",
+
+
+  "data": { "task_id": "019...", "project_id": "019...", "status_id": "019...", "version": 18 }
+
+
+}
+
+
+6.7 OpenAPI Starter Excerpt
+
+
+openapi: 3.1.0
+
+
+info:
+
+
+  title: AI Work Management System API
+
+
+  version: 1.0.0
+
+
+servers:
+
+
+  - url: /api/v1
+
+
+paths:
+
+
+  /tasks/{task}/move:
+
+
+    post:
+
+
+      operationId: moveTask
+
+
+      security: [{ sanctum: [] }]
+
+
+      parameters:
+
+
+        - in: header
+
+
+          name: Idempotency-Key
+
+
+          required: true
+
+
+          schema: { type: string, maxLength: 128 }
+
+
+        - in: header
+
+
+          name: If-Match
+
+
+          required: true
+
+
+          schema: { type: string }
+
+
+      responses:
+
+
+        '200': { description: Task moved }
+
+
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+
+        '409': { $ref: '#/components/responses/Conflict' }
+
+
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+
+
+7. AI System Design Document
+
+
+
+
+Figure 5 — Governed AI execution flow with authorization, routing, human approval, validation, and audit.
+
+
+7.1 Design Principles
+
+
+Provider-neutral: domain code requests a capability/use case, not a vendor-specific model name.
+
+
+Least data: include only authorized, relevant context; redact secrets and sensitive fields before provider transmission.
+
+
+Retrieval authorization: permission filtering occurs before and after vector/search retrieval to prevent cross-tenant or hidden-resource leakage.
+
+
+Structured-by-default for automation: plans and tool arguments use versioned JSON schemas and server-side validation.
+
+
+Human control: advisory responses are default. Write, notification, export, integration, permission, or destructive tools require policy and often explicit approval.
+
+
+Observable and evaluable: prompts, model routing, sources, token/cost, latency, tool calls, failures, user ratings, and evaluation results are traceable.
+
+
+Graceful degradation: provider/model failures trigger allowed fallbacks or asynchronous retry; core work transactions remain independent.
+
+
+7.2 Provider and Model Registry
+Configuration
+Example / Rule
+
+Provider types
+
+openai, gemini, ollama, openai_compatible. Additional providers implement a common ProviderAdapter contract.
+
+Credential storage
+
+Encrypted at application layer or secret-manager reference. UI returns only masked metadata and last successful test.
+
+Capabilities
+
+chat, structured_output, embeddings, vision, tool_calling, streaming, context_window, supported_regions.
+
+Data policy
+
+Allowed classifications, regional endpoint, provider retention/training opt-out status, local-only flag.
+
+Operational policy
+
+Timeout, retries, circuit breaker, concurrency, RPM/TPM limits, maximum context, health status.
+
+Cost policy
+
+Input/output/token estimates, daily/monthly organization budget, user quota, approval threshold.
+
+Routing scope
+
+Global default -&gt; organization override -&gt; use-case policy -&gt; request constraint. Lower scopes cannot weaken mandatory platform controls.
+
+
+
+
+7.3 Routing Algorithm
+
+
+route(AiRequest request, Principal principal):
+
+
+  authorize(request.context, principal)
+
+
+  classification = classifyContext(request.context)
+
+
+  candidates = policy.modelsFor(request.useCase)
+
+
+      .where(capability supports request)
+
+
+      .where(dataPolicy permits classification)
+
+
+      .where(health is available)
+
+
+      .where(budget remains)
+
+
+  score each candidate by policy priority, latency, quality tier, and estimated cost
+
+
+  attempt primary with timeout and circuit breaker
+
+
+  on eligible transient error, attempt ordered fallback
+
+
+  record every attempt without secrets or prohibited content
+
+
+  return validated result or a typed safe failure
+
+
+7.4 Agent Catalog
+Agent
+Inputs
+Outputs / Tools
+Control Level
+
+Planning Agent
+
+Goal, project context, constraints, team capacity, templates
+
+Structured epics/stories/tasks, dependencies, estimates, risks; propose_create_tasks
+
+Proposal; batch creation requires approval.
+
+Monitoring Agent
+
+Task/sprint/flow snapshots, deadlines, blockers, dependencies
+
+Health evidence, anomalies, forecast, recommended interventions
+
+Read-only by default; may propose reminders or impediments.
+
+Reporting Agent
+
+Permission-scoped metrics, activities, decisions, risks
+
+Daily/weekly/monthly/executive narrative with source links
+
+Read-only generation; distribution requires approval/policy.
+
+Knowledge Agent
+
+Question and authorized project/organization knowledge
+
+Grounded answer with record/document citations
+
+Read-only; refuses unsupported claims and hidden data.
+
+Automation Agent
+
+Approved rule/event and minimal context
+
+Allow-listed tool proposal or execution
+
+Runs only within automation owner’s delegated scope.
+
+Scrum Coach Agent
+
+Sprint and flow evidence, retrospective actions
+
+Questions, patterns, experiment suggestions, confidence
+
+No individual performance ranking; evidence and limitations required.
+
+Triage Agent
+
+New issue text, attachments metadata, project workflow
+
+Suggested type, priority, labels, assignee group, duplicates
+
+Suggestions only unless low-risk auto-triage policy is enabled.
+
+
+
+
+7.5 Tool Contract and Approval
+Tool
+Required Permission
+Approval Default
+Safety Checks
+
+search_work_items
+
+Resource read
+
+No
+
+Tenant/project scope, result cap, field redaction.
+
+get_project_metrics
+
+Report read
+
+No
+
+Metric definition and time range attached.
+
+propose_create_tasks
+
+Task create
+
+No execution
+
+Schema validation, duplicates, max item count.
+
+create_tasks
+
+Task create
+
+Yes
+
+Exact diff preview, idempotency, transaction, rate limit.
+
+update_task
+
+Task update
+
+Yes
+
+Allowed fields/transitions, expected_version, no privilege escalation.
+
+send_notification
+
+Notification send
+
+Yes or approved rule
+
+Recipient cap, quiet hours, content policy, anti-spam.
+
+generate_export
+
+Export data
+
+Yes
+
+Permission snapshot, classification, expiration, audit.
+
+call_webhook
+
+Integration execute
+
+Yes or approved rule
+
+Destination allow-list, SSRF defense, signed payload, timeout.
+
+manage_membership
+
+Membership admin
+
+Always
+
+Re-authentication, dual control where configured; cannot grant beyond approver.
+
+
+
+
+7.6 Retrieval-Augmented Generation (RAG)
+
+
+Ingestion receives a domain event for an approved source such as project description, decision, comment, attachment text, or report.
+
+
+Extractor normalizes text, removes malware-flagged files, assigns organization/resource/classification metadata, and computes checksum.
+
+
+Chunker uses document-aware chunks with overlap and stable source anchors. Embedding uses the organization-approved embedding model.
+
+
+Query authorization calculates permitted project/resource scope before search. PostgreSQL FTS and pgvector produce candidates.
+
+
+Re-rank using semantic/text score, freshness, source authority, and project context; then re-check each record against current permission.
+
+
+Prompt receives bounded excerpts and source identifiers. Answer must cite evidence; low-evidence answers state uncertainty.
+
+
+Deletion, permission change, or source update invalidates/re-indexes affected chunks through idempotent jobs.
+
+
+7.7 Prompt and Output Governance
+Control
+Implementation
+
+System prompt
+
+Versioned, reviewed, immutable after activation. Includes role, prohibited behavior, tool rules, and output contract.
+
+Context delimiters
+
+Untrusted content is explicitly delimited and treated as data, never instructions.
+
+Prompt injection
+
+Ignore instructions inside retrieved/user documents that attempt to change system/tool policy; do not reveal hidden prompts or secrets.
+
+Structured output
+
+JSON Schema with additionalProperties=false, enums, limits, and server validation.
+
+Content safety
+
+Configurable moderation and organization policy; preserve legitimate project discussion while blocking harmful or secret-exfiltration actions.
+
+Sensitive data
+
+Detection/redaction rules for credentials, tokens, personal identifiers, and confidential fields before external provider calls.
+
+Citations
+
+Responses that rely on project facts include stable source references and authorization-checked links.
+
+Caching
+
+Cache only non-sensitive deterministic outputs or tenant-scoped results; key includes organization, policy, prompt version, model, and source versions.
+
+
+
+
+7.8 AI Evaluation and Release Gates
+Evaluation
+Method
+Release Gate
+
+Groundedness
+
+Human-labeled and automated checks against source excerpts
+
+No critical fabricated action/status claims; target &gt;= 0.85 grounded responses on test set.
+
+Authorization leakage
+
+Adversarial cross-role/cross-tenant prompts
+
+0 unauthorized source identifiers or content.
+
+Tool correctness
+
+Golden scenarios, schema/fuzz tests, approval tests
+
+100% policy enforcement for high-risk tools; no execution on invalid schema.
+
+Task quality
+
+Product/PM review of generated plans
+
+Target &gt;= 70% usable with minor edits on representative cases.
+
+Robustness
+
+Provider timeout, malformed output, context overflow, injection
+
+Typed fallback/refusal; no raw exception or secret leakage.
+
+Cost and latency
+
+Replay benchmark by use case/model
+
+Within configured per-use-case SLO and budget thresholds.
+
+Regression
+
+Versioned prompt/model evaluation set in CI or release pipeline
+
+No material regression without approved waiver and rollback plan.
+
+
+
+
+7.9 AI Failure Handling
+
+
+Use typed errors: PROVIDER_UNAVAILABLE, MODEL_UNSUPPORTED, BUDGET_EXCEEDED, POLICY_DENIED, OUTPUT_INVALID, APPROVAL_REQUIRED, CONTEXT_TOO_LARGE, RETRIEVAL_EMPTY.
+
+
+Circuit-break unhealthy provider/model combinations. Fallback only when permitted by data policy; never fall back from local-only to external.
+
+
+Long planning/report jobs run asynchronously with progress and cancellation. Do not hold database transactions while calling a model.
+
+
+Persist sanitized diagnostic metadata. Retry only idempotent stages and cap attempts with dead-letter review.
+
+
+On low confidence or insufficient evidence, return questions or a bounded explanation instead of inventing facts.
+
+
+
+8. Security, Privacy, and Compliance
+
+
+8.1 Security Architecture
+Layer
+Required Controls
+
+Edge
+
+TLS 1.2+ (prefer TLS 1.3), HSTS, secure headers, request/body limits, bot/rate controls, no direct access to internal services.
+
+Authentication
+
+Verified identity, MFA, secure cookie attributes, CSRF protection for session auth, session rotation, login throttling, suspicious-login alerts.
+
+Authorization
+
+Deny by default; Laravel Policies/Gates plus scoped roles; tenant and object ownership checks; database RLS defense-in-depth.
+
+Input / Output
+
+Form Request validation, typed DTOs, parameterized queries, HTML sanitization, safe Markdown rendering, output encoding, strict content types.
+
+Files
+
+Presigned upload, randomized object key, type/size/checksum validation, malware scan, quarantine, no inline execution, short-lived download.
+
+Secrets / Crypto
+
+Secret manager or encrypted application storage, key versioning/rotation, no secrets in source/logs, strong random tokens, password hashing via Argon2id.
+
+Network / SSRF
+
+Egress policy, URL allow-list, DNS/IP validation, block link-local/private metadata endpoints, redirect re-validation, timeouts and size caps.
+
+Queues / Scheduler
+
+Signed/serialized safe jobs, organization context re-established, unique locks, idempotency, retry caps, dead-letter process, least-privilege worker credentials.
+
+Observability
+
+Centralized tamper-resistant audit, security alerts, PII-safe structured logs, correlation IDs, access review, anomaly monitoring.
+
+Supply chain
+
+Lock files, Dependabot/Renovate, Composer/npm audit, SBOM, signed images, provenance where possible, secret scanning, protected CI environments.
+
+AI
+
+Prompt-injection defense, retrieval ACL, provider policy, content redaction, tool allow-list, human approval, cost quota, complete AI trace.
+
+
+
+
+8.2 Threat Model (Selected)
+Threat
+Example
+Mitigation / Verification
+
+Cross-tenant access
+
+Changing project/task UUID to read another organization
+
+Tenant context from authenticated membership; policies; RLS; opaque errors; isolation tests on every repository and endpoint.
+
+Broken object authorization
+
+Member downloads a restricted attachment
+
+Authorization before presigned URL; object key not accepted directly; short expiry; audit sensitive downloads.
+
+Privilege escalation
+
+Project admin grants organization admin
+
+Grant ceiling; delegated administration scope; re-authentication; audit and alerts.
+
+Mass assignment
+
+Client sets organization_id, owner-only fields, or approval state
+
+Explicit DTO mapping/allow-list; server-derived tenant/actor; immutable fields ignored/rejected.
+
+XSS / content injection
+
+Malicious task description/comment/filename
+
+Sanitize rich text, encode output, CSP, safe file disposition, no raw HTML by default.
+
+SSRF
+
+Webhook or attachment preview requests cloud metadata endpoint
+
+Destination allow-list, network egress proxy, IP range blocking, DNS pinning/re-validation, timeout/size limits.
+
+Queue replay
+
+Duplicate job creates tasks/notifications twice
+
+Idempotency key, unique constraint, execution ledger, transactional state transitions.
+
+Webhook forgery/replay
+
+Fake task event
+
+HMAC signature, timestamp tolerance, event ID uniqueness, secret rotation.
+
+Prompt injection
+
+Document tells agent to expose secrets or call tools
+
+Treat retrieved content as untrusted data; immutable system rules; tool policy; no secret access; approval.
+
+RAG leakage
+
+Vector search returns hidden project chunk
+
+Pre-filter tenant/scope, source ACL re-check, source deletion propagation, adversarial evaluation.
+
+AI excessive agency
+
+Agent closes sprint or changes permissions
+
+No such tool or always-approval; least privilege; dry-run; exact diff; transaction; audit.
+
+Sensitive logs
+
+Tokens/prompts/PII written to logs
+
+Central redaction processor, safe metadata allow-list, log tests, restricted retention/access.
+
+Supply-chain compromise
+
+Malicious Composer/npm dependency
+
+Pinned lockfiles, provenance/SBOM, vulnerability scanning, review, isolated builds, minimal runtime image.
+
+Ransomware/data loss
+
+Database/object store encrypted/deleted
+
+Immutable/offline backups, object versioning, separate backup credentials, restore drills, incident runbook.
+
+
+
+
+8.3 Permission Baseline
+Capability
+Member
+Project Manager / Scrum Master
+PMO
+Executive / Auditor
+Super Admin
+
+Organization settings
+
+No
+
+No
+
+No
+
+Read
+
+Manage
+
+Members &amp; roles
+
+No
+
+No
+
+Project scope
+
+Read
+
+Manage
+
+Portfolio
+
+Read assigned
+
+Read
+
+Manage
+
+Read
+
+Manage
+
+Project settings
+
+No
+
+Manage assigned
+
+Manage assigned
+
+Read
+
+Manage
+
+Create/update tasks
+
+Assigned project
+
+Assigned project
+
+Assigned project
+
+Read
+
+Manage
+
+Move board cards
+
+Assigned project
+
+Assigned project
+
+Assigned project
+
+Read
+
+Manage
+
+Start/complete sprint
+
+No
+
+Manage assigned
+
+Manage assigned
+
+Read
+
+Manage
+
+Scrum Master workspace
+
+Read team
+
+Manage assigned
+
+Read assigned
+
+Read
+
+Manage
+
+Reports
+
+Scoped
+
+Project
+
+Portfolio
+
+Executive
+
+All
+
+AI chat/read tools
+
+Scoped
+
+Scoped
+
+Scoped
+
+Scoped
+
+Configure policy
+
+AI write approval
+
+No by default
+
+Project scope
+
+Portfolio/project scope
+
+Optional policy
+
+All within policy
+
+Audit logs
+
+Own actions only
+
+Project subset
+
+Portfolio subset
+
+Read approved
+
+All
+
+Provider credentials
+
+No
+
+No
+
+No
+
+No
+
+Manage masked configuration
+
+
+
+
+8.4 Privacy and Data Governance
+
+
+Classify data at least as Public, Internal, Confidential, and Restricted. Provider routing MUST honor the highest classification in submitted context.
+
+
+Provide transparent AI notices: provider/model class, whether external transmission occurs, source links, and when content is generated.
+
+
+Define retention per data class for audit, application records, exports, AI prompts/responses, backups, and telemetry. Legal hold overrides normal purge.
+
+
+Support subject access/export, correction, account offboarding, and anonymization or deletion when legally and operationally appropriate.
+
+
+Minimize telemetry and hash/truncate network identifiers where full values are unnecessary. Restrict audit/log access and monitor it.
+
+
+Review provider contracts, data processing terms, regional endpoints, retention/training settings, subprocessors, and incident obligations before enabling external AI.
+
+
+8.5 Security Verification Checklist
+Area
+Minimum Verification
+
+Authentication
+
+MFA, session fixation, logout/revocation, reset flow, brute-force and enumeration tests.
+
+Authorization
+
+Horizontal/vertical access tests, tenant isolation, nested-resource ownership, export/search/broadcast/tool authorization.
+
+API
+
+Schema fuzzing, mass assignment, rate limit, pagination abuse, idempotency, version conflicts, unsafe method/content-type handling.
+
+Web
+
+XSS, CSRF, clickjacking, CSP, unsafe redirects, CORS, cache control, error leakage.
+
+Files
+
+Polyglot/type bypass, oversized upload, malware quarantine, path/object-key attacks, unauthorized direct download.
+
+Integrations
+
+SSRF, webhook signature/replay, secret rotation, timeout/retry, OAuth scopes.
+
+AI
+
+Prompt injection, secret extraction, RAG leakage, malformed tool schema, approval bypass, model fallback policy, cost abuse.
+
+Infrastructure
+
+Image/container scan, exposed ports, database/cache auth, backup access, TLS, least-privilege IAM, restore test.
+
+Supply chain
+
+Dependency and license scan, SBOM, CI secret scanning, protected branches, signed release artifacts.
+
+Operations
+
+Alert exercises, audit integrity, incident response tabletop, key rotation and break-glass review.
+
+
+
+
+
+9. Implementation Blueprint and Code Baseline
+
+
+9.1 Repository Structure
+
+
+wms/
+
+
+├── app/
+
+
+│   ├── Domain/
+
+
+│   │   ├── Identity/{Actions,Contracts,DTOs,Events,Models,Policies,Queries}
+
+
+│   │   ├── Organization/{...}
+
+
+│   │   ├── Portfolio/{...}
+
+
+│   │   ├── Project/{...}
+
+
+│   │   ├── Work/{Actions,Enums,Events,Models,Policies,Services,States}
+
+
+│   │   ├── Agile/{Boards,Sprints,Retrospectives,Metrics}
+
+
+│   │   ├── Collaboration/{Comments,Files,Notifications}
+
+
+│   │   ├── Reporting/{Metrics,Projections,Exports}
+
+
+│   │   ├── Automation/{Rules,Triggers,Actions,Executions}
+
+
+│   │   ├── AI/{Agents,Providers,Routing,Prompts,Tools,RAG,Evals}
+
+
+│   │   └── Audit/{Events,Models,Queries}
+
+
+│   ├── Http/{Controllers/Api/V1,Middleware,Requests,Resources}
+
+
+│   ├── Infrastructure/{Database,Storage,Search,Telemetry,Security}
+
+
+│   ├── Jobs/  ├── Listeners/  ├── Broadcasting/  └── Console/
+
+
+├── bootstrap/  ├── config/  ├── database/{factories,migrations,seeders}
+
+
+├── routes/{api.php,channels.php,console.php,web.php}
+
+
+├── tests/{Architecture,Unit,Feature,Integration,Security,Performance}
+
+
+├── web/
+
+
+│   ├── src/{app,features,entities,shared,routes,testing}
+
+
+│   └── tests/{unit,e2e,a11y}
+
+
+├── deploy/{compose,k8s,nginx,otel,grafana}
+
+
+├── docs/{adr,api,runbooks,threat-model,product}
+
+
+└── .github/workflows/
+
+
+9.2 Bootstrap Commands
+
+
+# Backend
+
+
+composer create-project laravel/laravel wms-backend
+
+
+cd wms-backend
+
+
+composer require laravel/sanctum laravel/horizon laravel/reverb laravel/ai
+
+
+composer require spatie/laravel-permission spatie/laravel-data spatie/laravel-activitylog
+
+
+composer require league/flysystem-aws-s3-v3 predis/predis
+
+
+composer require --dev larastan/larastan pestphp/pest pestphp/pest-plugin-laravel
+
+
+
+
+
+# Frontend
+
+
+npm create vite@latest web -- --template react-ts
+
+
+cd web
+
+
+npm install @tanstack/react-query @tanstack/react-router axios zod react-hook-form
+
+
+npm install @hookform/resolvers @dnd-kit/core @dnd-kit/sortable @dnd-kit/accessibility
+
+
+npm install laravel-echo pusher-js zustand date-fns recharts
+
+
+npm install -D vitest @testing-library/react playwright axe-core eslint prettier
+
+
+
+
+
+# Services for local development
+
+
+# PostgreSQL + Valkey + SeaweedFS S3 gateway + Mailpit + optional Ollama + telemetry stack
+
+
+docker compose up -d
+
+
+9.3 Environment and Configuration
+
+
+APP_ENV=production
+
+
+APP_DEBUG=false
+
+
+APP_URL=https://wms.example.com
+
+
+SESSION_DRIVER=redis
+
+
+CACHE_STORE=redis
+
+
+QUEUE_CONNECTION=redis
+
+
+BROADCAST_CONNECTION=reverb
+
+
+DB_CONNECTION=pgsql
+
+
+FILESYSTEM_DISK=s3
+
+
+
+
+
+# Never commit real values. Prefer runtime secret injection.
+
+
+OPENAI_API_KEY=secret-ref
+
+
+GEMINI_API_KEY=secret-ref
+
+
+OLLAMA_BASE_URL=http://ollama:11434
+
+
+AI_DEFAULT_PROVIDER=none
+
+
+AI_EXTERNAL_DATA_MAX_CLASSIFICATION=internal
+
+
+AI_REQUIRE_APPROVAL_FOR_WRITES=true
+
+
+
+
+
+AWS_ENDPOINT=https://s3.internal.example
+
+
+AWS_USE_PATH_STYLE_ENDPOINT=true
+
+
+AWS_BUCKET=wms-production
+
+
+AWS_DEFAULT_REGION=us-east-1
+
+
+9.4 Laravel Domain Action: Move Task
+
+
+final readonly class MoveTaskData
+
+
+{
+
+
+    public function __construct(
+
+
+        public string $boardId,
+
+
+        public string $destinationColumnId,
+
+
+        public string $destinationStatusId,
+
+
+        public ?string $beforeTaskId,
+
+
+        public ?string $afterTaskId,
+
+
+        public int $expectedVersion,
+
+
+        public string $operationId,
+
+
+    ) {}
+
+
+}
+
+
+
+
+
+final class MoveTask
+
+
+{
+
+
+    public function __construct(
+
+
+        private WorkflowGuard $workflow,
+
+
+        private RankService $ranks,
+
+
+        private AuditWriter $audit,
+
+
+        private Outbox $outbox,
+
+
+    ) {}
+
+
+
+
+
+    public function handle(User $actor, Task $task, MoveTaskData $data): Task
+
+
+    {
+
+
+        Gate::forUser($actor)-&gt;authorize('move', $task);
+
+
+
+
+
+        return DB::transaction(function () use ($actor, $task, $data): Task {
+
+
+            /** @var Task $locked */
+
+
+            $locked = Task::query()-&gt;whereKey($task-&gt;id)-&gt;lockForUpdate()-&gt;firstOrFail();
+
+
+
+
+
+            if ($locked-&gt;version !== $data-&gt;expectedVersion) {
+
+
+                throw TaskVersionConflict::fromTask($locked);
+
+
+            }
+
+
+
+
+
+            $decision = $this-&gt;workflow-&gt;authorizeMove(
+
+
+                actor: $actor,
+
+
+                task: $locked,
+
+
+                boardId: $data-&gt;boardId,
+
+
+                statusId: $data-&gt;destinationStatusId,
+
+
+                columnId: $data-&gt;destinationColumnId,
+
+
+            );
+
+
+
+
+
+            $rank = $this-&gt;ranks-&gt;betweenTaskIds(
+
+
+                projectId: $locked-&gt;project_id,
+
+
+                statusId: $data-&gt;destinationStatusId,
+
+
+                beforeTaskId: $data-&gt;beforeTaskId,
+
+
+                afterTaskId: $data-&gt;afterTaskId,
+
+
+            );
+
+
+
+
+
+            $before = $locked-&gt;only(['status_id', 'rank', 'version']);
+
+
+            $locked-&gt;forceFill([
+
+
+                'status_id' =&gt; $data-&gt;destinationStatusId,
+
+
+                'rank' =&gt; $rank,
+
+
+                'version' =&gt; DB::raw('version + 1'),
+
+
+            ])-&gt;save();
+
+
+            $locked-&gt;refresh();
+
+
+
+
+
+            $this-&gt;audit-&gt;taskMoved($actor, $locked, $before, $data-&gt;operationId);
+
+
+            $this-&gt;outbox-&gt;record(new TaskMoved($locked, $data-&gt;operationId, $decision-&gt;warnings));
+
+
+
+
+
+            return $locked;
+
+
+        }, attempts: 3);
+
+
+    }
+
+
+}
+
+
+9.5 Migration Baseline
+
+
+Schema::create('tasks', function (Blueprint $table) {
+
+
+    $table-&gt;uuid('id')-&gt;primary();
+
+
+    $table-&gt;uuid('organization_id');
+
+
+    $table-&gt;uuid('project_id');
+
+
+    $table-&gt;uuid('parent_id')-&gt;nullable();
+
+
+    $table-&gt;uuid('type_id');
+
+
+    $table-&gt;uuid('status_id');
+
+
+    $table-&gt;uuid('sprint_id')-&gt;nullable();
+
+
+    $table-&gt;string('key', 32);
+
+
+    $table-&gt;string('title', 500);
+
+
+    $table-&gt;text('description')-&gt;nullable();
+
+
+    $table-&gt;string('priority', 24)-&gt;default('medium');
+
+
+    $table-&gt;string('rank', 64);
+
+
+    $table-&gt;unsignedBigInteger('version')-&gt;default(1);
+
+
+    $table-&gt;timestampTz('start_at')-&gt;nullable();
+
+
+    $table-&gt;timestampTz('due_at')-&gt;nullable();
+
+
+    $table-&gt;unsignedInteger('estimate_minutes')-&gt;nullable();
+
+
+    $table-&gt;decimal('story_points', 8, 2)-&gt;nullable();
+
+
+    $table-&gt;timestampsTz();
+
+
+    $table-&gt;softDeletesTz();
+
+
+
+
+
+    $table-&gt;unique(['project_id', 'key']);
+
+
+    $table-&gt;index(['organization_id', 'project_id']);
+
+
+    $table-&gt;index(['project_id', 'status_id', 'rank']);
+
+
+    $table-&gt;foreign('project_id')-&gt;references('id')-&gt;on('projects')-&gt;restrictOnDelete();
+
+
+    $table-&gt;foreign('parent_id')-&gt;references('id')-&gt;on('tasks')-&gt;restrictOnDelete();
+
+
+});
+
+
+9.6 API Controller and Request
+
+
+final class MoveTaskRequest extends FormRequest
+
+
+{
+
+
+    public function rules(): array
+
+
+    {
+
+
+        return [
+
+
+            'board_id' =&gt; ['required', 'uuid'],
+
+
+            'destination_column_id' =&gt; ['required', 'uuid'],
+
+
+            'destination_status_id' =&gt; ['required', 'uuid'],
+
+
+            'before_task_id' =&gt; ['nullable', 'uuid', 'different:after_task_id'],
+
+
+            'after_task_id' =&gt; ['nullable', 'uuid'],
+
+
+            'operation_id' =&gt; ['required', 'uuid'],
+
+
+        ];
+
+
+    }
+
+
+}
+
+
+
+
+
+final class TaskMoveController
+
+
+{
+
+
+    public function __invoke(MoveTaskRequest $request, Task $task, MoveTask $action): TaskResource
+
+
+    {
+
+
+        $expected = Etag::parseRequired($request-&gt;header('If-Match'));
+
+
+        $data = new MoveTaskData(...$request-&gt;safe()-&gt;all(), expectedVersion: $expected);
+
+
+        $moved = $action-&gt;handle($request-&gt;user(), $task, $data);
+
+
+
+
+
+        return (new TaskResource($moved))
+
+
+            -&gt;additional(['meta' =&gt; ['operation_id' =&gt; $data-&gt;operationId]])
+
+
+            -&gt;withHeaders(['ETag' =&gt; Etag::forVersion($moved-&gt;version)]);
+
+
+    }
+
+
+}
+
+
+9.7 React Kanban Mutation
+
+
+export function useMoveTask(boardId: string) {
+
+
+  const queryClient = useQueryClient();
+
+
+
+
+
+  return useMutation({
+
+
+    mutationFn: (input: MoveTaskInput) =&gt;
+
+
+      api.post(`/tasks/${input.taskId}/move`, input.body, {
+
+
+        headers: { 'If-Match': `"${input.expectedVersion}"`, 'Idempotency-Key': input.operationId },
+
+
+      }),
+
+
+    onMutate: async (input) =&gt; {
+
+
+      await queryClient.cancelQueries({ queryKey: ['board', boardId] });
+
+
+      const previous = queryClient.getQueryData&lt;BoardData&gt;(['board', boardId]);
+
+
+      queryClient.setQueryData(['board', boardId], (current: BoardData) =&gt;
+
+
+        applyOptimisticMove(current, input)
+
+
+      );
+
+
+      return { previous };
+
+
+    },
+
+
+    onError: (error, _input, context) =&gt; {
+
+
+      if (context?.previous) queryClient.setQueryData(['board', boardId], context.previous);
+
+
+      showMoveError(error); // 403, 409, 422, or transient retry guidance
+
+
+    },
+
+
+    onSuccess: ({ data }) =&gt; {
+
+
+      queryClient.setQueryData(['board', boardId], (current: BoardData) =&gt;
+
+
+        reconcileCanonicalTask(current, data.data)
+
+
+      );
+
+
+    },
+
+
+    onSettled: () =&gt; queryClient.invalidateQueries({ queryKey: ['board-counts', boardId] }),
+
+
+  });
+
+
+}
+
+
+9.8 AI Interfaces
+
+
+interface AiProviderAdapter
+
+
+{
+
+
+    public function supports(AiCapability $capability): bool;
+
+
+    public function health(): ProviderHealth;
+
+
+    public function stream(AiInvocation $invocation): StreamedAiResult;
+
+
+    public function embed(EmbeddingRequest $request): EmbeddingResult;
+
+
+}
+
+
+
+
+
+interface AiTool
+
+
+{
+
+
+    public function name(): string;
+
+
+    public function inputSchema(): array;
+
+
+    public function risk(): ToolRisk;
+
+
+    public function authorize(Principal $principal, array $input): ToolDecision;
+
+
+    public function execute(ApprovedToolCall $call): ToolResult;
+
+
+}
+
+
+
+
+
+final class AiRouter
+
+
+{
+
+
+    public function route(AiUseCase $useCase, DataClassification $classification): RoutedModel
+
+
+    {
+
+
+        // Resolve organization policy, filter by capabilities/data policy/health/budget,
+
+
+        // and return primary plus ordered permitted fallbacks.
+
+
+    }
+
+
+}
+
+
+9.9 Queue and Scheduler Design
+Queue
+Jobs
+Priority / Controls
+
+critical
+
+Security alerts, membership revocation, approval expiry
+
+Highest; short timeout; dedicated workers; alert on delay.
+
+realtime
+
+Broadcast fan-out and notification preparation
+
+High; small payloads; fast retry.
+
+default
+
+Activity projections, normal notifications, webhook preparation
+
+Normal; idempotent; backoff.
+
+files
+
+Malware scan orchestration, thumbnails, text extraction
+
+Resource-limited; quarantine; file-size timeout tiers.
+
+ai-interactive
+
+Interactive AI continuations/tool proposals
+
+High; provider concurrency and per-org quota.
+
+ai-batch
+
+Reports, embeddings, re-indexing, evaluation
+
+Low/normal; cancellable; budget-aware.
+
+exports
+
+CSV/XLSX/PDF generation
+
+Low; isolated memory limits; expiring artifacts.
+
+maintenance
+
+Retention, purge, rank rebalance, snapshots, health
+
+Low; unique locks; maintenance windows where needed.
+
+
+
+
+// routes/console.php
+
+
+Schedule::command('wms:due-reminders')-&gt;everyFiveMinutes()-&gt;withoutOverlapping();
+
+
+Schedule::command('wms:publish-outbox')-&gt;everyMinute()-&gt;withoutOverlapping();
+
+
+Schedule::command('wms:snapshot-flow-metrics')-&gt;hourly()-&gt;onOneServer();
+
+
+Schedule::command('wms:ai-provider-health')-&gt;everyTenMinutes()-&gt;onOneServer();
+
+
+Schedule::command('wms:expire-exports')-&gt;hourly()-&gt;onOneServer();
+
+
+Schedule::command('wms:retention')-&gt;dailyAt('02:30')-&gt;onOneServer();
+
+
+Schedule::command('horizon:snapshot')-&gt;everyFiveMinutes();
+
+
+9.10 Local Docker Compose Baseline
+
+
+services:
+
+
+  app:
+
+
+    build: ./deploy/php
+
+
+    depends_on: [postgres, valkey, seaweedfs]
+
+
+    env_file: .env
+
+
+  web:
+
+
+    build: ./web
+
+
+  worker:
+
+
+    build: ./deploy/php
+
+
+    command: php artisan horizon
+
+
+    env_file: .env
+
+
+  scheduler:
+
+
+    build: ./deploy/php
+
+
+    command: php artisan schedule:work
+
+
+    env_file: .env
+
+
+  reverb:
+
+
+    build: ./deploy/php
+
+
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080
+
+
+    env_file: .env
+
+
+  postgres:
+
+
+    image: pgvector/pgvector:pg18
+
+
+    volumes: [pgdata:/var/lib/postgresql/data]
+
+
+  valkey:
+
+
+    image: valkey/valkey:9-alpine
+
+
+    command: valkey-server --appendonly yes
+
+
+  seaweedfs:
+
+
+    image: chrislusf/seaweedfs:latest
+
+
+    command: server -s3 -dir=/data
+
+
+  mailpit:
+
+
+    image: axllent/mailpit:latest
+
+
+  ollama:
+
+
+    image: ollama/ollama:latest
+
+
+    profiles: [local-ai]
+
+
+volumes: { pgdata: {}, weeddata: {} }
+
+
+9.11 CI/CD Pipeline
+
+
+Validate formatting, linting, PHPStan/Larastan, TypeScript, architecture rules, and generated-code consistency.
+
+
+Run unit and feature tests against PostgreSQL/Valkey; run tenant-isolation and authorization suites separately.
+
+
+Run frontend unit, component, Playwright E2E, and automated accessibility smoke tests.
+
+
+Run Composer/npm vulnerability and license checks, secret scan, SAST, container scan, and generate SBOM.
+
+
+Build immutable backend/frontend images, sign them, and push with commit SHA and semantic release tag.
+
+
+Deploy to staging; run migrations in expand phase, smoke tests, contract tests, load sanity, and AI evaluation suite.
+
+
+Require approval for production; take backup checkpoint; rolling/canary deploy; verify telemetry and queue health.
+
+
+Complete contract phase after old application versions are drained. Automated rollback uses previous image and forward-compatible schema.
+
+
+9.12 Testing Strategy
+Test Type
+Focus
+Examples
+
+Unit
+
+Pure domain behavior
+
+Rank calculation, workflow guard, sprint rules, metric formulas, AI routing score.
+
+Feature/API
+
+HTTP, validation, policy, transaction
+
+CRUD, move conflicts, WIP, bulk edit, idempotency, error envelope.
+
+Integration
+
+Real services/adapters
+
+PostgreSQL constraints/RLS, queue jobs, Reverb authorization, S3 flow, provider stubs.
+
+Architecture
+
+Module boundaries
+
+No controller business logic; no cross-module model access; domain cannot depend on HTTP.
+
+Security
+
+Abuse and access control
+
+Tenant matrix, BOLA/BFLA, mass assignment, XSS, SSRF, webhook replay, AI approval bypass.
+
+Frontend
+
+State and interaction
+
+Optimistic move/rollback, filters, keyboard DnD, realtime reconciliation.
+
+E2E
+
+Critical user journeys
+
+Create project, plan sprint, move card, comment/upload, complete sprint, AI approval.
+
+Performance
+
+SLO and capacity
+
+Board loads/moves, task search, reports, queue throughput, WebSocket fan-out.
+
+Resilience
+
+Dependency failures
+
+Database failover rehearsal, cache loss, provider timeout, S3 unavailable, duplicate events.
+
+AI evaluation
+
+Quality and safety
+
+Grounding, leakage, injection, tool correctness, prompt/model regression, cost/latency.
+
+
+
+
+
+10. Development Roadmap and Delivery Governance
+
+
+10.1 Team Model
+Role
+Suggested Count
+Responsibilities
+
+Product Manager / Product Owner
+
+1
+
+Vision, discovery, prioritization, acceptance, stakeholder alignment.
+
+Solution Architect / Tech Lead
+
+1
+
+Architecture, ADRs, security design, code quality, performance.
+
+Laravel Engineers
+
+3-4
+
+Domain/API, PostgreSQL, queues, integrations, security.
+
+React Engineers
+
+2-3
+
+Design system, workspaces, board, realtime, accessibility.
+
+AI Engineer
+
+1-2
+
+Provider abstraction, agents, RAG, tool safety, evaluations.
+
+QA / SDET
+
+2
+
+Automation, E2E, performance, security regression, release evidence.
+
+DevOps / Platform
+
+1
+
+CI/CD, environments, observability, backups, DR, secrets.
+
+UX/Product Designer
+
+1
+
+Research, interaction design, design system, accessibility.
+
+Security Champion
+
+Part-time or dedicated
+
+Threat model, review, testing, incident readiness.
+
+Scrum Master
+
+1
+
+Delivery process, impediments, metrics, facilitation; also validates product workspace.
+
+
+
+
+10.2 26-Sprint Roadmap (Two-Week Sprints)
+Sprint
+Theme
+Scope
+Exit Outcome
+
+0
+
+Inception
+
+Vision, personas, domain map, architecture spikes, threat model, UX research, environment baseline.
+
+Approved blueprint, ADR set, prioritized backlog, clickable flows.
+
+1
+
+Platform foundation
+
+Laravel/React repos, CI, Docker, PostgreSQL/Valkey, logging, error envelope, feature flags.
+
+Deployable skeleton and quality gates.
+
+2
+
+IAM core
+
+Registration/invite, login, verification, sessions, MFA, organization context.
+
+Secure authentication and tenant shell.
+
+3
+
+Authorization &amp; org
+
+Roles/permissions/policies, teams/departments, membership lifecycle, tenant tests.
+
+Least-privilege organization administration.
+
+4
+
+Project foundation
+
+Project/template/member/workflow/status models and APIs.
+
+Project creation from template.
+
+5
+
+Work items I
+
+Task types, CRUD, parent/subtask, assignments, labels, custom fields.
+
+Usable list/detail work management.
+
+6
+
+Work items II
+
+Dependencies, checklist, activity, bulk operations, saved filters.
+
+Complete core task model.
+
+7
+
+Collaboration
+
+Comments, mentions, watchers, notifications, preferences.
+
+Collaborative task flow.
+
+8
+
+Files
+
+Presigned upload, scan/quarantine, attachment permissions, lifecycle.
+
+Secure attachment workflow.
+
+9
+
+Kanban base
+
+Boards/columns/status mapping, card rendering, filters, realtime shell.
+
+Read-only/live board.
+
+10
+
+Kanban drag/drop
+
+dnd-kit, rank service, move API, WIP, optimistic concurrency/reconciliation.
+
+Production-grade draggable board.
+
+11
+
+Scrum backlog
+
+Backlog ordering, estimates, sprint CRUD, capacity indicators.
+
+Sprint planning ready.
+
+12
+
+Sprint lifecycle
+
+Start/complete, baseline, scope change, burndown/burnup.
+
+End-to-end Scrum cycle.
+
+13
+
+Scrum Master I
+
+Impediments, aging/WIP signals, ceremony readiness, core flow metrics.
+
+Daily coaching workspace.
+
+14
+
+Scrum Master II
+
+Retrospective, action items, cumulative flow, cycle-time/throughput trends.
+
+Continuous-improvement loop.
+
+15
+
+Calendar &amp; timeline
+
+Milestones, releases, calendar, basic roadmap/timeline dependencies.
+
+Time-based project views.
+
+16
+
+Reporting I
+
+Project/sprint dashboards, metric snapshots, drill-down, freshness.
+
+Reliable operational reporting.
+
+17
+
+Portfolio I
+
+Portfolios, objectives, initiatives, health aggregation, dependency map.
+
+PMO portfolio workspace.
+
+18
+
+Automation
+
+Rule engine, schedules, idempotent execution, webhooks, delivery logs.
+
+Governed no-code automation baseline.
+
+19
+
+AI platform
+
+Provider/model registry, encrypted credentials, routing, budgets, health, trace.
+
+Selectable OpenAI/Gemini/local providers.
+
+20
+
+AI knowledge
+
+Conversation, authorized retrieval, pgvector, citations, streaming.
+
+Grounded project Q&amp;A.
+
+21
+
+AI planning/reporting
+
+Planning and reporting agents, structured outputs, async reports.
+
+Reviewable AI deliverables.
+
+22
+
+AI tools &amp; approval
+
+Tool registry, risk policy, approval queue, idempotent execution, adversarial tests.
+
+Governed AI actions.
+
+23
+
+Enterprise identity &amp; audit
+
+OIDC SSO, service accounts, audit search/export, retention controls.
+
+Enterprise governance baseline.
+
+24
+
+Hardening
+
+Performance, accessibility, security, DR restore, scale tests, UX polish.
+
+Release candidate with evidence.
+
+25
+
+Pilot
+
+Pilot migration, training, telemetry, support process, issue remediation.
+
+Pilot acceptance and go/no-go.
+
+26
+
+General availability
+
+Production rollout, runbooks, SLO review, backlog transition, post-launch governance.
+
+GA and operational handover.
+
+
+
+
+10.3 MVP Prioritization
+Priority
+Capabilities
+
+Must
+
+Secure IAM/tenant isolation, organization/team, project/template, task/subtask, workflow/status, list/detail, comments/mentions, files, notifications, audit, draggable Kanban, backlog/sprint lifecycle, basic Scrum Master signals, essential dashboards, provider-neutral read-only AI chat/summaries.
+
+Should
+
+Time logs, workload, calendar/timeline, portfolio basics, automation rules, webhooks, RAG citations, AI planning proposals, exports, SSO.
+
+Could
+
+Advanced portfolio finance, scenario planning, public templates, marketplace, advanced mobile/PWA, AI write tools beyond task creation/update.
+
+Won’t initially
+
+Autonomous personnel evaluation, unrestricted autonomous actions, native mobile, custom foundational-model training, separate microservices without measured need.
+
+
+
+
+10.4 Delivery Gates
+Gate
+Required Evidence
+
+Architecture readiness
+
+Approved ADRs, domain boundaries, threat model, data classification, operational assumptions.
+
+Feature ready
+
+Acceptance tests, authorization matrix, migrations, observability, accessibility, rollback/feature flag.
+
+AI feature ready
+
+Evaluation set, policy, provider data review, cost limits, fallback behavior, injection/leakage/tool tests.
+
+Release candidate
+
+Security scan, pentest scope closure, performance SLO, restore drill, runbooks, migration rehearsal, support training.
+
+GA
+
+Pilot sign-off, error budget/SLO dashboards, incident contacts, backup evidence, data-retention jobs, user/admin docs.
+
+
+
+
+10.5 Key Risks and Mitigations
+Risk
+Likelihood / Impact
+Mitigation
+
+Scope expansion toward full Jira/ClickUp parity
+
+High / High
+
+Use MVP gates, module flags, outcome-based roadmap, and explicit deferred list.
+
+Tenant or authorization defect
+
+Medium / Critical
+
+Central tenant middleware, policy templates, RLS, automated access matrix, security review.
+
+Kanban concurrency/order defects
+
+Medium / High
+
+Fractional rank, locking/version, deterministic tests, realtime reconciliation, load tests.
+
+AI hallucination or unauthorized action
+
+High / High
+
+Grounding, citations, schema validation, tool allow-list, approval, evaluation, kill switch.
+
+Provider cost/availability volatility
+
+High / Medium
+
+Budgets, quotas, health routing, fallbacks, local option, asynchronous processing.
+
+Operational burden from too many components
+
+Medium / High
+
+PostgreSQL search first, modular monolith, managed services when justified, documented SLO ownership.
+
+Attachment malware or data leak
+
+Medium / High
+
+Quarantine/scan, access-checked presigned URLs, DLP policy, lifecycle/versioning.
+
+Metric misuse for individual evaluation
+
+Medium / High
+
+Metric definitions, aggregate/team focus, governance, no default individual productivity score.
+
+Migration lock/data loss
+
+Medium / Critical
+
+Expand/contract, rehearsal, backups, resumable backfills, rollback and restore validation.
+
+Open-source/license drift
+
+Medium / Medium
+
+SBOM/license scanning, approved component registry, periodic architecture review.
+
+
+
+
+
+11. Antigravity Prompt Pack
+Use these prompts as controlled work packages for an agentic development environment. Each task should run in a dedicated branch/worktree. The agent must inspect the repository first, preserve existing conventions, execute tests, and return evidence. Do not paste production secrets or unredacted sensitive data into prompts.
+
+
+11.1 Master Repository Context Prompt
+
+
+You are a senior product engineer working on an enterprise AI Work Management System.
+
+
+
+
+
+Platform baseline:
+
+
+- Backend: Laravel 13 / PHP 8.3+, PostgreSQL 18, Valkey/Redis protocol, Horizon, Reverb, Scheduler.
+
+
+- Frontend: React 19 + TypeScript + Vite, TanStack Query, dnd-kit, Zod, React Hook Form.
+
+
+- Storage: Laravel S3 abstraction; local self-hosted baseline uses SeaweedFS.
+
+
+- AI: provider-neutral Laravel AI integration supporting OpenAI, Gemini, Ollama/local, and OpenAI-compatible endpoints.
+
+
+- Architecture: modular monolith with strict domains, transactions, outbox events, policies, tenant isolation, and typed APIs.
+
+
+
+
+
+Non-negotiable rules:
+
+
+1. Establish organization context from authenticated membership; never trust organization_id from client input.
+
+
+2. Deny by default. Add policy and tenant-isolation tests for every resource and endpoint.
+
+
+3. Use Form Requests/DTOs, explicit mapping, database constraints, transactions, idempotency, and optimistic locking where relevant.
+
+
+4. Never log secrets, raw credentials, access tokens, or prohibited sensitive content.
+
+
+5. AI is advisory by default. Tool calls require allow-list, policy evaluation, schema validation, and approval for write/high-risk operations.
+
+
+6. Preserve accessibility: keyboard and screen-reader alternatives for drag-and-drop and visualizations.
+
+
+7. Add structured logs, metrics, trace/correlation IDs, and meaningful typed errors.
+
+
+8. Run formatter, static analysis, tests, and build before final response.
+
+
+
+
+
+Before changing code:
+
+
+- Read relevant docs/ADRs and inspect neighboring code/tests.
+
+
+- State assumptions in the work log, but do not invent APIs or dependencies when repository evidence exists.
+
+
+- Make the smallest coherent change; do not refactor unrelated areas.
+
+
+
+
+
+Completion response must include:
+
+
+- Summary of behavior delivered.
+
+
+- Files changed and important design decisions.
+
+
+- Migrations/config/env changes.
+
+
+- Tests and commands executed with outcomes.
+
+
+- Security, performance, accessibility, and rollback notes.
+
+
+- Remaining risks or follow-up items.
+
+
+11.2 Feature Prompts
+
+
+P00 — Repository Bootstrap
+Create the Laravel backend and React TypeScript frontend skeleton. Add Docker development services for PostgreSQL, Valkey, SeaweedFS S3 gateway, Mailpit, Horizon worker, scheduler, Reverb, and optional Ollama profile. Configure CI for lint, static analysis, tests, build, dependency/security scan, and SBOM. Add health endpoints and structured JSON logging. Acceptance: one command starts the stack; backend/frontend tests and production builds pass; no secrets committed.
+
+
+P01 — Tenant Context and IAM
+Implement users, organizations, memberships, verified email login, secure sessions, invitation flow, suspend/offboard, active organization selection, MFA-ready interfaces, and tenant context middleware. Add deny-by-default policies and RLS baseline. Include exhaustive cross-tenant tests. Acceptance: a principal cannot infer or access another organization through IDs, search, errors, jobs, or broadcasts.
+
+
+P02 — Roles and Permissions
+Implement organization and project roles with granular permissions, role assignments scoped by resource, grant-ceiling rules, caching with invalidation, and an admin matrix UI. Use Spatie Permission only behind domain services. Acceptance: project admin cannot grant organization authority; permission changes revoke relevant caches/sessions and create audit events.
+
+
+P03 — Project Templates and Workflow
+Implement projects, members, templates, work-item types, workflows, statuses, transitions, validators, and project creation as one transaction. Build admin workflow editor with safe validation (no orphan status, no duplicate key, transition reachability warnings). Acceptance: templates are versioned; project creation is idempotent; permissions and audit events are complete.
+
+
+P04 — Work Item Core
+Implement task/epic/story/bug/subtask CRUD with key generation, parent hierarchy rules, assignments, labels, custom fields, dates, estimates, story points, watchers, activity timeline, soft delete, and version. Add list/detail UI, cursor pagination, saved filters, validation, and accessibility tests.
+
+
+P05 — Dependencies, Checklist, and Bulk Edit
+Implement typed task dependencies with cycle checks, ordered checklists, and bulk edit dry-run/execute endpoints. Bulk edits must return per-item validation and one correlation ID, be bounded and asynchronous above a threshold, and preserve audit/idempotency.
+
+
+P06 — Collaboration and Notifications
+Implement comments, replies, edit history, mentions, reactions, watchers, in-app notifications, preferences, quiet hours, and digest jobs. Sanitize rich text and prevent enumeration/spam. Broadcast only safe event payloads to authorized channels.
+
+
+P07 — Secure Attachments
+Implement presigned multipart upload intents, randomized object keys, checksum verification, MIME/size policies, quarantine, malware scan adapter, text-extraction event, versioned attachment metadata, authorized short-lived download, retention, and cleanup. Add malicious filename/type/size and cross-tenant tests.
+
+
+P08 — Kanban Board Read Model
+Implement board/columns/status mappings, quick filters, swimlanes, WIP configuration, cursor loading per column, card summaries, and Reverb channels. Build a virtualized accessible board. Acceptance: board query stays within agreed p95 on representative dataset and never leaks hidden tasks.
+
+
+P09 — Draggable Kanban
+Implement pointer/touch/keyboard drag-and-drop with dnd-kit, MoveTask action/API, fractional rank, expected_version/ETag, WIP/workflow validation, optimistic UI, rollback, conflict handling, outbox, audit, and TaskMoved broadcast. Add deterministic rank/property tests and concurrent-move integration tests.
+
+
+P10 — Scrum Backlog and Sprints
+Implement backlog ranking, sprint CRUD, capacity view, plan/start/complete/cancel rules, immutable start baseline, scope-change tracking, carry-over destination, and sprint events. Build backlog and sprint planning UI with keyboard reordering.
+
+
+P11 — Scrum Master Workspace
+Implement impediments, aging WIP, WIP breaches, unassigned urgent work, blocked time, carry-over, scope churn, ceremony readiness, burndown/burnup, throughput, cycle-time percentiles, cumulative flow, and drill-down evidence. Build retrospective sessions and improvement actions. Avoid individual performance scoring.
+
+
+P12 — Reporting and Snapshots
+Implement versioned metric definitions, hourly/daily snapshots, project/sprint/team-flow dashboards, data freshness, filters, drill-down, and async exports with expiring authorized download. Add formula tests and compare snapshots to source events.
+
+
+P13 — Portfolio and Roadmap
+Implement portfolios, objectives, initiatives, benefits, milestones, risks, project dependencies, health aggregation, and roadmap/timeline. Use permission-scoped aggregation and documented health-score evidence rather than opaque AI-only scores.
+
+
+P14 — Automation Engine
+Implement trigger-condition-action rules, versioning, dry run, schedules, recursion prevention, idempotent executions, rate limits, notification actions, task field actions, and signed webhooks with retry/dead-letter logs. SSRF protections and destination policies are mandatory.
+
+
+P15 — AI Provider Registry
+Implement encrypted provider configuration for OpenAI, Gemini, Ollama, and OpenAI-compatible endpoints; model capabilities; health test; routing policies; budgets/quotas; circuit breaker; fallbacks; admin UI with masked credentials. Never reveal or log keys. Local-only policy must never fall back externally.
+
+
+P16 — AI Conversations and RAG
+Implement conversations, streaming, provider-neutral invocation, prompt versions, authorized PostgreSQL FTS/pgvector retrieval, citations, source invalidation, context limits, content delimiting, redaction, usage/cost trace, feedback, and safe typed failures. Add cross-role/cross-tenant leakage and prompt-injection tests.
+
+
+P17 — Planning and Reporting Agents
+Implement structured planning and reporting agents. Planning output must conform to a strict JSON schema and produce a reviewable proposed change set; reporting must link every factual status/metric to sources. No writes in this task. Add golden evaluation datasets and regression commands.
+
+
+P18 — AI Tool Approval
+Implement tool registry, tool risk levels, authorization, input/output schemas, exact diff preview, approval/denial queue, expiry, revalidation at execution time, idempotency, transaction, and audit. Add create_tasks/update_task/send_notification tools. Prove that unapproved, stale, unauthorized, or malformed calls never execute.
+
+
+P19 — Security Hardening
+Perform an ASVS L2-oriented review of authentication, authorization, tenant isolation, API, XSS/CSRF, files, SSRF, secrets, queue, WebSocket, webhooks, AI, logging, and supply chain. Implement fixes, security tests, CSP, rate-limit policies, SBOM, secret scanning, and a threat-model delta. Do not claim compliance without evidence.
+
+
+P20 — Production Readiness
+Create production deployment manifests, probes, scaling rules, resource limits, migration job, backup/PITR and object-versioning guidance, restore runbook, observability dashboards/alerts, incident runbooks, release/rollback procedure, and load/resilience tests. Acceptance: staging recovery and rollback exercises are documented with results.
+
+
+11.3 Review Prompts
+
+
+Security Reviewer
+Review the current change as an adversarial application-security engineer. Trace authentication, authorization, tenant scope, validation, secrets, logging, file/network access, queue/realtime boundaries, and AI tool permissions. Produce findings ranked Critical/High/Medium/Low with exploit scenario, affected code, concrete fix, and test. Do not report speculative issues without a code path.
+
+
+Database Reviewer
+Review migrations, indexes, constraints, query patterns, RLS, lock behavior, transaction boundaries, pagination, soft deletion, and zero-downtime safety. Identify integrity gaps and explain EXPLAIN/benchmark evidence needed. Propose exact migration/query changes and regression tests.
+
+
+API Reviewer
+Compare implementation to API conventions: versioning, schemas, errors, pagination, filtering, idempotency, concurrency, authorization, audit, and OpenAPI. Flag inconsistent behavior and backward-compatibility risk. Provide precise contract changes and tests.
+
+
+Frontend Reviewer
+Review React behavior for state ownership, query keys, optimistic updates, realtime race conditions, performance, error recovery, TypeScript safety, accessibility, localization, and testing. Reproduce problematic flows and propose focused changes.
+
+
+AI Safety Reviewer
+Threat-model prompts, retrieval, provider routing, tool schemas, approvals, redaction, traces, budgets, and fallbacks. Test prompt injection, hidden-data requests, cross-tenant retrieval, malformed structured output, stale approvals, and provider failure. Require evidence for every safety claim.
+
+
+Performance Reviewer
+Profile representative board, search, reporting, notification, queue, WebSocket, and AI flows. Identify p95/p99 bottlenecks, N+1 queries, payload size, indexes, memory, contention, and fan-out. Recommend measured changes, not premature microservices.
+
+
+Release Reviewer
+Assess whether the change is releasable: acceptance tests, migration/rollback, flags, compatibility, telemetry, alerts, runbooks, backup/restore impact, security scan, documentation, and support. Return a go/no-go decision with blocking evidence.
+
+
+11.4 Agent Work Partitioning Rules
+
+
+One agent owns one bounded task and branch. Shared database/API contracts are agreed before parallel implementation.
+
+
+Use separate agents for implementation, tests, security review, and documentation on high-risk modules; the implementer does not self-approve.
+
+
+Agents must not edit the same files concurrently. Coordinate via interfaces, migrations sequence, and generated contracts.
+
+
+Every branch includes tests and a concise ADR when a material architectural choice changes.
+
+
+Run a final integration agent only after individual branches pass; resolve contract differences explicitly rather than hiding them in adapters.
+
+
+Never authorize an agent to execute production changes, rotate secrets, purge data, or approve its own AI tool call.
+
+
+
+12. Deployment, Observability, and Operations
+
+
+12.1 Environment Strategy
+Environment
+Purpose
+Data / Access Rules
+
+Local
+
+Developer feedback and component integration
+
+Synthetic data only; optional local AI; disposable services.
+
+CI
+
+Automated tests and builds
+
+Ephemeral databases; fake provider adapters; no production credentials.
+
+Development
+
+Shared integration and demos
+
+Seeded synthetic data; restricted external provider keys and budgets.
+
+Staging
+
+Production-like validation, migration rehearsal, load/security tests
+
+Anonymized or synthetic production-scale data; same topology/policies as production where practical.
+
+Production
+
+Business operation
+
+Least privilege, private network controls, managed secrets, backups/PITR, audited break-glass access.
+
+DR
+
+Recovery validation or standby
+
+Independent credentials and recovery path; routine restore/recovery exercises.
+
+
+
+
+12.2 Production Process Separation
+Process
+Scaling Signal
+Important Controls
+
+Web/API
+
+CPU, request concurrency, p95 latency
+
+Stateless; rolling deployment; readiness blocks before migrations/config ready.
+
+Reverb
+
+Connections, messages/sec, event-loop lag
+
+Sticky or supported scaling model; private-channel auth; backpressure and connection limits.
+
+Horizon workers
+
+Queue delay and throughput by queue
+
+Dedicated supervisors, time/memory limits, graceful termination, retry/dead-letter alarms.
+
+Scheduler
+
+Exactly one logical leader
+
+onOneServer/locks, heartbeat, missed-run alert, no long-running work inline.
+
+PostgreSQL
+
+Connections, IOPS, locks, replica lag, storage
+
+Connection pool, PITR, encrypted backups, query monitoring, tested restore.
+
+Valkey
+
+Memory, evictions, latency, persistence/replication
+
+No public exposure; authenticated TLS where supported; eviction policy reviewed per namespace.
+
+Object storage
+
+Capacity, error rate, scan backlog
+
+Versioning/lifecycle, encryption, restricted bucket policy, backup/replication as required.
+
+AI/local inference
+
+Queue delay, GPU/CPU, model latency, errors
+
+Separate resource pool, concurrency caps, local-only routing, model lifecycle governance.
+
+
+
+
+12.3 Observability Specification
+Signal
+Minimum Fields / Metrics
+Alerts
+
+HTTP logs
+
+timestamp, level, trace_id, request_id, organization_id (safe ID), actor_id, route, method, status, duration, bytes; no secrets/body by default
+
+5xx rate, auth anomaly, p95/p99 latency, rate-limit saturation.
+
+Database
+
+query duration/fingerprint, connections, locks, deadlocks, replication/storage
+
+Slow query, lock wait, connection saturation, backup/PITR failure.
+
+Queue
+
+queue, job class, organization, attempt, wait/runtime, outcome, error code
+
+Oldest-job delay, failure rate, dead-letter growth, worker heartbeat.
+
+Reverb
+
+connections, subscriptions, messages, errors, event-loop lag
+
+Connection or authorization error spike, lag, fan-out failure.
+
+Storage/files
+
+upload/scan/extract durations, bytes, status, quarantine count
+
+Scan backlog, object errors, unexpected public access, lifecycle failure.
+
+AI
+
+provider/model/use case, prompt version, tokens, estimated cost, latency, fallback, tool/approval outcome; sanitized
+
+Provider failure, budget threshold, tool failure, leakage evaluation regression, latency.
+
+Business
+
+task throughput, cycle time, WIP, sprint scope/completion, active users
+
+Metric pipeline stale or materially inconsistent with source events.
+
+Security audit
+
+actor/action/resource/result/correlation and access to logs
+
+Privilege change, repeated denial, mass export, break-glass use, key rotation overdue.
+
+
+
+
+12.4 Backup and Disaster Recovery
+
+
+PostgreSQL: continuous WAL/PITR plus encrypted full backups; separate backup credentials and account/project; documented retention.
+
+
+Object storage: versioning and lifecycle; replication or backup according to RPO; retain attachment metadata and object consistency checks.
+
+
+Configuration: version-controlled non-secret config; secret-manager backup/escrow and rotation procedure; export AI routing and automation definitions.
+
+
+Run quarterly restore drills into an isolated environment. Validate data integrity, tenant access, object retrieval, queue state, and application smoke tests.
+
+
+Document RPO/RTO achieved, gaps, owners, and corrective actions. A backup is not considered valid until a restore has succeeded.
+
+
+Incident sequence: contain writes if necessary, preserve evidence, choose recovery point, restore, reconcile outbox/webhook/idempotency ledgers, verify, communicate, and review.
+
+
+12.5 Operational Runbooks
+Runbook
+Minimum Steps
+
+Provider outage
+
+Confirm health and blast radius; check circuit breaker; route only to policy-permitted fallback; pause batch AI; communicate; reconcile failed runs.
+
+Queue backlog
+
+Identify queue/job class/tenant; inspect dependency; add workers within limits; quarantine poison jobs; preserve idempotency; verify oldest-job delay recovers.
+
+Database saturation
+
+Check connections/locks/queries/storage; shed expensive/report load; pause batch jobs; scale or fail over per runbook; capture evidence before changes.
+
+Stuck board/realtime
+
+Verify REST authority first, Reverb health/channel auth, outbox publisher, event lag; clients can refresh and continue using API.
+
+Malware finding
+
+Keep object quarantined; alert security/owner; prevent download/indexing/AI ingestion; retain evidence; follow policy for deletion and incident response.
+
+Credential compromise
+
+Revoke/rotate provider or integration secret; invalidate affected tokens/sessions; review access/audit; notify stakeholders; confirm no secret in logs/history.
+
+Tenant data incident
+
+Contain affected paths, preserve audit, activate incident team/legal/privacy procedures, verify isolation, remediate, assess notification obligations.
+
+Failed deployment
+
+Stop rollout; check migration compatibility; roll back image/flag; do not reverse destructive migrations blindly; validate queues, sessions, and data integrity.
+
+
+
+
+13. Appendices
+
+
+13.1 Starter PostgreSQL DDL (Illustrative)
+
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
+
+CREATE EXTENSION IF NOT EXISTS vector;
+
+
+
+
+
+CREATE TABLE organizations (
+
+
+  id uuid PRIMARY KEY,
+
+
+  name varchar(200) NOT NULL,
+
+
+  slug varchar(100) NOT NULL,
+
+
+  status varchar(24) NOT NULL DEFAULT 'active',
+
+
+  timezone varchar(64) NOT NULL DEFAULT 'UTC',
+
+
+  locale varchar(16) NOT NULL DEFAULT 'en',
+
+
+  settings jsonb NOT NULL DEFAULT '{}'::jsonb,
+
+
+  created_at timestamptz NOT NULL DEFAULT now(),
+
+
+  updated_at timestamptz NOT NULL DEFAULT now(),
+
+
+  CONSTRAINT organizations_slug_uq UNIQUE (slug),
+
+
+  CONSTRAINT organizations_status_ck CHECK (status IN ('active','suspended','archived'))
+
+
+);
+
+
+
+
+
+CREATE TABLE projects (
+
+
+  id uuid PRIMARY KEY,
+
+
+  organization_id uuid NOT NULL REFERENCES organizations(id) ON DELETE RESTRICT,
+
+
+  portfolio_id uuid NULL,
+
+
+  key varchar(16) NOT NULL,
+
+
+  name varchar(250) NOT NULL,
+
+
+  methodology varchar(24) NOT NULL DEFAULT 'kanban',
+
+
+  owner_id uuid NOT NULL,
+
+
+  status varchar(24) NOT NULL DEFAULT 'active',
+
+
+  version bigint NOT NULL DEFAULT 1,
+
+
+  created_at timestamptz NOT NULL DEFAULT now(),
+
+
+  updated_at timestamptz NOT NULL DEFAULT now(),
+
+
+  deleted_at timestamptz NULL,
+
+
+  CONSTRAINT projects_org_key_uq UNIQUE (organization_id, key),
+
+
+  CONSTRAINT projects_methodology_ck CHECK (methodology IN ('scrum','kanban','hybrid'))
+
+
+);
+
+
+
+
+
+CREATE TABLE tasks (
+
+
+  id uuid PRIMARY KEY,
+
+
+  organization_id uuid NOT NULL REFERENCES organizations(id) ON DELETE RESTRICT,
+
+
+  project_id uuid NOT NULL REFERENCES projects(id) ON DELETE RESTRICT,
+
+
+  parent_id uuid NULL REFERENCES tasks(id) ON DELETE RESTRICT,
+
+
+  type_id uuid NOT NULL,
+
+
+  status_id uuid NOT NULL,
+
+
+  sprint_id uuid NULL,
+
+
+  key varchar(32) NOT NULL,
+
+
+  title varchar(500) NOT NULL,
+
+
+  description text NULL,
+
+
+  priority varchar(24) NOT NULL DEFAULT 'medium',
+
+
+  rank varchar(64) NOT NULL,
+
+
+  version bigint NOT NULL DEFAULT 1,
+
+
+  start_at timestamptz NULL,
+
+
+  due_at timestamptz NULL,
+
+
+  estimate_minutes integer NULL CHECK (estimate_minutes &gt;= 0),
+
+
+  story_points numeric(8,2) NULL CHECK (story_points &gt;= 0),
+
+
+  created_at timestamptz NOT NULL DEFAULT now(),
+
+
+  updated_at timestamptz NOT NULL DEFAULT now(),
+
+
+  deleted_at timestamptz NULL,
+
+
+  CONSTRAINT tasks_project_key_uq UNIQUE (project_id, key)
+
+
+);
+
+
+
+
+
+CREATE INDEX tasks_tenant_project_idx ON tasks (organization_id, project_id) WHERE deleted_at IS NULL;
+
+
+CREATE INDEX tasks_board_order_idx ON tasks (project_id, status_id, rank) WHERE deleted_at IS NULL;
+
+
+CREATE INDEX tasks_title_trgm_idx ON tasks USING gin (title gin_trgm_ops);
+
+
+CREATE INDEX tasks_fts_idx ON tasks USING gin
+
+
+  (to_tsvector('simple', coalesce(title,'') || ' ' || coalesce(description,'')));
+
+
+
+
+
+CREATE TABLE outbox_events (
+
+
+  id uuid PRIMARY KEY,
+
+
+  organization_id uuid NOT NULL,
+
+
+  aggregate_type varchar(100) NOT NULL,
+
+
+  aggregate_id uuid NOT NULL,
+
+
+  event_type varchar(150) NOT NULL,
+
+
+  payload jsonb NOT NULL,
+
+
+  occurred_at timestamptz NOT NULL DEFAULT now(),
+
+
+  published_at timestamptz NULL
+
+
+);
+
+
+CREATE INDEX outbox_unpublished_idx ON outbox_events (occurred_at) WHERE published_at IS NULL;
+
+
+
+
+
+CREATE TABLE knowledge_chunks (
+
+
+  id uuid PRIMARY KEY,
+
+
+  organization_id uuid NOT NULL,
+
+
+  source_id uuid NOT NULL,
+
+
+  chunk_no integer NOT NULL,
+
+
+  content text NOT NULL,
+
+
+  metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+
+
+  embedding vector(1536) NULL,
+
+
+  created_at timestamptz NOT NULL DEFAULT now(),
+
+
+  CONSTRAINT knowledge_chunks_source_chunk_uq UNIQUE (source_id, chunk_no)
+
+
+);
+
+
+-- Choose vector dimension/index type based on the selected embedding model and measured dataset.
+
+
+13.2 Error Code Catalog
+Code
+HTTP
+Meaning
+
+AUTHENTICATION_REQUIRED
+
+401
+
+No valid session/token.
+
+MFA_REQUIRED
+
+401
+
+Authentication requires MFA challenge.
+
+ACCESS_DENIED
+
+403
+
+Principal lacks permission without revealing hidden resource details.
+
+RESOURCE_NOT_FOUND
+
+404
+
+Resource missing or intentionally concealed by authorization policy.
+
+IDEMPOTENCY_KEY_REUSED
+
+409
+
+Key reused with different request hash.
+
+TASK_VERSION_CONFLICT
+
+409
+
+Client version is stale.
+
+WORKFLOW_TRANSITION_INVALID
+
+422
+
+Requested status transition or validators fail.
+
+WIP_LIMIT_EXCEEDED
+
+422
+
+Destination column hard WIP limit would be exceeded.
+
+SPRINT_STATE_INVALID
+
+422
+
+Operation not valid for current sprint state.
+
+DEPENDENCY_CYCLE
+
+422
+
+Dependency would create a cycle.
+
+UPLOAD_POLICY_VIOLATION
+
+422
+
+File size/type/checksum policy failure.
+
+FILE_QUARANTINED
+
+423
+
+Attachment is not available before scan/approval.
+
+RATE_LIMITED
+
+429
+
+Request/provider quota exceeded.
+
+AI_POLICY_DENIED
+
+403
+
+Data/provider/tool policy denies request.
+
+AI_APPROVAL_REQUIRED
+
+202
+
+Tool call is proposed and awaits approval.
+
+AI_BUDGET_EXCEEDED
+
+429
+
+Organization/user budget threshold reached.
+
+AI_OUTPUT_INVALID
+
+502
+
+Provider output failed required schema validation.
+
+AI_PROVIDER_UNAVAILABLE
+
+503
+
+No policy-permitted model currently available.
+
+EXPORT_EXPIRED
+
+410
+
+Generated export is no longer available.
+
+SERVICE_TEMPORARILY_UNAVAILABLE
+
+503
+
+Transient dependency or maintenance condition.
+
+
+
+
+13.3 Glossary
+Term
+Definition
+
+ABAC
+
+Attribute-Based Access Control.
+
+ADR
+
+Architecture Decision Record.
+
+ASVS
+
+Application Security Verification Standard.
+
+BOLA
+
+Broken Object Level Authorization.
+
+Cumulative Flow
+
+Chart of work-item counts by workflow state over time.
+
+Cycle Time
+
+Elapsed time from work start to completion.
+
+Definition of Done
+
+Shared completion criteria for a releasable increment.
+
+Fractional Rank
+
+Sortable string/number generated between neighbors to reduce mass reordering.
+
+Idempotency
+
+Repeated execution produces no additional side effect.
+
+Impediment
+
+Issue that blocks or materially slows team delivery.
+
+Outbox Pattern
+
+Persisting domain events in the same transaction as state changes for reliable publication.
+
+PITR
+
+Point-in-Time Recovery.
+
+RAG
+
+Retrieval-Augmented Generation.
+
+RLS
+
+PostgreSQL Row-Level Security.
+
+Scrum Master
+
+Facilitator and coach responsible for Scrum effectiveness and impediment removal, not a task commander.
+
+WIP Limit
+
+Maximum permitted work in progress in a board column/state.
+
+
+
+
+13.4 Standards and Product References
+Reference
+URL
+
+Laravel 13 Release Notes and Documentation
+
+https://laravel.com/docs/13.x/releases
+
+Laravel AI SDK Documentation
+
+https://laravel.com/docs/13.x/ai-sdk
+
+Laravel Sanctum
+
+https://laravel.com/docs/13.x/sanctum
+
+Laravel Horizon
+
+https://laravel.com/docs/13.x/horizon
+
+Laravel Reverb
+
+https://laravel.com/docs/13.x/reverb
+
+Laravel Filesystem / S3-compatible storage
+
+https://laravel.com/docs/13.x/filesystem
+
+React Versions / React 19.2
+
+https://react.dev/versions
+
+PostgreSQL Current Documentation
+
+https://www.postgresql.org/docs/current/
+
+Valkey
+
+https://valkey.io/
+
+SeaweedFS
+
+https://github.com/seaweedfs/seaweedfs
+
+OWASP ASVS
+
+https://owasp.org/www-project-application-security-verification-standard/
+
+OWASP Top 10:2025
+
+https://owasp.org/Top10/2025/
+
+OWASP API Security Top 10:2023
+
+https://owasp.org/API-Security/editions/2023/en/0x11-t10/
+
+Google Antigravity Documentation
+
+https://antigravity.google/docs/
+
+
+
+
+References are architecture inputs, not a substitute for project-specific legal, privacy, security, accessibility, and licensing review.
+
+
+13.5 Implementation Readiness Checklist
+☐ Product owner approves MVP scope, personas, workflows, and measurable success criteria.
+☐ Architecture owner approves ADR-001 through ADR-008 and records any deviations.
+☐ Security owner approves threat model, data classification, tenant model, and provider data policy.
+☐ UX owner validates board keyboard interaction, Scrum Master flows, responsive behavior, and accessibility baseline.
+☐ Database owner validates schema, tenant indexes/RLS, migration strategy, backup/PITR, and scale assumptions.
+☐ API owner publishes OpenAPI baseline, error catalog, idempotency/concurrency standards, and webhook contract.
+☐ AI owner validates providers, model capabilities, routing/fallback/budget policy, tool approvals, and evaluation datasets.
+☐ DevOps owner provisions development/staging topology, secret handling, telemetry, backups, and restore rehearsal.
+☐ QA owner maps functional/NFR requirements to automated and manual test evidence.
+☐ Delivery lead turns the roadmap and prompt pack into owned epics/stories with dependencies and release gates.
+
+
+Conclusion
+
+This blueprint turns the initial concept into an implementation-ready baseline for a secure, scalable, AI-assisted Work Management System. The recommended path deliberately starts with a modular monolith and PostgreSQL-centered platform, adds real-time Kanban and Scrum workflows as first-class capabilities, and introduces multi-provider AI behind explicit routing, data, budget, approval, and audit controls. Teams should treat this document as a living baseline: material deviations require an ADR, test evidence, security review, and an updated operational plan.
+

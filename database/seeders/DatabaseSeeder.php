@@ -24,8 +24,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Seed Roles & Permissions
+        // 1. Seed Roles & Permissions and Project Templates
         $this->call(RolePermissionSeeder::class);
+        $this->call(ProjectTemplateSeeder::class);
 
         $ownerRole = Role::whereNull('organization_id')->where('slug', 'owner')->first();
         $adminRole = Role::whereNull('organization_id')->where('slug', 'admin')->first();

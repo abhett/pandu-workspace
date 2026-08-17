@@ -1,0 +1,195 @@
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-error-container":"#ffdad6","outline-variant":"#464555","surface-container-high":"#1b2b3f","primary-fixed-dim":"#c3c0ff","error-container":"#93000a","on-tertiary-container":"#67f4b7","on-tertiary":"#003824","inverse-on-surface":"#213145","status-cancelled":"#475569","surface-container-low":"#0b1c30","on-primary":"#1d00a5","tertiary-container":"#006e4b","on-primary-fixed-variant":"#3323cc","primary":"#c3c0ff","on-tertiary-fixed-variant":"#005236","background":"#031427","zinc-surface":"#09090B","tertiary-fixed-dim":"#4edea3","on-surface-variant":"#c7c4d8","status-backlog":"#94A3B8","on-primary-container":"#dad7ff","warning-amber":"#F59E0B","primary-container":"#4f46e5","on-secondary-fixed":"#09006b","on-secondary-container":"#b1b1ff","surface-bright":"#2a3a4f","on-tertiary-fixed":"#002113","status-review":"#8B5CF6","inverse-primary":"#4d44e3","surface-container":"#102034","surface-dim":"#031427","inverse-surface":"#d3e4fe","on-error":"#690005","status-blocked":"#EF4444","error":"#ffb4ab","secondary-fixed":"#e1dfff","status-todo":"#3B82F6","on-secondary-fixed-variant":"#2c24ce","secondary":"#c1c1ff","outline":"#918fa1","zinc-border":"#27272A","on-primary-fixed":"#0f0069","tertiary-fixed":"#6ffbbe","surface-variant":"#26364a","surface-container-lowest":"#000f21","status-inprogress":"#4F46E5","on-secondary":"#1400a8","primary-fixed":"#e2dfff","tertiary":"#4edea3","on-surface":"#d3e4fe","surface":"#031427","surface-container-highest":"#26364a","secondary-fixed-dim":"#c1c1ff","surface-tint":"#c3c0ff","status-done":"#10B981","secondary-container":"#2f27d0","on-background":"#d3e4fe"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin-mobile":"16px","container-max":"1440px","stack-sm":"8px","stack-xs":"4px","stack-md":"16px","unit":"8px","margin-desktop":"32px","stack-lg":"24px","gutter":"24px"},"fontFamily":{"mono":["Geist"],"label-sm":["Geist"],"label-md":["Geist"],"headline-lg-mobile":["Geist"],"body-md":["Inter"],"headline-lg":["Geist"],"body-lg":["Inter"],"headline-md":["Geist"],"headline-sm":["Geist"],"body-sm":["Inter"],"display":["Geist"]},"fontSize":{"mono":["13px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"500"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","fontWeight":"600"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}],"body-sm":["14px",{"lineHeight":"20px","fontWeight":"400"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.04em","fontWeight":"700"}]}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/></head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container/80 backdrop-blur-md"><div class="h-16 flex items-center justify-between px-margin-mobile lg:px-margin-desktop"><div></div><div class="flex items-center gap-stack-md"><div class="h-8 w-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-label-md">U</div></div></div></header><aside class="fixed top-16 left-0 bottom-0 w-64 bg-surface-container-low hidden lg:flex flex-col border-r border-outline-variant/30"><nav class="flex-1 p-stack-md flex flex-col gap-stack-xs" data-active-classes="bg-primary-container text-on-primary-container font-label-md rounded-lg"><a class="px-stack-md py-stack-sm text-on-surface-variant hover:bg-surface-variant/50 rounded-lg transition-colors" data-path="dashboard" href="#">Dashboard</a><a aria-current="page" class="px-stack-md py-stack-sm transition-colors bg-primary-container text-on-primary-container font-label-md rounded-lg" data-path="daftar-project" href="#">Daftar Project</a><a class="px-stack-md py-stack-sm text-on-surface-variant hover:bg-surface-variant/50 rounded-lg transition-colors" data-path="settings" href="#">Pengaturan</a></nav></aside><main class="pt-16 lg:pl-64 min-h-screen"><div class="p-margin-mobile lg:p-margin-desktop max-w-container-max mx-auto"><div class="flex flex-col w-full h-full relative" id="project-dashboard">
+<!-- Content behind modal (blurred) -->
+<div class="p-margin-desktop grid grid-cols-1 lg:grid-cols-12 gap-stack-lg blur-sm opacity-50 pointer-events-none transition-all duration-300" id="background-content">
+<div class="lg:col-span-12 flex justify-between items-end mb-stack-md">
+<div>
+<h1 class="font-display text-display text-on-background mb-stack-xs">Daftar Project</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Kelola seluruh inisiatif dan ruang kerja tim Anda.</p>
+</div>
+<button class="bg-primary-container text-on-primary-container px-stack-md py-stack-sm rounded-lg font-label-md text-label-md shadow-md hover:shadow-lg transition-shadow flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-[18px]">add</span> Proyek Baru
+      </button>
+</div>
+<!-- Dummy Cards -->
+<div class="lg:col-span-4 bg-surface-container rounded-xl p-stack-md h-48 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-stack-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-headline-sm text-headline-sm">C</div>
+<span class="bg-surface-variant text-on-surface-variant px-stack-sm py-stack-xs rounded-full font-label-sm text-label-sm">Active</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-background">Core Platform Rewrite</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Internal tooling updates</p>
+</div>
+</div>
+<div class="lg:col-span-4 bg-surface-container rounded-xl p-stack-md h-48 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-stack-sm">
+<div class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container font-headline-sm text-headline-sm">M</div>
+<span class="bg-surface-variant text-on-surface-variant px-stack-sm py-stack-xs rounded-full font-label-sm text-label-sm">Planning</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-background">Marketing Q4 Campaign</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Holiday season push</p>
+</div>
+</div>
+</div>
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-margin-mobile lg:p-margin-desktop bg-surface-container-lowest/80 backdrop-blur-md transition-opacity duration-300" id="modal-container">
+<!-- Modal Dialog -->
+<div class="bg-surface-container-low w-full max-w-[800px] rounded-2xl shadow-2xl overflow-hidden flex flex-col transform transition-transform duration-300 scale-100" id="modal-dialog">
+<!-- Modal Header -->
+<div class="flex items-center justify-between p-stack-lg bg-surface-container">
+<h2 class="font-headline-lg text-headline-lg text-on-background m-0">Buat Proyek Baru</h2>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-variant text-on-surface-variant hover:bg-outline-variant hover:text-on-background transition-colors" id="close-modal">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Body - Split View -->
+<div class="flex flex-col lg:flex-row w-full flex-1 min-h-[500px]">
+<!-- Left Pane: Template Selection -->
+<div class="w-full lg:w-5/12 bg-surface-container p-stack-lg border-r border-outline-variant/20 flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-stack-sm">Pilih Template</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-stack-lg">Mulai lebih cepat dengan struktur yang sudah disiapkan.</p>
+<div class="flex flex-col gap-stack-md overflow-y-auto pr-stack-xs" id="template-list">
+<!-- Template Option 1 -->
+<label class="cursor-pointer group relative">
+<input checked="" class="peer sr-only" name="project_template" type="radio" value="software"/>
+<div class="p-stack-md rounded-xl bg-surface transition-all duration-200 peer-checked:bg-primary-container/20 peer-checked:ring-1 peer-checked:ring-primary-container hover:bg-surface-variant flex gap-stack-md items-start">
+<div class="w-10 h-10 rounded-lg bg-primary/20 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined">terminal</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-stack-xs">Software Development</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Sprints, issues, epics, dan backlog management.</p>
+</div>
+</div>
+</label>
+<!-- Template Option 2 -->
+<label class="cursor-pointer group relative">
+<input class="peer sr-only" name="project_template" type="radio" value="marketing"/>
+<div class="p-stack-md rounded-xl bg-surface transition-all duration-200 peer-checked:bg-secondary-container/20 peer-checked:ring-1 peer-checked:ring-secondary-container hover:bg-surface-variant flex gap-stack-md items-start">
+<div class="w-10 h-10 rounded-lg bg-secondary/20 text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined">campaign</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-stack-xs">Marketing Campaign</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Editorial calendar, asset tracking, dan timeline promo.</p>
+</div>
+</div>
+</label>
+<!-- Template Option 3 -->
+<label class="cursor-pointer group relative">
+<input class="peer sr-only" name="project_template" type="radio" value="product"/>
+<div class="p-stack-md rounded-xl bg-surface transition-all duration-200 peer-checked:bg-tertiary-container/20 peer-checked:ring-1 peer-checked:ring-tertiary-container hover:bg-surface-variant flex gap-stack-md items-start">
+<div class="w-10 h-10 rounded-lg bg-tertiary/20 text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-stack-xs">Product Management</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Roadmap, feature requests, dan release planning.</p>
+</div>
+</div>
+</label>
+<!-- Template Option 4 -->
+<label class="cursor-pointer group relative">
+<input class="peer sr-only" name="project_template" type="radio" value="blank"/>
+<div class="p-stack-md rounded-xl bg-surface transition-all duration-200 peer-checked:bg-surface-variant peer-checked:ring-1 peer-checked:ring-outline hover:bg-surface-variant flex gap-stack-md items-start">
+<div class="w-10 h-10 rounded-lg bg-surface-variant text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined">draft</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-stack-xs">Proyek Kosong</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Mulai dari nol dan sesuaikan sesuai kebutuhan tim.</p>
+</div>
+</div>
+</label>
+</div>
+</div>
+<!-- Right Pane: Project Details -->
+<div class="w-full lg:w-7/12 p-stack-lg bg-surface-container-low flex flex-col justify-between">
+<div class="flex flex-col gap-stack-lg">
+<div class="flex flex-col gap-stack-xs relative">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="projectName">Nama Proyek</label>
+<input class="w-full bg-surface text-on-surface font-body-md text-body-md px-stack-md py-stack-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-primary-container transition-shadow placeholder:text-outline/50 border-none shadow-sm" id="projectName" placeholder="Mis. Redesign Website Utama" type="text"/>
+</div>
+<div class="flex flex-col gap-stack-xs relative">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider flex items-center gap-stack-xs" for="projectKey">
+                 Kode/Key <span class="material-symbols-outlined text-[14px] cursor-help" title="Unik identifier untuk proyek ini">info</span>
+</label>
+<input class="w-24 bg-surface text-on-surface font-mono text-mono px-stack-md py-stack-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-primary-container transition-shadow uppercase placeholder:text-outline/50 border-none shadow-sm" id="projectKey" placeholder="WEB" type="text"/>
+<p class="font-body-sm text-body-sm text-outline mt-stack-xs">Digunakan sebagai prefix issue (mis. WEB-1, WEB-2)</p>
+</div>
+<div class="flex flex-col gap-stack-xs">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" for="projectDesc">Deskripsi (Opsional)</label>
+<textarea class="w-full bg-surface text-on-surface font-body-md text-body-md px-stack-md py-stack-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-primary-container transition-shadow resize-none placeholder:text-outline/50 border-none shadow-sm" id="projectDesc" placeholder="Tujuan singkat proyek ini..." rows="3"></textarea>
+</div>
+<div class="flex flex-col gap-stack-xs">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-stack-xs">Visibilitas</label>
+<div class="flex gap-stack-md">
+<label class="flex-1 cursor-pointer">
+<input checked="" class="peer sr-only" name="visibility" type="radio" value="private"/>
+<div class="p-stack-sm rounded-lg bg-surface border border-outline-variant/30 text-center transition-all peer-checked:bg-surface-variant peer-checked:border-primary-container peer-checked:text-on-surface hover:bg-surface-variant/50">
+<span class="material-symbols-outlined text-[24px] mb-stack-xs text-on-surface-variant peer-checked:text-primary">lock</span>
+<h5 class="font-label-md text-label-md text-on-surface">Private</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-tight mt-1">Hanya anggota yang diundang</p>
+</div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="peer sr-only" name="visibility" type="radio" value="public"/>
+<div class="p-stack-sm rounded-lg bg-surface border border-outline-variant/30 text-center transition-all peer-checked:bg-surface-variant peer-checked:border-primary-container peer-checked:text-on-surface hover:bg-surface-variant/50">
+<span class="material-symbols-outlined text-[24px] mb-stack-xs text-on-surface-variant peer-checked:text-primary">group</span>
+<h5 class="font-label-md text-label-md text-on-surface">Workspace</h5>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[11px] leading-tight mt-1">Terlihat oleh semua di workspace</p>
+</div>
+</label>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex justify-end gap-stack-md mt-stack-lg pt-stack-md border-t border-outline-variant/20">
+<button class="px-stack-md py-stack-sm rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-variant transition-colors" id="cancel-btn">Batal</button>
+<button class="px-stack-lg py-stack-sm rounded-lg font-label-md text-label-md bg-primary-container text-on-primary-container hover:bg-primary transition-colors shadow-md flex items-center gap-stack-sm">Buat Proyek <span class="material-symbols-outlined text-[18px]">arrow_forward</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modalContainer = document.getElementById('modal-container');
+      const modalDialog = document.getElementById('modal-dialog');
+      const backgroundContent = document.getElementById('background-content');
+      const closeBtns = [document.getElementById('close-modal'), document.getElementById('cancel-btn')];
+      
+      const projectNameInput = document.getElementById('projectName');
+      const projectKeyInput = document.getElementById('projectKey');
+
+      // Auto-generate Key based on Name (simple example)
+      projectNameInput.addEventListener('input', (e) => {
+          const name = e.target.value;
+          if(name.length > 0) {
+              const words = name.split(' ');
+              let key = '';
+              if(words.length === 1) {
+                  key = words[0].substring(0, 3).toUpperCase();
+              } else {
+                 key = words.map(w => w.charAt(0)).join('').substring(0, 4).toUpperCase();
+              }
+              projectKeyInput.value = key;
+          } else {
+              projectKeyInput.value = '';
+          }
+      });
+
+      // Simple close modal logic for demo purposes
+      closeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          modalContainer.classList.add('opacity-0', 'pointer-events-none');
+          modalDialog.classList.add('scale-95');
+          backgroundContent.classList.remove('blur-sm', 'opacity-50');
+        });
+      });
+    });
+  </script>
+</div></div></main></body></html>

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
@@ -17,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property string $organization_id
  * @property string $project_id
  * @property string $status_id
+ * @property string|null $sprint_id
  * @property string|null $parent_id
  * @property int $sequence_number
  * @property string $key
@@ -38,6 +40,7 @@ use Illuminate\Support\Carbon;
     'organization_id',
     'project_id',
     'status_id',
+    'sprint_id',
     'parent_id',
     'sequence_number',
     'key',
@@ -104,6 +107,16 @@ class Task extends Model
     }
 
     /**
+     * Get the sprint assigned to this task.
+     *
+     * @return BelongsTo<Sprint, $this>
+     */
+    public function sprint(): BelongsTo
+    {
+        return $this->belongsTo(Sprint::class);
+    }
+
+    /**
      * Get the parent task (for subtasks).
      *
      * @return BelongsTo<Task, $this>
@@ -163,5 +176,35 @@ class Task extends Model
     public function labels(): BelongsToMany
     {
         return $this->belongsToMany(Label::class, 'task_labels');
+    }
+
+    /**
+     * Get all attachments associated with this task.
+     *
+     * @return MorphMany<Attachment, $this>
+     */
+    public function attachments(): MorphMany
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
+
+    /**
+     * Get all comments on this task.
+     *
+     * @return HasMany<Comment, $this>
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class)->whereNull('parent_id')->with(['user', 'replies.user'])->latest('created_at');
+    }
+
+    /**
+     * Get all checklists for this task.
+     *
+     * @return HasMany<TaskChecklist, $this>
+     */
+    public function checklists(): HasMany
+    {
+        return $this->hasMany(TaskChecklist::class)->orderBy('position');
     }
 }

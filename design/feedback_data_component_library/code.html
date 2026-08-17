@@ -1,0 +1,314 @@
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-dim":"#031427","secondary":"#c1c1ff","status-todo":"#3B82F6","on-surface-variant":"#c7c4d8","surface-bright":"#2a3a4f","outline":"#918fa1","status-review":"#8B5CF6","tertiary":"#4edea3","tertiary-fixed-dim":"#4edea3","surface-container-lowest":"#000f21","secondary-fixed":"#e1dfff","on-tertiary-container":"#67f4b7","on-secondary-fixed-variant":"#2c24ce","primary-container":"#4f46e5","surface-container-high":"#1b2b3f","primary-fixed":"#e2dfff","on-error":"#690005","error-container":"#93000a","surface-container":"#102034","on-primary-container":"#dad7ff","status-done":"#10B981","status-backlog":"#94A3B8","secondary-fixed-dim":"#c1c1ff","status-cancelled":"#475569","status-blocked":"#EF4444","inverse-on-surface":"#213145","tertiary-container":"#006e4b","zinc-surface":"#09090B","surface-tint":"#c3c0ff","primary":"#c3c0ff","on-secondary":"#1400a8","on-primary-fixed":"#0f0069","surface-variant":"#26364a","on-primary-fixed-variant":"#3323cc","warning-amber":"#F59E0B","zinc-border":"#27272A","error":"#ffb4ab","background":"#031427","surface-container-low":"#0b1c30","on-primary":"#1d00a5","on-error-container":"#ffdad6","on-background":"#d3e4fe","inverse-primary":"#4d44e3","outline-variant":"#464555","on-surface":"#d3e4fe","on-tertiary-fixed-variant":"#005236","surface":"#031427","secondary-container":"#2f27d0","on-secondary-container":"#b1b1ff","status-inprogress":"#4F46E5","on-tertiary-fixed":"#002113","inverse-surface":"#d3e4fe","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#09006b","surface-container-highest":"#26364a","primary-fixed-dim":"#c3c0ff"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"container-max":"1440px","unit":"8px","stack-xs":"4px","stack-sm":"8px","margin-mobile":"16px","stack-md":"16px","margin-desktop":"32px","stack-lg":"24px","gutter":"24px"},"fontFamily":{"headline-md":["Geist"],"body-md":["Inter"],"body-sm":["Inter"],"label-sm":["Geist"],"mono":["Geist"],"headline-lg-mobile":["Geist"],"headline-lg":["Geist"],"body-lg":["Inter"],"label-md":["Geist"],"headline-sm":["Geist"],"display":["Geist"]},"fontSize":{"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"body-sm":["14px",{"lineHeight":"20px","fontWeight":"400"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"mono":["13px",{"lineHeight":"18px","fontWeight":"400"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","fontWeight":"600"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"500"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.04em","fontWeight":"700"}]}}}}</script><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/></head><body class="bg-background font-body-md text-on-background"><header class="fixed top-0 left-0 right-0 h-16 bg-surface-dim/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.1)] z-[60]"><div class="h-16 w-full px-margin-desktop flex items-center justify-between"><div class="flex items-center gap-stack-md"><img alt="Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLtzYEc5FmeispUUsmDSxWEsstJ7UP3jMB8jP9CNMUgOvO3-ImuvhCYvKd0KFqhBQ6jvFzSa7VjCX4I5gKfr2VWaJA8Evhi8IC9aemwVYRyi4len5AwD0H3wcdoFNViZkxEob3dl9-8tmjIqeldFw0Z-VAr7PBP1pLI94nANv3Lsv-ogaNOvEd4WGiR-l7JPUS7trdqnS8igdaKHZ_o2vR48S7ySQ1UI55VdEcBKvm-PUdrtN6ZXILYOAA"/><span class="font-headline-sm text-headline-sm text-on-surface">WMS Design System</span><div class="h-4 w-[1px] bg-outline-variant mx-2"></div><span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Documentation</span></div><div class="flex items-center gap-stack-lg"><nav class="hidden lg:flex items-center gap-stack-lg text-label-md"><a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Changelog</a><a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Guidelines</a><a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Storybook</a></nav><div class="flex items-center gap-stack-md bg-surface-container px-3 py-1.5 rounded-full border border-outline-variant/30"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">search</span><input class="bg-transparent border-none outline-none text-body-sm w-48 text-on-surface placeholder:text-outline" placeholder="Search components..." type="text"/></div><div class="flex items-center gap-stack-sm pl-4 border-l border-outline-variant/30"><img alt="Profile" class="w-8 h-8 rounded-full object-cover border border-outline-variant/50" src="https://lh3.googleusercontent.com/aida/AP1WRLt-HBiFvm5HCwYwd3f1z6I9fbj9w7uLDAF0TrWVOSG2UB_XjuAlohUJGibOs87Vtd8QHLA6syhQ54b1LkIcjFt2cyZDyv9KRozh_VUohAJqruAxTg3Ah3aP-CBiLi4Bq66UDQpbTB3XTHGVT3OAN6Zd_qdxhYxb6WbKZcrpzAGW89kMEdgHjt8-UcXOVzN17neuoIt6U2KbSqOkPNvzW6ywAZ16DBLYZnSoASv-Q5XWToUXDUscbMcdh_k"/></div></div></div></header><aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-72 bg-surface-container-low z-50 overflow-y-auto custom-scrollbar border-r border-outline-variant/10"><nav class="p-stack-lg space-y-stack-lg" data-active-classes="bg-secondary-container text-on-secondary-container font-medium"><div class="space-y-stack-xs"><p class="px-4 py-2 text-label-sm font-label-sm text-outline uppercase tracking-wider">Foundations</p><div class="space-y-1"><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="foundations-colors" href="#">Colors</a><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="foundations-typography" href="#">Typography</a><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="foundations-elevation" href="#">Elevation</a></div></div><div class="space-y-stack-xs"><p class="px-4 py-2 text-label-sm font-label-sm text-outline uppercase tracking-wider">Forms</p><div class="space-y-1"><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="forms-inputs" href="#">Inputs</a><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="forms-buttons" href="#">Buttons</a></div></div><div class="space-y-stack-xs"><p class="px-4 py-2 text-label-sm font-label-sm text-outline uppercase tracking-wider">Data Display</p><div class="space-y-1"><a aria-current="page" class="flex items-center px-4 py-2 rounded-lg transition-all bg-secondary-container text-on-secondary-container font-medium" data-path="data-tables" href="#">Tables</a><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="data-charts" href="#">Charts</a></div></div><div class="space-y-stack-xs"><p class="px-4 py-2 text-label-sm font-label-sm text-outline uppercase tracking-wider">Feedback</p><div class="space-y-1"><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="feedback-toasts" href="#">Toasts</a><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="feedback-progress" href="#">Progress</a></div></div><div class="space-y-stack-xs"><p class="px-4 py-2 text-label-sm font-label-sm text-outline uppercase tracking-wider">Overlays</p><div class="space-y-1"><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="overlays-modals" href="#">Modals</a><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="overlays-popovers" href="#">Popovers</a></div></div><div class="space-y-stack-xs"><p class="px-4 py-2 text-label-sm font-label-sm text-outline uppercase tracking-wider">Specialized (AI &amp; WMS)</p><div class="space-y-1"><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="specialized-ai-chat" href="#">AI Chatbot</a><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="specialized-kanban" href="#">Task Board</a><a class="flex items-center px-4 py-2 rounded-lg text-body-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="specialized-workflow-builder" href="#">Workflow Engine</a></div></div></nav></aside><div class="pl-72"><main class="relative pt-16 min-h-screen bg-background"><div class="flex flex-col w-full px-margin-desktop py-stack-lg gap-stack-lg max-w-container-max mx-auto">
+<div class="flex flex-col gap-stack-xs">
+<h1 class="font-display text-display text-on-surface tracking-tight">Feedback &amp; Data</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">Comprehensive components for communicating state, alerting users, and displaying complex data structures.</p>
+</div>
+<!-- Section: Alerts & Notifications -->
+<div class="flex flex-col gap-stack-md mt-stack-md">
+<h2 class="font-headline-md text-headline-md text-on-surface border-b border-outline-variant/30 pb-2">Alerts &amp; Banners</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<!-- Info Alert -->
+<div class="flex items-start gap-stack-sm p-4 bg-surface-container-high rounded-lg relative overflow-hidden border border-outline-variant/50">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-status-todo"></div>
+<span class="material-symbols-outlined text-status-todo mt-0.5">info</span>
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface">System Update Scheduled</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Maintenance will occur on Sunday at 02:00 AM UTC. Expect 15 minutes of downtime.</span>
+</div>
+<button class="ml-auto text-on-surface-variant hover:text-on-surface transition-colors p-1">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Success Alert -->
+<div class="flex items-start gap-stack-sm p-4 bg-surface-container-high rounded-lg relative overflow-hidden border border-outline-variant/50">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-status-done"></div>
+<span class="material-symbols-outlined text-status-done mt-0.5">check_circle</span>
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface">Deployment Successful</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">v2.4.1 has been successfully deployed to the production environment.</span>
+</div>
+<button class="ml-auto text-on-surface-variant hover:text-on-surface transition-colors p-1">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Warning Alert -->
+<div class="flex items-start gap-stack-sm p-4 bg-surface-container-high rounded-lg relative overflow-hidden border border-outline-variant/50">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-warning-amber"></div>
+<span class="material-symbols-outlined text-warning-amber mt-0.5">warning</span>
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface">Storage Capacity High</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Your database cluster is at 85% capacity. Consider upgrading your plan.</span>
+</div>
+<button class="ml-auto text-on-surface-variant hover:text-on-surface transition-colors p-1">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Error Alert -->
+<div class="flex items-start gap-stack-sm p-4 bg-error-container/20 rounded-lg relative overflow-hidden border border-error/30">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<span class="material-symbols-outlined text-error mt-0.5">error</span>
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface">Payment Failed</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">We couldn't process your last invoice. Please update your payment method.</span>
+</div>
+<button class="ml-auto text-on-surface-variant hover:text-on-surface transition-colors p-1">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Section: Progress & Loading -->
+<div class="flex flex-col gap-stack-md mt-stack-md">
+<h2 class="font-headline-md text-headline-md text-on-surface border-b border-outline-variant/30 pb-2">Progress &amp; Loading States</h2>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-stack-lg">
+<!-- Progress Bars -->
+<div class="flex flex-col gap-stack-md p-stack-md bg-surface-container rounded-xl border border-outline-variant/20">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Linear Progress</h3>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface">Data Migration</span>
+<span class="font-mono text-mono text-on-surface-variant">72%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 72%"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2 mt-4">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface">Indeterminate Sync</span>
+<span class="font-label-sm text-label-sm text-outline animate-pulse">Syncing...</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden relative">
+<div class="h-full bg-secondary absolute left-0 top-0 w-1/3 rounded-full animate-[slide_1.5s_ease-in-out_infinite]"></div>
+</div>
+</div>
+</div>
+<!-- Skeletons & Circular -->
+<div class="flex flex-col gap-stack-md p-stack-md bg-surface-container rounded-xl border border-outline-variant/20">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Skeletons &amp; Spinners</h3>
+<div class="flex items-center gap-stack-lg">
+<!-- Skeletons -->
+<div class="flex-1 flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest animate-pulse"></div>
+<div class="flex flex-col gap-2 flex-1">
+<div class="h-3 w-3/4 bg-surface-container-highest rounded animate-pulse"></div>
+<div class="h-2 w-1/2 bg-surface-container-highest rounded animate-pulse"></div>
+</div>
+</div>
+<div class="h-16 w-full bg-surface-container-highest rounded-lg animate-pulse mt-2"></div>
+</div>
+<!-- Circular Progress -->
+<div class="flex items-center justify-center gap-6 border-l border-outline-variant/30 pl-stack-lg">
+<div class="relative w-12 h-12 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
+<path class="text-status-done" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="45, 100" stroke-width="4"></path>
+</svg>
+<span class="absolute font-mono text-[10px] text-on-surface">45%</span>
+</div>
+<div class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section: Data Table -->
+<div class="flex flex-col gap-stack-md mt-stack-md">
+<h2 class="font-headline-md text-headline-md text-on-surface border-b border-outline-variant/30 pb-2">Complex Data Table</h2>
+<div class="bg-surface-container rounded-xl border border-outline-variant/20 overflow-hidden flex flex-col shadow-sm">
+<!-- Table Toolbar -->
+<div class="flex items-center justify-between p-4 border-b border-outline-variant/30 bg-surface-container-low">
+<div class="flex items-center gap-3">
+<span class="font-headline-sm text-headline-sm text-on-surface">Users</span>
+<span class="bg-surface-container-highest px-2 py-0.5 rounded-full font-mono text-label-sm text-on-surface-variant">1,240</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-outline">search</span>
+<input class="pl-9 pr-4 py-1.5 bg-surface rounded-lg border border-outline-variant/30 text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary w-64 transition-colors" placeholder="Search..." type="text"/>
+</div>
+<button class="flex items-center gap-1 px-3 py-1.5 border border-outline-variant/30 rounded-lg text-label-md font-label-md text-on-surface hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                        Filter
+                    </button>
+<button class="flex items-center gap-1 px-3 py-1.5 bg-primary text-on-primary rounded-lg text-label-md font-label-md hover:brightness-110 transition-all shadow-md">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        New User
+                    </button>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left whitespace-nowrap">
+<thead>
+<tr class="bg-surface-container text-outline font-label-sm text-label-sm uppercase tracking-wider border-b border-outline-variant/30">
+<th class="px-4 py-3 w-10 text-center"><input class="accent-primary rounded bg-surface" type="checkbox"/></th>
+<th class="px-4 py-3 font-medium cursor-pointer hover:text-on-surface flex items-center gap-1">Name <span class="material-symbols-outlined text-[14px]">arrow_downward</span></th>
+<th class="px-4 py-3 font-medium">Role</th>
+<th class="px-4 py-3 font-medium">Status</th>
+<th class="px-4 py-3 font-medium">Last Active</th>
+<th class="px-4 py-3 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10 text-body-sm text-on-surface font-body-sm">
+<tr class="hover:bg-surface-variant/50 transition-colors group">
+<td class="px-4 py-3 text-center"><input class="accent-primary rounded bg-surface" type="checkbox"/></td>
+<td class="px-4 py-3 flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover bg-surface-container-highest" data-alt="A small circular avatar of a professional woman with dark hair in a well-lit office setting, neutral background, high contrast, modern UI style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDWZ1OVJZXVkHKps5RB4UI_0pJM8rk07nGLJ_UXWwWZTZmwNt78d35VjEFv4Ukrs-gjJUQ9ICMZkv59jbZDaqn-D6ov0mBGk5xNCDPMfVReJqXCmcv7IiEv6A8ETVZPjW4wsGiYCcs1w4oWWJ1qSvgLhH7jT6Y2_wjHjcO6C4jFHi_OjpR_93r67-a7lQjs-cvPve6Td2TLqIcNgvLg9lbTgAkkX5EHkW0zZF-6NNYlSyLnc4joFH9"/>
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Sarah Jenkins</span>
+<span class="text-on-surface-variant text-label-sm">sarah.j@example.com</span>
+</div>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Admin</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-status-done/10 text-status-done text-label-sm font-label-sm border border-status-done/20">
+<span class="w-1.5 h-1.5 rounded-full bg-status-done"></span> Active
+                                </span>
+</td>
+<td class="px-4 py-3 font-mono text-mono text-on-surface-variant">2 mins ago</td>
+<td class="px-4 py-3 text-right">
+<button class="p-1 text-on-surface-variant hover:text-primary opacity-0 group-hover:opacity-100 transition-all"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-1 text-on-surface-variant hover:text-error opacity-0 group-hover:opacity-100 transition-all"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-variant/50 transition-colors group">
+<td class="px-4 py-3 text-center"><input class="accent-primary rounded bg-surface" type="checkbox"/></td>
+<td class="px-4 py-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-md font-bold">MK</div>
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Marcus Kline</span>
+<span class="text-on-surface-variant text-label-sm">m.kline@example.com</span>
+</div>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Editor</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-warning-amber/10 text-warning-amber text-label-sm font-label-sm border border-warning-amber/20">
+<span class="w-1.5 h-1.5 rounded-full bg-warning-amber"></span> Pending
+                                </span>
+</td>
+<td class="px-4 py-3 font-mono text-mono text-on-surface-variant">1 day ago</td>
+<td class="px-4 py-3 text-right">
+<button class="p-1 text-on-surface-variant hover:text-primary opacity-0 group-hover:opacity-100 transition-all"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-1 text-on-surface-variant hover:text-error opacity-0 group-hover:opacity-100 transition-all"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-variant/50 transition-colors group">
+<td class="px-4 py-3 text-center"><input class="accent-primary rounded bg-surface" type="checkbox"/></td>
+<td class="px-4 py-3 flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover bg-surface-container-highest" data-alt="A small circular avatar of a professional man with glasses, looking thoughtful, dark studio lighting, high contrast, minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZlmMpVL6xPrkALR61qWRNb0piNiIKcdyPTExly5V2fiGrph5O-peTM5r1J1KYyv8gz3OreqW85uNY7CUPidjtDPHGZ9KWrJZevFGaefJ6Rz9AZv1c3KF7INc10EMwotLd8w5Yb0AzMBXrVuoNsmL82aX4RNQB-ask9khnwmWyJUpxEVrpZVGGL7CT0zCr5sQwHnkb1vlwHb8rh4al9HQd_QIhdedL3ytNamU8L8q7fUwmVZFgxO6G"/>
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">Elena Rostova</span>
+<span class="text-on-surface-variant text-label-sm">elena.r@example.com</span>
+</div>
+</td>
+<td class="px-4 py-3 text-on-surface-variant">Viewer</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-status-cancelled/20 text-status-cancelled text-label-sm font-label-sm border border-status-cancelled/30">
+<span class="w-1.5 h-1.5 rounded-full bg-status-cancelled"></span> Inactive
+                                </span>
+</td>
+<td class="px-4 py-3 font-mono text-mono text-on-surface-variant">Oct 12, 2023</td>
+<td class="px-4 py-3 text-right">
+<button class="p-1 text-on-surface-variant hover:text-primary opacity-0 group-hover:opacity-100 transition-all"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-1 text-on-surface-variant hover:text-error opacity-0 group-hover:opacity-100 transition-all"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between p-4 border-t border-outline-variant/30 bg-surface-container-low">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Showing 1-3 of 1,240</span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded text-on-surface-variant hover:bg-surface-variant disabled:opacity-50"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="w-8 h-8 rounded bg-primary/20 text-primary font-label-md flex items-center justify-center">1</button>
+<button class="w-8 h-8 rounded hover:bg-surface-variant text-on-surface font-label-md flex items-center justify-center">2</button>
+<button class="w-8 h-8 rounded hover:bg-surface-variant text-on-surface font-label-md flex items-center justify-center">3</button>
+<span class="text-on-surface-variant px-1">...</span>
+<button class="p-1 rounded text-on-surface-variant hover:bg-surface-variant"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Section: Timelines & Overlays -->
+<div class="flex flex-col gap-stack-md mt-stack-md">
+<h2 class="font-headline-md text-headline-md text-on-surface border-b border-outline-variant/30 pb-2">Activity &amp; Overlays</h2>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-stack-lg">
+<!-- Activity Timeline -->
+<div class="bg-surface-container rounded-xl p-stack-md border border-outline-variant/20">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-4">Audit Log</h3>
+<div class="relative pl-6 space-y-6">
+<div class="absolute left-[11px] top-2 bottom-2 w-[2px] bg-outline-variant/30"></div>
+<!-- Event 1 -->
+<div class="relative">
+<div class="absolute -left-[30px] top-0.5 w-6 h-6 rounded-full bg-surface-container border-2 border-primary flex items-center justify-center z-10">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface">API Key Generated</span>
+<span class="font-mono text-mono text-on-surface-variant text-[11px]">10:42 AM</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Production key 'sk_live_...9f2' was created by Sarah Jenkins.</span>
+</div>
+</div>
+<!-- Event 2 -->
+<div class="relative">
+<div class="absolute -left-[30px] top-0.5 w-6 h-6 rounded-full bg-surface-container border-2 border-outline-variant/50 flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[12px] text-on-surface-variant">settings</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface">Webhook Configured</span>
+<span class="font-mono text-mono text-on-surface-variant text-[11px]">Yesterday</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Endpoint updated to https://api.example.com/webhooks/stripe</span>
+</div>
+</div>
+<!-- Event 3 -->
+<div class="relative">
+<div class="absolute -left-[30px] top-0.5 w-6 h-6 rounded-full bg-error-container/50 border-2 border-error flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[12px] text-error">close</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface text-error">Build Failed</span>
+<span class="font-mono text-mono text-on-surface-variant text-[11px]">Oct 24</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Deployment #892 failed during the testing phase. View logs.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State & Dialog Trigger -->
+<div class="flex flex-col gap-stack-md">
+<!-- Empty State -->
+<div class="flex-1 bg-surface-container border border-outline-variant/20 border-dashed rounded-xl flex flex-col items-center justify-center p-stack-lg text-center gap-3">
+<div class="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-[32px] text-on-surface-variant">folder_off</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface">No Projects Found</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">You haven't created any projects in this workspace yet. Get started by creating your first project.</p>
+<button class="mt-2 px-4 py-2 bg-primary text-on-primary rounded-lg text-label-md font-label-md hover:brightness-110 transition-all shadow-md">Create Project</button>
+</div>
+<!-- Toast Example (Static representation) -->
+<div class="bg-surface-container-highest shadow-xl rounded-lg p-3 flex items-center justify-between border border-outline-variant/30">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">cloud_done</span>
+<span class="font-label-md text-label-md text-on-surface">Settings saved successfully.</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface font-label-sm uppercase tracking-wider text-[11px] px-2">Undo</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<style>
+    @keyframes slide {
+        0% { left: -33%; }
+        100% { left: 100%; }
+    }
+</style></main></div></body></html>

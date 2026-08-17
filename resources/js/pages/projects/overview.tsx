@@ -252,7 +252,13 @@ export default function ProjectOverview({
                         <Button asChild className="bg-primary text-primary-foreground font-semibold text-xs gap-1.5 shadow-sm">
                             <Link href={`/projects/${project.id}/board`}>
                                 <Columns3 className="size-3.5" />
-                                Buka Papan Kanban
+                                Papan Kanban
+                            </Link>
+                        </Button>
+                        <Button asChild variant="outline" size="sm" className="text-xs gap-1.5">
+                            <Link href={`/projects/${project.id}/backlog`}>
+                                <Layers className="size-3.5" />
+                                Backlog & Sprints
                             </Link>
                         </Button>
                         <Button asChild variant="outline" size="sm" className="text-xs gap-1.5">

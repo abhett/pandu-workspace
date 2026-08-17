@@ -1,0 +1,562 @@
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-dim":"#031427","status-todo":"#3B82F6","primary-fixed":"#e2dfff","surface-container-low":"#0b1c30","secondary":"#c1c1ff","error-container":"#93000a","surface-container":"#102034","background":"#031427","on-tertiary-fixed-variant":"#005236","on-primary-container":"#dad7ff","on-background":"#d3e4fe","zinc-surface":"#09090B","secondary-fixed-dim":"#c1c1ff","on-secondary-fixed-variant":"#2c24ce","on-error":"#690005","secondary-container":"#2f27d0","on-tertiary-fixed":"#002113","on-primary":"#1d00a5","inverse-on-surface":"#213145","on-tertiary-container":"#67f4b7","status-backlog":"#94A3B8","inverse-primary":"#4d44e3","surface-variant":"#26364a","on-secondary":"#1400a8","warning-amber":"#F59E0B","surface-container-highest":"#26364a","status-blocked":"#EF4444","surface-tint":"#c3c0ff","primary-fixed-dim":"#c3c0ff","zinc-border":"#27272A","on-secondary-fixed":"#09006b","surface-container-high":"#1b2b3f","on-surface":"#d3e4fe","on-primary-fixed-variant":"#3323cc","secondary-fixed":"#e1dfff","outline-variant":"#464555","tertiary-fixed":"#6ffbbe","error":"#ffb4ab","status-inprogress":"#4F46E5","on-secondary-container":"#b1b1ff","status-cancelled":"#475569","primary-container":"#4f46e5","on-primary-fixed":"#0f0069","on-error-container":"#ffdad6","inverse-surface":"#d3e4fe","surface":"#031427","status-done":"#10B981","surface-bright":"#2a3a4f","surface-container-lowest":"#000f21","status-review":"#8B5CF6","primary":"#c3c0ff","outline":"#918fa1","tertiary-container":"#006e4b","on-surface-variant":"#c7c4d8","tertiary-fixed-dim":"#4edea3","tertiary":"#4edea3","on-tertiary":"#003824"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"stack-lg":"24px","unit":"8px","container-max":"1440px","stack-sm":"8px","stack-md":"16px","stack-xs":"4px","gutter":"24px","margin-mobile":"16px","margin-desktop":"32px"},"fontFamily":{"label-md":["Geist"],"headline-lg-mobile":["Geist"],"label-sm":["Geist"],"headline-sm":["Geist"],"headline-lg":["Geist"],"body-md":["Inter"],"body-lg":["Inter"],"display":["Geist"],"headline-md":["Geist"],"body-sm":["Inter"],"mono":["Geist"]},"fontSize":{"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"500"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","fontWeight":"600"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.04em","fontWeight":"700"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"body-sm":["14px",{"lineHeight":"20px","fontWeight":"400"}],"mono":["13px",{"lineHeight":"18px","fontWeight":"400"}]}}}}</script><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/></head><body class="bg-background font-body-md text-on-background"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-low z-50 flex flex-col border-r border-zinc-border"><div class="p-gutter flex items-center gap-stack-md"><img alt="Kinetic AI Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLtzYEc5FmeispUUsmDSxWEsstJ7UP3jMB8jP9CNMUgOvO3-ImuvhCYvKd0KFqhBQ6jvFzSa7VjCX4I5gKfr2VWaJA8Evhi8IC9aemwVYRyi4len5AwD0H3wcdoFNViZkxEob3dl9-8tmjIqeldFw0Z-VAr7PBP1pLI94nANv3Lsv-ogaNOvEd4WGiR-l7JPUS7trdqnS8igdaKHZ_o2vR48S7ySQ1UI55VdEcBKvm-PUdrtN6ZXILYOAA"/><span class="font-headline-sm text-headline-sm text-primary tracking-tight">Kinetic AI</span></div><nav class="flex-1 px-stack-md mt-stack-md overflow-y-auto space-y-stack-xs" data-active-classes="bg-primary-container text-on-primary-container font-medium"><a class="flex items-center gap-stack-md px-stack-md py-stack-md rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all transition-colors group" data-path="home" href="#"><span class="material-symbols-outlined text-on-surface-variant group-hover:text-on-surface">home</span><span class="font-label-md text-label-md">Home</span></a><a class="flex items-center gap-stack-md px-stack-md py-stack-md rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all transition-colors group" data-path="projects" href="#"><span class="material-symbols-outlined text-on-surface-variant group-hover:text-on-surface">folder_open</span><span class="font-label-md text-label-md">Projects</span></a><a class="flex items-center gap-stack-md px-stack-md py-stack-md rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all transition-colors group" data-path="tasks" href="#"><span class="material-symbols-outlined text-on-surface-variant group-hover:text-on-surface">task_alt</span><span class="font-label-md text-label-md">Tasks</span></a><a class="flex items-center gap-stack-md px-stack-md py-stack-md rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all transition-colors group" data-path="portfolio" href="#"><span class="material-symbols-outlined text-on-surface-variant group-hover:text-on-surface">business_center</span><span class="font-label-md text-label-md">Portfolio</span></a><a class="flex items-center gap-stack-md px-stack-md py-stack-md rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all transition-colors group" data-path="timeline" href="#"><span class="material-symbols-outlined text-on-surface-variant group-hover:text-on-surface">view_timeline</span><span class="font-label-md text-label-md">Timeline</span></a><a class="flex items-center gap-stack-md px-stack-md py-stack-md rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all transition-colors group" data-path="calendar" href="#"><span class="material-symbols-outlined text-on-surface-variant group-hover:text-on-surface">calendar_month</span><span class="font-label-md text-label-md">Calendar</span></a><a class="flex items-center gap-stack-md px-stack-md py-stack-md rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all transition-colors group" data-path="analytics" href="#"><span class="material-symbols-outlined text-on-surface-variant group-hover:text-on-surface">analytics</span><span class="font-label-md text-label-md">Analytics</span></a><a class="flex items-center gap-stack-md px-stack-md py-stack-md rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all transition-colors group" data-path="reports" href="#"><span class="material-symbols-outlined text-on-surface-variant group-hover:text-on-surface">description</span><span class="font-label-md text-label-md">Reports</span></a><a aria-current="page" class="flex items-center gap-stack-md px-stack-md py-stack-md rounded-xl transition-all transition-colors group bg-primary-container text-on-primary-container font-medium" data-path="team" href="#"><span class="material-symbols-outlined text-on-surface-variant group-hover:text-on-surface">groups</span><span class="font-label-md text-label-md">Team</span></a><a class="flex items-center gap-stack-md px-stack-md py-stack-md rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all transition-colors group" data-path="automation" href="#"><span class="material-symbols-outlined text-on-surface-variant group-hover:text-on-surface">auto_fix_high</span><span class="font-label-md text-label-md">Automation</span></a></nav><div class="p-stack-md border-t border-zinc-border"><div class="flex items-center gap-stack-md px-stack-md py-stack-sm rounded-xl bg-surface-container"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLt-HBiFvm5HCwYwd3f1z6I9fbj9w7uLDAF0TrWVOSG2UB_XjuAlohUJGibOs87Vtd8QHLA6syhQ54b1LkIcjFt2cyZDyv9KRozh_VUohAJqruAxTg3Ah3aP-CBiLi4Bq66UDQpbTB3XTHGVT3OAN6Zd_qdxhYxb6WbKZcrpzAGW89kMEdgHjt8-UcXOVzN17neuoIt6U2KbSqOkPNvzW6ywAZ16DBLYZnSoASv-Q5XWToUXDUscbMcdh_k"/><div class="flex-1 min-w-0"><p class="font-label-md text-label-md text-on-surface truncate">Alex Sterling</p><p class="font-label-sm text-label-sm text-on-surface-variant truncate">Lead Architect</p></div><span class="material-symbols-outlined text-on-surface-variant text-sm">settings</span></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-background/80 backdrop-blur-xl z-40 border-b border-zinc-border flex items-center justify-between px-margin-desktop"><div class="flex-1 max-w-xl"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-stack-md text-on-surface-variant">search</span><input class="w-full bg-surface-container-low border border-zinc-border rounded-lg pl-12 pr-stack-md py-stack-xs text-on-surface focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Search workload, tasks, or insights..." type="text"/></div></div><div class="flex items-center gap-stack-lg"><div class="flex items-center gap-stack-md"><button class="p-stack-xs text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined">notifications</span></button><button class="p-stack-xs text-on-surface-variant hover:text-on-surface"><span class="material-symbols-outlined">help_outline</span></button></div><button class="bg-primary text-on-primary px-stack-md py-stack-xs rounded-lg font-label-md text-label-md flex items-center gap-stack-xs"><span class="material-symbols-outlined text-sm">add</span>Create Task</button></div></header><main class="relative pt-16 w-full min-h-screen bg-background"><div class="flex flex-col w-full bg-background min-h-screen h-full font-body-md text-on-background relative overflow-hidden" id="wiki-app">
+<!-- Desktop Layout Container -->
+<div class="flex flex-col lg:flex-row w-full h-full lg:h-[calc(100vh-64px)] relative">
+<!-- Left Sidebar: Navigation & Search -->
+<aside class="w-full lg:w-72 bg-surface-container-low flex-shrink-0 flex flex-col h-full z-10 transition-all duration-300 transform lg:translate-x-0" id="left-sidebar">
+<!-- Workspace Header -->
+<div class="p-stack-md flex items-center justify-between shadow-sm relative z-20 bg-surface-container-low">
+<div class="flex items-center gap-stack-sm cursor-pointer hover:bg-surface-container p-stack-xs rounded-lg transition-colors -ml-stack-xs">
+<div class="w-8 h-8 rounded bg-primary-container text-on-primary-container flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-sm">auto_stories</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-on-surface truncate">Engineering Wiki</span>
+<span class="font-label-sm text-on-surface-variant truncate opacity-80">Knowledge Base</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm ml-auto">unfold_more</span>
+</div>
+</div>
+<!-- Quick Actions & Search -->
+<div class="px-stack-md pb-stack-sm">
+<div class="flex gap-stack-xs mb-stack-sm">
+<button class="flex-1 bg-primary text-on-primary py-stack-xs rounded-lg font-label-md flex items-center justify-center gap-stack-xs shadow-sm hover:brightness-110 transition-all">
+<span class="material-symbols-outlined text-sm">add</span> New Doc
+          </button>
+<button class="px-stack-sm bg-surface-container text-on-surface py-stack-xs rounded-lg flex items-center justify-center hover:bg-surface-container-highest transition-colors shadow-sm relative group" id="templates-btn">
+<span class="material-symbols-outlined text-sm">dashboard_customize</span>
+<!-- Templates Dropdown -->
+<div class="absolute top-full left-0 mt-stack-xs w-48 bg-surface-container-high rounded-xl shadow-xl hidden group-hover:block z-50 p-stack-xs flex flex-col gap-stack-xs border border-zinc-border/10 backdrop-blur-md">
+<span class="font-label-sm text-on-surface-variant px-stack-sm py-stack-xs uppercase tracking-wider">Templates</span>
+<a class="font-label-md text-on-surface hover:bg-surface-container-highest px-stack-sm py-stack-xs rounded-md transition-colors truncate" href="#">Product Requirement</a>
+<a class="font-label-md text-on-surface hover:bg-surface-container-highest px-stack-sm py-stack-xs rounded-md transition-colors truncate" href="#">Meeting Notes</a>
+<a class="font-label-md text-on-surface hover:bg-surface-container-highest px-stack-sm py-stack-xs rounded-md transition-colors truncate" href="#">ADR (Decision Log)</a>
+<a class="font-label-md text-on-surface hover:bg-surface-container-highest px-stack-sm py-stack-xs rounded-md transition-colors truncate" href="#">Retrospective</a>
+<a class="font-label-md text-on-surface hover:bg-surface-container-highest px-stack-sm py-stack-xs rounded-md transition-colors truncate" href="#">Runbook</a>
+<a class="font-label-md text-on-surface hover:bg-surface-container-highest px-stack-sm py-stack-xs rounded-md transition-colors truncate" href="#">Project Brief</a>
+<a class="font-label-md text-on-surface hover:bg-surface-container-highest px-stack-sm py-stack-xs rounded-md transition-colors truncate" href="#">Incident Review</a>
+</div>
+</button>
+</div>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-stack-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-sm group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container text-on-surface pl-9 pr-stack-sm py-stack-xs rounded-lg font-label-md focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all shadow-inner placeholder-on-surface-variant/50" placeholder="Search docs..." type="text"/>
+<div class="absolute right-stack-sm top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-50">
+<kbd class="font-mono text-[10px] bg-surface-container-highest px-1 rounded text-on-surface-variant">⌘</kbd>
+<kbd class="font-mono text-[10px] bg-surface-container-highest px-1 rounded text-on-surface-variant">K</kbd>
+</div>
+</div>
+</div>
+<!-- Tree Navigation -->
+<nav class="flex-1 overflow-y-auto px-stack-sm py-stack-sm custom-scrollbar" id="wiki-nav">
+<!-- Favorites Section -->
+<div class="mb-stack-md">
+<div class="flex items-center justify-between px-stack-sm mb-stack-xs group cursor-pointer">
+<span class="font-label-sm text-on-surface-variant uppercase tracking-wider group-hover:text-on-surface transition-colors">Favorites</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">add</span>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-stack-sm px-stack-sm py-[6px] rounded-md hover:bg-surface-container text-on-surface group" href="#">
+<span class="material-symbols-outlined text-[18px] text-warning-amber">star</span>
+<span class="font-label-md truncate">Q3 Roadmap Planning</span>
+</a>
+<a class="flex items-center gap-stack-sm px-stack-sm py-[6px] rounded-md bg-surface-container-highest text-on-surface shadow-sm relative overflow-hidden group" href="#">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-md"></div>
+<span class="material-symbols-outlined text-[18px] text-primary">description</span>
+<span class="font-label-md font-medium truncate">Kinetic AI - V2 Architecture PRD</span>
+</a>
+</div>
+</div>
+<!-- Spaces Section -->
+<div>
+<div class="flex items-center justify-between px-stack-sm mb-stack-xs group cursor-pointer">
+<span class="font-label-sm text-on-surface-variant uppercase tracking-wider group-hover:text-on-surface transition-colors">Spaces</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">add</span>
+</div>
+<div class="flex flex-col gap-1">
+<!-- Product Folder (Expanded) -->
+<div class="nav-folder" data-state="expanded">
+<div class="flex items-center gap-stack-xs px-stack-sm py-[6px] rounded-md hover:bg-surface-container cursor-pointer text-on-surface group transition-colors" onclick="toggleFolder(this)">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant transition-transform transform rotate-90 folder-icon">chevron_right</span>
+<span class="material-symbols-outlined text-[18px] text-secondary">folder_open</span>
+<span class="font-label-md truncate select-none">Product</span>
+</div>
+<div class="folder-content pl-6 flex flex-col gap-1 mt-1 transition-all duration-200 overflow-hidden">
+<a class="flex items-center gap-stack-xs px-stack-sm py-[6px] rounded-md hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span class="font-body-sm truncate">User Research Specs</span>
+</a>
+<a class="flex items-center gap-stack-xs px-stack-sm py-[6px] rounded-md bg-surface-container/50 text-primary font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px] text-primary">description</span>
+<span class="font-label-md truncate">Kinetic AI - V2 Architecture PRD</span>
+</a>
+<a class="flex items-center gap-stack-xs px-stack-sm py-[6px] rounded-md hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span class="font-body-sm truncate">Competitor Analysis Q2</span>
+</a>
+</div>
+</div>
+<!-- Engineering Folder (Collapsed) -->
+<div class="nav-folder" data-state="collapsed">
+<div class="flex items-center gap-stack-xs px-stack-sm py-[6px] rounded-md hover:bg-surface-container cursor-pointer text-on-surface group transition-colors" onclick="toggleFolder(this)">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant transition-transform folder-icon">chevron_right</span>
+<span class="material-symbols-outlined text-[18px] text-status-todo">folder</span>
+<span class="font-label-md truncate select-none">Engineering</span>
+</div>
+<div class="folder-content pl-6 flex flex-col gap-1 mt-1 transition-all duration-200 overflow-hidden hidden">
+<a class="flex items-center gap-stack-xs px-stack-sm py-[6px] rounded-md hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span class="font-body-sm truncate">API Documentation</span>
+</a>
+<a class="flex items-center gap-stack-xs px-stack-sm py-[6px] rounded-md hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span class="font-body-sm truncate">System Architecture v1.5</span>
+</a>
+</div>
+</div>
+<!-- HR Folder (Collapsed) -->
+<div class="nav-folder" data-state="collapsed">
+<div class="flex items-center gap-stack-xs px-stack-sm py-[6px] rounded-md hover:bg-surface-container cursor-pointer text-on-surface group transition-colors" onclick="toggleFolder(this)">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant transition-transform folder-icon">chevron_right</span>
+<span class="material-symbols-outlined text-[18px] text-tertiary">folder</span>
+<span class="font-label-md truncate select-none">Human Resources</span>
+</div>
+<div class="folder-content pl-6 flex flex-col gap-1 mt-1 transition-all duration-200 overflow-hidden hidden">
+<a class="flex items-center gap-stack-xs px-stack-sm py-[6px] rounded-md hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span class="font-body-sm truncate">Employee Handbook 2024</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</aside>
+<!-- Main Content: Rich Text Editor -->
+<main class="flex-1 flex flex-col h-full bg-surface relative z-0 min-w-0" id="editor-container">
+<!-- Editor Header & Toolbar -->
+<header class="h-14 border-b border-surface-variant flex items-center justify-between px-stack-lg bg-surface/80 backdrop-blur-md sticky top-0 z-30">
+<div class="flex items-center gap-stack-sm">
+<!-- Mobile sidebar toggle -->
+<button class="lg:hidden p-stack-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-md" onclick="toggleMobileSidebar()">
+<span class="material-symbols-outlined text-[20px]">menu</span>
+</button>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm truncate max-w-[200px] sm:max-w-md">
+<a class="hover:text-on-surface transition-colors truncate" href="#">Product</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-on-surface truncate">Kinetic AI - V2 Architecture PRD</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary text-[10px] font-label-md uppercase tracking-wider ml-stack-sm shadow-sm border border-primary/20 backdrop-blur-sm">Draft</span>
+</div>
+<div class="flex items-center gap-stack-sm">
+<div class="flex -space-x-2 mr-stack-sm opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+<img class="w-6 h-6 rounded-full border border-surface shadow-sm" data-alt="Small circular avatar portrait of a female professional with dark hair in a well-lit office, cyberpunk lighting accents, highly detailed, photorealistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRSFXJdrSZgjo8hIMZAvpn-vauSv-RkD0STncIiCvX0cVYyllXXA8VcaPZdGN3Tj2WTmZ9aThXefFkaAH4-HxEnBZsPAgr_Ma-JiBico8jzMLEc1wmCWa-NDR2qyEvrI1kUE1ET75a15k25THDSYQ6MW5YQmBr79RZRJzqC_5FIEHjhbsQ6z6Ov0UoiPhc1-oHB1itP5-ftwqfwqD-bS18V5lniz6D9UAz16-DAUuCvncvuy5VziPr"/>
+<img class="w-6 h-6 rounded-full border border-surface shadow-sm" data-alt="Small circular avatar portrait of a male developer with glasses in a dark tech studio, neon blue ambient light, high quality, photorealistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0wTGdanISZNtFrsekcepPXd8-fTTb580ySSUm6GDSFz4R8aXtqlCoJdkzwySfkiTOv1QXRic9n9WnQhtV91xyc1OrHtQW4Fc1WC13YBQ6CrrmPZKkLCPiigmCA6A6LaxvYdFUib-H-amGP9wPusb9la6_NH6_dcPtyEozUPKVl0KMXeKIisIWKN7Ttc54hHbrgVzGrOwzini8-Vr3i0VZDI3NoxFt6je9LuC6ZuwbqMAxNAGgubg_"/>
+<div class="w-6 h-6 rounded-full border border-surface bg-surface-container flex items-center justify-center shadow-sm">
+<span class="font-label-sm text-[10px] text-on-surface-variant">+2</span>
+</div>
+</div>
+<button class="p-stack-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-md transition-colors tooltip-trigger relative" data-tooltip="Version History">
+<span class="material-symbols-outlined text-[20px]">history</span>
+</button>
+<button class="p-stack-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-md transition-colors tooltip-trigger relative" data-tooltip="Comments">
+<span class="material-symbols-outlined text-[20px]">chat_bubble_outline</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_8px_rgba(195,192,255,0.6)]"></span>
+</button>
+<button class="hidden sm:flex items-center gap-1 bg-surface-container hover:bg-surface-container-high text-on-surface px-stack-sm py-stack-xs rounded-md transition-colors font-label-md ml-stack-xs shadow-sm">
+<span class="material-symbols-outlined text-[18px]">share</span> Share
+          </button>
+<!-- Toggle AI Panel button -->
+<button class="flex items-center gap-1 bg-gradient-to-r from-primary to-inverse-primary text-on-primary px-stack-sm py-stack-xs rounded-md shadow-md hover:shadow-lg transition-all font-label-md ml-stack-xs lg:hidden" onclick="toggleAIPanel()">
+<span class="material-symbols-outlined text-[18px]">magic_button</span> AI
+          </button>
+</div>
+</header>
+<!-- Editor Content Area -->
+<div class="flex-1 overflow-y-auto scroll-smooth custom-scrollbar relative" id="editor-scroll-area">
+<!-- Cover Image Container -->
+<div class="w-full h-48 sm:h-64 md:h-80 relative group overflow-hidden bg-surface-container-highest">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A sweeping, abstract, highly conceptual architectural rendering of a futuristic data city structure, glowing with neon blues and deep purples, hyper-detailed, cinematic lighting, ultra-wide aspect ratio, symbolizing complex AI architecture." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAW58X5PmPBjVoNTG_Kgw8edhMM477ohv6R-rx0f2jb0uqLteT3IoAJ2-_3pDNsLEqfdomWljW3Rye4wE29NhqCsvsv44W9Jq22-5DPzIyVhjk7pNLQtG76ahJyyGOK5IpouFP-_dZ8JFGMYjm1iWfO-5nUrTl3b6bGQ3bc2GPTkKRyVwnKgkOnHwEhQOW9pdD-JZfkLahKJPaqa7cFEkR-rJoOtHruUbZ_9YDofOScWNygmNsYMY30')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/60 to-transparent"></div>
+<button class="absolute top-stack-md right-stack-md bg-surface/80 backdrop-blur-md text-on-surface hover:bg-surface px-stack-sm py-stack-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity font-label-sm flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-[16px]">image</span> Change Cover
+          </button>
+</div>
+<div class="max-w-4xl mx-auto px-stack-md sm:px-stack-lg md:px-12 lg:px-24 pb-32 relative">
+<!-- Document Icon (Overlapping cover) -->
+<div class="relative -mt-12 sm:-mt-16 mb-stack-md z-10 flex group w-fit">
+<div class="w-20 h-20 sm:w-24 sm:h-24 bg-surface-container rounded-2xl flex items-center justify-center text-4xl sm:text-5xl shadow-xl border border-zinc-border relative overflow-hidden backdrop-blur-xl">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent"></div>
+               🚀
+            </div>
+<button class="absolute -right-2 -top-2 bg-surface text-on-surface rounded-full p-1 shadow-md border border-zinc-border opacity-0 group-hover:opacity-100 transition-opacity hover:text-primary">
+<span class="material-symbols-outlined text-[14px]">edit</span>
+</button>
+</div>
+<!-- Document Title Area -->
+<div class="mb-stack-lg relative group">
+<input class="w-full bg-transparent font-display text-4xl sm:text-5xl md:text-display text-on-surface focus:outline-none placeholder-on-surface-variant/30 break-words placeholder-opacity-50" placeholder="Untitled Document" type="text" value="Kinetic AI - V2 Architecture PRD"/>
+<div class="flex flex-wrap items-center gap-stack-sm mt-stack-sm text-on-surface-variant font-body-sm">
+<div class="flex items-center gap-1 bg-surface-container-low px-2 py-1 rounded-md shadow-sm">
+<span class="material-symbols-outlined text-[14px]">person</span> By 
+                <span class="text-on-surface font-medium hover:underline cursor-pointer">Sarah Chen</span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-low px-2 py-1 rounded-md shadow-sm">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+<span>Updated 2 hours ago</span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-low px-2 py-1 rounded-md shadow-sm text-tertiary-fixed-dim">
+<span class="material-symbols-outlined text-[14px]">visibility</span>
+<span>Public to Engineering</span>
+</div>
+</div>
+</div>
+<!-- The Editor Body -->
+<div class="prose prose-invert prose-p:font-body-md prose-p:text-on-surface-variant prose-headings:font-headline-md prose-headings:text-on-surface max-w-none relative group/editor space-y-stack-md" id="rich-text-body">
+<p class="text-lg leading-relaxed text-on-surface">This document outlines the product requirements and technical specifications for the upcoming V2 release of the Kinetic AI core architecture. Our primary goal is to shift from a monolithic inference engine to a distributed, highly scalable micro-agent framework.</p>
+<h2 class="font-headline-lg text-on-surface flex items-center group/h2 mt-stack-lg">
+              1. Executive Summary
+              <a class="opacity-0 group-hover/h2:opacity-100 ml-2 text-on-surface-variant hover:text-primary transition-opacity" href="#">
+<span class="material-symbols-outlined text-[20px]">link</span>
+</a>
+</h2>
+<p>Currently, our inference pipeline struggles with latency when context windows exceed 32k tokens. By moving to a distributed architecture, we anticipate a <strong>40% reduction in median response time</strong> and improved fault tolerance across active workspaces.</p>
+<!-- AI Highlighted Text Block -->
+<div class="relative group/highlight my-stack-md p-1 -mx-1 rounded-lg transition-colors hover:bg-surface-container-low/50">
+<p class="font-body-md leading-relaxed">
+<span class="bg-primary/20 text-on-surface rounded px-1 relative cursor-help inline-block shadow-[inset_0_-2px_0_rgba(195,192,255,0.4)]">
+                  The current system is okay but it gets really slow when a lot of users try to run big complex queries at the exact same time, which makes people annoyed and hurts our retention numbers.
+                  <!-- AI Highlight Tooltip/Actions -->
+</span></p><div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 bg-surface-container-high rounded-xl shadow-xl border border-primary/30 p-stack-sm opacity-0 group-hover/highlight:opacity-100 transition-opacity z-20 pointer-events-none group-hover/highlight:pointer-events-auto backdrop-blur-lg flex flex-col gap-stack-xs">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-[16px] text-primary">auto_awesome</span>
+<span class="font-label-md text-on-surface">Improve Writing</span>
+</div>
+<div class="bg-surface-container p-2 rounded-md font-body-sm text-on-surface-variant text-sm mb-2 shadow-inner">
+                      "System performance degrades significantly under high concurrent load with complex queries, negatively impacting user experience and retention metrics."
+                    </div>
+<div class="flex gap-2">
+<button class="flex-1 bg-primary text-on-primary py-1 rounded-md font-label-sm shadow-sm hover:brightness-110">Apply Suggestion</button>
+<button class="px-2 py-1 bg-surface border border-zinc-border rounded-md text-on-surface-variant hover:text-on-surface font-label-sm">Dismiss</button>
+</div>
+</div>
+
+                We need to address this immediately in the next sprint to hit Q3 targets.
+              <p></p>
+</div>
+<!-- Task Embed Block -->
+<div class="my-stack-lg p-stack-md bg-surface-container-low rounded-xl border border-zinc-border shadow-md hover:shadow-lg transition-shadow relative overflow-hidden group/task">
+<div class="absolute top-0 left-0 w-1 h-full bg-status-todo"></div>
+<div class="flex items-start justify-between mb-stack-sm">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-status-todo bg-status-todo/10 p-1 rounded-md text-[18px]">task_alt</span>
+<span class="font-label-md text-on-surface">ENG-402: Implement distributed queuing</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-md bg-surface text-on-surface-variant font-mono text-[10px] uppercase shadow-sm border border-zinc-border">In Progress</span>
+<button class="text-on-surface-variant hover:text-on-surface opacity-0 group-hover/task:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</button>
+</div>
+</div>
+<p class="font-body-sm text-on-surface-variant mb-stack-md ml-8">Design and deploy RabbitMQ cluster to handle request buffering before inference worker distribution.</p>
+<div class="flex items-center justify-between ml-8">
+<div class="flex items-center gap-stack-sm">
+<img class="w-5 h-5 rounded-full shadow-sm" data-alt="Small avatar of a male engineer in a tech office, neon blue accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtmLzClr4paIImnCSrjWW9QRhNAo8Os-tGxxmek5T4-KNmOISVlwOtNzFS0sX3ADjKH7KH0FH8ebyYzI2PwGuvSBtpnpL4_xgX5vaMg7R5HiHbMf4Bti4mS97Vj5ZP9f1eLM1KGQgrwS875e7b0N1PDnaR3NBnZQtbcbUkvVIcg1gw1Wervt9Jc0dIpaShzSELYZqL_d-o3OGC4mjVK0TbU0kslRztZFC5c82InMjwJ8n1PeK0Ofr7"/>
+<span class="font-label-sm text-on-surface">Alex S.</span>
+</div>
+<div class="flex items-center gap-stack-xs text-on-surface-variant font-label-sm">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 12
+                </div>
+</div>
+</div>
+<h2 class="font-headline-lg text-on-surface flex items-center group/h2 mt-stack-lg">
+              2. Technical Requirements
+            </h2>
+<p>The new architecture must conform to the following specifications, as discussed with <span class="bg-secondary-container/30 text-secondary px-1 py-0.5 rounded-md cursor-pointer hover:bg-secondary-container/50 transition-colors inline-flex items-center gap-1 shadow-sm"><img class="w-4 h-4 rounded-full" data-alt="Tiny avatar headshot of a professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWMTDibZqaF0D8jh6mKHu7LLM7gnRHkKLDeBRp1NeyURE6LNZlRdc8U8fSHPQ5S_ntp-uTlngB5BzPEjFz9VBTNGldK-KI72ELFOszkLtvFKSPC3KCToONVLM4IrUtbGpkob0kZcrKq9kTCS8maED1sSogzoy5fQoUFA2L-N5FYYQWVa8ptA_2fMKrVO6z7PwFQMypMXqHgx7qAmMeRrcyi-qwUxFuex9mbu4irX5tYK6K4IFnQxMf"/>@Marcus Thorne</span> and the DevOps team:</p>
+<ul class="list-disc pl-6 space-y-2 mt-stack-sm text-on-surface-variant marker:text-primary">
+<li><strong>Latency:</strong> p95 latency under 800ms for standard text completions.</li>
+<li><strong>Scalability:</strong> Auto-scaling workers based on queue depth metrics.</li>
+<li><strong>Storage:</strong> Transition from Postgres to specialized Vector DB for context retrieval.</li>
+</ul>
+<!-- Code Block Embed -->
+<div class="my-stack-md rounded-xl overflow-hidden shadow-xl border border-zinc-border relative group/code bg-[#0d1117]">
+<div class="flex items-center justify-between px-stack-sm py-2 bg-surface-container-highest border-b border-zinc-border/50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">code</span>
+<span class="font-mono text-[12px] text-on-surface-variant">worker_config.yaml</span>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface font-label-sm flex items-center gap-1 opacity-0 group-hover/code:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[14px]">content_copy</span> Copy
+                 </button>
+</div>
+<pre class="p-stack-md font-mono text-[13px] text-on-surface overflow-x-auto custom-scrollbar"><code><span class="text-tertiary">apiVersion:</span> <span class="text-primary">apps/v1</span>
+<span class="text-tertiary">kind:</span> <span class="text-primary">Deployment</span>
+<span class="text-tertiary">metadata:</span>
+  <span class="text-tertiary">name:</span> <span class="text-on-surface">inference-worker-pool</span>
+<span class="text-tertiary">spec:</span>
+  <span class="text-tertiary">replicas:</span> <span class="text-warning-amber">5</span>
+  <span class="text-tertiary">selector:</span>
+    <span class="text-tertiary">matchLabels:</span>
+      <span class="text-tertiary">app:</span> <span class="text-on-surface">kinetic-v2-worker</span></code></pre>
+</div>
+<!-- Empty Paragraph for Slash Command Demo -->
+<div class="relative group/slash mt-stack-lg" id="slash-command-demo">
+<p class="text-on-surface-variant/50 font-body-md flex items-center gap-2">
+<span class="inline-block w-0.5 h-5 bg-primary animate-pulse shadow-[0_0_8px_rgba(195,192,255,0.8)]"></span>
+                Type '/' for commands
+              </p>
+<!-- Slash Command Floating Menu -->
+<div class="absolute left-0 top-full mt-2 w-64 bg-surface-container-high rounded-xl shadow-2xl border border-zinc-border overflow-hidden z-40 block backdrop-blur-xl">
+<div class="px-stack-sm py-stack-xs border-b border-surface-variant bg-surface-container/50">
+<span class="font-label-sm text-on-surface-variant uppercase tracking-wider">Basic Blocks</span>
+</div>
+<div class="p-1 flex flex-col gap-1 max-h-64 overflow-y-auto">
+<button class="flex items-center gap-stack-sm px-stack-sm py-stack-xs rounded-md hover:bg-primary/20 hover:text-primary text-on-surface text-left transition-colors group/item focus:outline-none focus:bg-primary/20">
+<div class="w-8 h-8 rounded bg-surface flex items-center justify-center border border-zinc-border shadow-sm group-hover/item:border-primary/50 group-hover/item:text-primary">
+<span class="material-symbols-outlined text-[18px]">table_chart</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md">Table</span>
+<span class="font-label-sm text-on-surface-variant group-hover/item:text-primary/70">Add a simple tabular data</span>
+</div>
+</button>
+<button class="flex items-center gap-stack-sm px-stack-sm py-stack-xs rounded-md hover:bg-primary/20 hover:text-primary text-on-surface text-left transition-colors group/item focus:outline-none focus:bg-primary/20">
+<div class="w-8 h-8 rounded bg-surface flex items-center justify-center border border-zinc-border shadow-sm group-hover/item:border-primary/50 group-hover/item:text-primary">
+<span class="material-symbols-outlined text-[18px]">data_object</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md">Code Block</span>
+<span class="font-label-sm text-on-surface-variant group-hover/item:text-primary/70">Capture a code snippet</span>
+</div>
+</button>
+<button class="flex items-center gap-stack-sm px-stack-sm py-stack-xs rounded-md bg-primary/20 text-primary text-left transition-colors group/item focus:outline-none">
+<div class="w-8 h-8 rounded bg-surface flex items-center justify-center border border-primary/50 shadow-sm text-primary">
+<span class="material-symbols-outlined text-[18px]">account_tree</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md">Diagram</span>
+<span class="font-label-sm text-primary/70">Embed a Mermaid diagram</span>
+</div>
+</button>
+<div class="px-stack-sm py-stack-xs mt-1 border-t border-surface-variant bg-surface-container/50">
+<span class="font-label-sm text-on-surface-variant uppercase tracking-wider">Integrations</span>
+</div>
+<button class="flex items-center gap-stack-sm px-stack-sm py-stack-xs rounded-md hover:bg-primary/20 hover:text-primary text-on-surface text-left transition-colors group/item mt-1">
+<div class="w-8 h-8 rounded bg-surface flex items-center justify-center border border-zinc-border shadow-sm group-hover/item:border-primary/50 group-hover/item:text-primary text-status-todo">
+<span class="material-symbols-outlined text-[18px]">task_alt</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md">Task Embed</span>
+<span class="font-label-sm text-on-surface-variant group-hover/item:text-primary/70">Link an existing task</span>
+</div>
+</button>
+</div>
+</div>
+</div>
+<div class="h-32"></div> <!-- Padding bottom -->
+</div>
+</div>
+</div>
+</main>
+<!-- Right Sidebar: AI Workspace Panel -->
+<aside class="w-full lg:w-80 bg-surface-container border-l border-zinc-border flex-shrink-0 flex flex-col h-full absolute lg:relative right-0 transform translate-x-full lg:translate-x-0 transition-transform duration-300 z-40 shadow-2xl lg:shadow-none" id="ai-panel">
+<!-- AI Panel Header -->
+<div class="h-14 flex items-center justify-between px-stack-md border-b border-surface-variant bg-surface-container/90 backdrop-blur-md shrink-0">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded bg-gradient-to-br from-primary to-inverse-primary flex items-center justify-center text-on-primary shadow-md">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+</div>
+<span class="font-headline-sm text-on-surface tracking-tight">AI Workspace</span>
+</div>
+<button class="lg:hidden p-1 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-md transition-colors" onclick="toggleAIPanel()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- AI Panel Content -->
+<div class="flex-1 overflow-y-auto p-stack-md custom-scrollbar space-y-stack-md relative">
+<!-- Ambient background for AI panel -->
+<div aria-hidden="true" class="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary rounded-full mix-blend-screen filter blur-[80px] opacity-50 animate-pulse" style="animation-duration: 8s;"></div>
+<div class="absolute bottom-0 left-0 w-48 h-48 bg-tertiary rounded-full mix-blend-screen filter blur-[60px] opacity-30 animate-pulse" style="animation-duration: 12s;"></div>
+</div>
+<!-- Suggested Actions Grid -->
+<div class="relative z-10">
+<h3 class="font-label-sm text-on-surface-variant uppercase tracking-wider mb-stack-sm flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> Context Actions
+          </h3>
+<div class="grid grid-cols-2 gap-stack-xs">
+<button class="bg-surface-container-low hover:bg-surface-container-high border border-zinc-border hover:border-primary/50 text-on-surface p-stack-sm rounded-xl flex flex-col items-start gap-2 transition-all group shadow-sm hover:shadow-md text-left">
+<span class="material-symbols-outlined text-[20px] text-primary group-hover:scale-110 transition-transform">summarize</span>
+<span class="font-label-md leading-tight">Ringkas dokumen<br/><span class="font-label-sm text-on-surface-variant font-normal">(Summarize)</span></span>
+</button>
+<button class="bg-surface-container-low hover:bg-surface-container-high border border-zinc-border hover:border-status-todo/50 text-on-surface p-stack-sm rounded-xl flex flex-col items-start gap-2 transition-all group shadow-sm hover:shadow-md text-left">
+<span class="material-symbols-outlined text-[20px] text-status-todo group-hover:scale-110 transition-transform">add_task</span>
+<span class="font-label-md leading-tight">Buat task dari dok.<br/><span class="font-label-sm text-on-surface-variant font-normal">(Create Tasks)</span></span>
+</button>
+<button class="bg-surface-container-low hover:bg-surface-container-high border border-zinc-border hover:border-tertiary/50 text-on-surface p-stack-sm rounded-xl flex flex-col items-start gap-2 transition-all group shadow-sm hover:shadow-md text-left">
+<span class="material-symbols-outlined text-[20px] text-tertiary group-hover:scale-110 transition-transform">edit_note</span>
+<span class="font-label-md leading-tight">Perbaiki tulisan<br/><span class="font-label-sm text-on-surface-variant font-normal">(Fix Writing)</span></span>
+</button>
+<button class="bg-surface-container-low hover:bg-surface-container-high border border-zinc-border hover:border-warning-amber/50 text-on-surface p-stack-sm rounded-xl flex flex-col items-start gap-2 transition-all group shadow-sm hover:shadow-md text-left">
+<span class="material-symbols-outlined text-[20px] text-warning-amber group-hover:scale-110 transition-transform">psychology</span>
+<span class="font-label-md leading-tight">Temukan keputusan<br/><span class="font-label-sm text-on-surface-variant font-normal">(Find Decisions)</span></span>
+</button>
+</div>
+</div>
+<hr class="border-surface-variant/50 relative z-10"/>
+<!-- More Actions List -->
+<div class="relative z-10">
+<h3 class="font-label-sm text-on-surface-variant uppercase tracking-wider mb-stack-sm">Generate</h3>
+<div class="flex flex-col gap-1">
+<button class="w-full flex items-center gap-stack-sm px-stack-sm py-[8px] rounded-lg hover:bg-surface-container-high text-on-surface text-left transition-colors border border-transparent hover:border-zinc-border group">
+<div class="w-7 h-7 rounded bg-surface-container flex items-center justify-center text-secondary group-hover:bg-secondary/10 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px]">quiz</span>
+</div>
+<span class="font-label-md">Buat FAQ (Generate FAQ)</span>
+</button>
+<button class="w-full flex items-center gap-stack-sm px-stack-sm py-[8px] rounded-lg hover:bg-surface-container-high text-on-surface text-left transition-colors border border-transparent hover:border-zinc-border group">
+<div class="w-7 h-7 rounded bg-surface-container flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px]">file_copy</span>
+</div>
+<span class="font-label-md">Cari dokumen terkait</span>
+</button>
+</div>
+</div>
+<!-- Chat / Output Area (Simulated) -->
+<div class="mt-stack-md bg-surface-container-lowest border border-zinc-border rounded-xl p-stack-sm shadow-inner relative z-10">
+<div class="flex items-center gap-2 mb-stack-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">smart_toy</span>
+<span class="font-label-md text-on-surface">AI Assistant</span>
+</div>
+<p class="font-body-sm text-on-surface-variant leading-relaxed">
+            I'm ready to help with "Kinetic AI - V2 Architecture PRD". Select an action above or type a custom prompt below to analyze this document.
+          </p>
+</div>
+</div>
+<!-- AI Panel Input -->
+<div class="p-stack-md border-t border-surface-variant bg-surface-container relative z-10 shrink-0">
+<div class="relative flex items-end shadow-md rounded-xl bg-surface-container-lowest border border-zinc-border focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/50 transition-all">
+<textarea class="w-full bg-transparent text-on-surface px-stack-sm py-stack-sm font-body-sm focus:outline-none resize-none custom-scrollbar min-h-[40px] max-h-[120px]" oninput="this.style.height = '';this.style.height = Math.min(this.scrollHeight, 120) + 'px'" placeholder="Ask AI about this doc..." rows="1"></textarea>
+<div class="flex items-center p-1 pb-1.5 pr-1.5 gap-1 shrink-0">
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-md transition-colors">
+<span class="material-symbols-outlined text-[18px]">attach_file</span>
+</button>
+<button class="p-1.5 bg-primary hover:bg-primary-container text-on-primary hover:text-on-primary-container rounded-md transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</div>
+<div class="text-center mt-2">
+<span class="font-label-sm text-[10px] text-on-surface-variant opacity-70">AI can make mistakes. Verify important info.</span>
+</div>
+</div>
+</aside>
+<!-- Mobile overlay -->
+<div class="fixed inset-0 bg-background/80 backdrop-blur-sm z-30 hidden lg:hidden" id="mobile-overlay" onclick="closeAllPanels()"></div>
+</div>
+</div>
+<style>
+  /* Base custom scrollbar injected directly as per constraints to keep structure self-contained */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #27272A; /* zinc-border */
+    border-radius: 10px;
+  }
+  .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background: #464555; /* outline-variant */
+  }
+</style>
+<script>
+  // Simple interactive logic for the mock UI
+  function toggleFolder(element) {
+    const parent = element.parentElement;
+    const content = parent.querySelector('.folder-content');
+    const icon = parent.querySelector('.folder-icon');
+    
+    if (parent.dataset.state === 'expanded') {
+      content.classList.add('hidden');
+      icon.classList.remove('rotate-90');
+      parent.dataset.state = 'collapsed';
+    } else {
+      content.classList.remove('hidden');
+      icon.classList.add('rotate-90');
+      parent.dataset.state = 'expanded';
+    }
+  }
+
+  const aiPanel = document.getElementById('ai-panel');
+  const leftSidebar = document.getElementById('left-sidebar');
+  const overlay = document.getElementById('mobile-overlay');
+
+  function toggleAIPanel() {
+    const isClosed = aiPanel.classList.contains('translate-x-full');
+    if (isClosed) {
+      aiPanel.classList.remove('translate-x-full');
+      overlay.classList.remove('hidden');
+      // Hide left sidebar if on mobile to prevent overlap
+      if (window.innerWidth < 1024) {
+          leftSidebar.classList.add('-translate-x-full');
+      }
+    } else {
+      aiPanel.classList.add('translate-x-full');
+      overlay.classList.add('hidden');
+    }
+  }
+
+  function toggleMobileSidebar() {
+      const isClosed = leftSidebar.classList.contains('-translate-x-full');
+      
+      // Initially, on mobile, it might not have the class but is hidden by layout.
+      // We force toggle it.
+      if (!leftSidebar.classList.contains('fixed')) {
+          leftSidebar.classList.add('fixed', 'inset-y-0', 'left-0', 'w-72', 'shadow-2xl', 'z-40');
+      }
+
+      if (leftSidebar.classList.contains('-translate-x-full') || !leftSidebar.classList.contains('translate-x-0')) {
+          leftSidebar.classList.remove('-translate-x-full');
+          leftSidebar.classList.add('translate-x-0');
+          overlay.classList.remove('hidden');
+          // Hide AI panel if open
+          aiPanel.classList.add('translate-x-full');
+      } else {
+          leftSidebar.classList.add('-translate-x-full');
+          leftSidebar.classList.remove('translate-x-0');
+          overlay.classList.add('hidden');
+      }
+  }
+
+  function closeAllPanels() {
+      if (window.innerWidth < 1024) {
+          aiPanel.classList.add('translate-x-full');
+          leftSidebar.classList.add('-translate-x-full');
+          leftSidebar.classList.remove('translate-x-0');
+          overlay.classList.add('hidden');
+      }
+  }
+
+  // Handle window resize to reset mobile states
+  window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+          aiPanel.classList.remove('translate-x-full');
+          leftSidebar.classList.remove('-translate-x-full', 'fixed', 'inset-y-0', 'shadow-2xl', 'z-40');
+          leftSidebar.classList.add('translate-x-0');
+          overlay.classList.add('hidden');
+      } else {
+          aiPanel.classList.add('translate-x-full');
+          leftSidebar.classList.add('-translate-x-full');
+      }
+  });
+
+  // Initial mobile setup
+  if (window.innerWidth < 1024) {
+      leftSidebar.classList.add('-translate-x-full', 'fixed', 'inset-y-0', 'shadow-2xl', 'z-40');
+  }
+</script></main></div></body></html>

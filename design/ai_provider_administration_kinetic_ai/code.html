@@ -1,0 +1,390 @@
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"primary":"#c3c0ff","on-secondary-container":"#b1b1ff","inverse-surface":"#d3e4fe","on-error":"#690005","secondary-fixed-dim":"#c1c1ff","surface":"#031427","surface-container-low":"#0b1c30","status-review":"#8B5CF6","surface-variant":"#26364a","on-secondary-fixed-variant":"#2c24ce","on-secondary-fixed":"#09006b","on-primary-fixed":"#0f0069","on-primary-fixed-variant":"#3323cc","surface-container-high":"#1b2b3f","surface-bright":"#2a3a4f","on-surface":"#d3e4fe","warning-amber":"#F59E0B","surface-container-lowest":"#000f21","on-tertiary-container":"#67f4b7","tertiary":"#4edea3","secondary":"#c1c1ff","error":"#ffb4ab","surface-container":"#102034","tertiary-fixed":"#6ffbbe","on-primary-container":"#dad7ff","on-surface-variant":"#c7c4d8","background":"#031427","on-tertiary-fixed-variant":"#005236","on-secondary":"#1400a8","error-container":"#93000a","status-done":"#10B981","secondary-container":"#2f27d0","status-todo":"#3B82F6","zinc-border":"#27272A","primary-fixed-dim":"#c3c0ff","secondary-fixed":"#e1dfff","outline":"#918fa1","on-primary":"#1d00a5","status-inprogress":"#4F46E5","inverse-primary":"#4d44e3","tertiary-fixed-dim":"#4edea3","status-blocked":"#EF4444","status-backlog":"#94A3B8","surface-tint":"#c3c0ff","on-error-container":"#ffdad6","surface-dim":"#031427","on-background":"#d3e4fe","surface-container-highest":"#26364a","inverse-on-surface":"#213145","outline-variant":"#464555","primary-fixed":"#e2dfff","primary-container":"#4f46e5","tertiary-container":"#006e4b","zinc-surface":"#09090B","on-tertiary":"#003824","status-cancelled":"#475569","on-tertiary-fixed":"#002113"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"stack-lg":"24px","stack-xs":"4px","stack-sm":"8px","container-max":"1440px","unit":"8px","stack-md":"16px","margin-mobile":"16px","margin-desktop":"32px","gutter":"24px"},"fontFamily":{"mono":["Geist"],"headline-sm":["Geist"],"label-md":["Geist"],"headline-lg-mobile":["Geist"],"headline-md":["Geist"],"body-md":["Inter"],"display":["Geist"],"body-sm":["Inter"],"label-sm":["Geist"],"headline-lg":["Geist"],"body-lg":["Inter"]},"fontSize":{"mono":["13px",{"lineHeight":"18px","fontWeight":"400"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}],"label-md":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"500"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"32px","fontWeight":"600"}],"body-md":["16px",{"lineHeight":"24px","fontWeight":"400"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.04em","fontWeight":"700"}],"body-sm":["14px",{"lineHeight":"20px","fontWeight":"400"}],"label-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}]}}}}</script><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/></head><body class="bg-surface font-body-md text-on-surface"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-low z-50 flex flex-col shadow-[0_0_24px_rgba(0,0,0,0.1)] transition-all duration-300 border-r border-outline-variant/10"><div class="flex items-center gap-stack-sm px-stack-lg py-stack-lg"><img alt="Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLtzYEc5FmeispUUsmDSxWEsstJ7UP3jMB8jP9CNMUgOvO3-ImuvhCYvKd0KFqhBQ6jvFzSa7VjCX4I5gKfr2VWaJA8Evhi8IC9aemwVYRyi4len5AwD0H3wcdoFNViZkxEob3dl9-8tmjIqeldFw0Z-VAr7PBP1pLI94nANv3Lsv-ogaNOvEd4WGiR-l7JPUS7trdqnS8igdaKHZ_o2vR48S7ySQ1UI55VdEcBKvm-PUdrtN6ZXILYOAA"/><span class="font-headline-sm text-headline-sm tracking-tight text-primary">AI WorkFlow</span></div><nav class="flex-1 px-stack-sm space-y-stack-xs overflow-y-auto" data-active-classes="bg-primary-container text-on-primary-container font-bold rounded-xl"><a class="flex items-center px-stack-md py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="home" href="#"><span class="material-symbols-outlined mr-stack-md">home</span><span class="font-label-md text-label-md">Home</span></a><a class="flex items-center px-stack-md py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="projects" href="#"><span class="material-symbols-outlined mr-stack-md">tactic</span><span class="font-label-md text-label-md">Projects</span></a><a class="flex items-center px-stack-md py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="tasks" href="#"><span class="material-symbols-outlined mr-stack-md">check_circle</span><span class="font-label-md text-label-md">Tasks</span></a><a class="flex items-center px-stack-md py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="portfolio" href="#"><span class="material-symbols-outlined mr-stack-md">folder_managed</span><span class="font-label-md text-label-md">Portfolio</span></a><a class="flex items-center px-stack-md py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="timeline" href="#"><span class="material-symbols-outlined mr-stack-md">view_timeline</span><span class="font-label-md text-label-md">Timeline</span></a><a class="flex items-center px-stack-md py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="calendar" href="#"><span class="material-symbols-outlined mr-stack-md">calendar_today</span><span class="font-label-md text-label-md">Calendar</span></a><a class="flex items-center px-stack-md py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="analytics" href="#"><span class="material-symbols-outlined mr-stack-md">analytics</span><span class="font-label-md text-label-md">Analytics</span></a><a class="flex items-center px-stack-md py-stack-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="reports" href="#"><span class="material-symbols-outlined mr-stack-md">description</span><span class="font-label-md text-label-md">Reports</span></a></nav><div class="px-stack-sm pt-stack-md pb-stack-lg border-t border-outline-variant/10"><a class="flex items-center px-stack-md py-stack-md rounded-xl bg-tertiary-container text-on-tertiary-container hover:bg-tertiary text-on-tertiary transition-all shadow-lg" data-path="ai-assistant" href="#"><span class="material-symbols-outlined mr-stack-md">auto_awesome</span><span class="font-label-md text-label-md">AI Assistant</span></a></div></aside><div class="pl-72 min-h-screen flex flex-col"><header class="fixed top-0 left-72 right-0 h-20 bg-surface/80 backdrop-blur-xl z-40 px-stack-lg flex items-center justify-between border-b border-outline-variant/10"><div class="flex items-center flex-1 max-w-xl bg-surface-container-high rounded-full px-stack-md py-stack-xs border border-outline-variant/20 hover:border-primary/50 transition-all"><span class="material-symbols-outlined text-on-surface-variant">search</span><input class="bg-transparent border-none focus:ring-0 text-on-surface font-body-sm text-body-sm w-full px-stack-sm ml-stack-xs placeholder:text-on-surface-variant/50 outline-none" placeholder="Cari proyek, tugas, atau diskusi..." type="text"/></div><div class="flex items-center gap-stack-md ml-stack-lg"><button class="flex items-center gap-stack-xs bg-primary text-on-primary px-stack-md py-2 rounded-full font-label-md text-label-md hover:brightness-110 transition-all shadow-md"><span class="material-symbols-outlined">add</span>Tambah</button><button class="p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all relative"><span class="material-symbols-outlined">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full"></span></button><div class="h-8 w-[1px] bg-outline-variant/30 mx-stack-xs"></div><div class="flex items-center gap-stack-sm pl-stack-xs cursor-pointer group"><div class="text-right hidden lg:block"><p class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Andi Pratama</p><p class="font-label-sm text-label-sm text-on-surface-variant">Project Admin</p></div><img alt="Profile" class="w-10 h-10 rounded-full border-2 border-primary/20 group-hover:border-primary transition-all object-cover shadow-sm" src="https://lh3.googleusercontent.com/aida/AP1WRLt-HBiFvm5HCwYwd3f1z6I9fbj9w7uLDAF0TrWVOSG2UB_XjuAlohUJGibOs87Vtd8QHLA6syhQ54b1LkIcjFt2cyZDyv9KRozh_VUohAJqruAxTg3Ah3aP-CBiLi4Bq66UDQpbTB3XTHGVT3OAN6Zd_qdxhYxb6WbKZcrpzAGW89kMEdgHjt8-UcXOVzN17neuoIt6U2KbSqOkPNvzW6ywAZ16DBLYZnSoASv-Q5XWToUXDUscbMcdh_k"/></div></div></header><main class="relative pt-20 flex-1 w-full bg-surface"><div class="flex flex-col w-full h-full relative font-body-md bg-surface text-on-surface">
+<!-- Header Area -->
+<header class="flex flex-col md:flex-row md:items-end justify-between px-stack-lg py-stack-lg z-10 relative">
+<div class="flex flex-col gap-stack-sm max-w-2xl">
+<h1 class="font-display text-display text-on-surface tracking-tight leading-none mix-blend-difference">
+        AI Provider Settings
+      </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+        Manage API keys, routing priority, and governance for external and local model endpoints.
+      </p>
+</div>
+<div class="flex flex-wrap items-center gap-stack-md mt-stack-md md:mt-0 relative">
+<!-- Global Stats (Hidden on small screens) -->
+<div class="hidden lg:flex items-center gap-stack-lg mr-stack-md bg-surface-container-high px-stack-md py-stack-sm rounded-xl shadow-sm border border-outline-variant/10">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total Usage</span>
+<span class="font-mono text-headline-sm text-on-surface">142.8M <span class="text-label-sm text-on-surface-variant">tok</span></span>
+</div>
+<div class="w-[1px] h-8 bg-outline-variant/20"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Est. Cost</span>
+<span class="font-mono text-headline-sm text-on-surface">$1,240<span class="text-label-sm text-on-surface-variant">/mo</span></span>
+</div>
+<div class="w-[1px] h-8 bg-outline-variant/20"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Active</span>
+<span class="font-mono text-headline-sm text-status-done">4 <span class="text-label-sm text-on-surface-variant">/ 5</span></span>
+</div>
+</div>
+<button class="flex items-center gap-stack-xs bg-primary text-on-primary px-stack-lg py-3 rounded-xl font-label-md text-label-md hover:brightness-110 transition-all shadow-md active:scale-95 whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">add</span>
+        Add Provider
+      </button>
+</div>
+</header>
+<!-- Main Content Area -->
+<div class="flex flex-1 flex-col xl:flex-row relative">
+<!-- Provider Grid -->
+<div class="flex-1 px-stack-lg pb-stack-lg overflow-y-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-stack-md">
+<!-- OpenAI Card -->
+<div class="group bg-surface-container rounded-xl p-stack-md flex flex-col gap-stack-md relative overflow-hidden transition-all hover:bg-surface-container-high border border-transparent cursor-pointer" onclick="openPanel('openai')">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex items-start justify-between relative z-10">
+<div class="flex items-center gap-stack-sm">
+<div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center shadow-sm">
+<!-- Inline SVG Logo Placeholder for OpenAI -->
+<svg class="w-6 h-6 text-on-surface" fill="currentColor" viewbox="0 0 24 24"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A6.0651 6.0651 0 0 0 19.0192 19.82a5.9847 5.9847 0 0 0 3.9977-2.9 6.0462 6.0462 0 0 0-.735-7.0988zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6762 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"></path></svg>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">OpenAI</h3>
+<div class="flex items-center gap-stack-xs mt-1">
+<span class="w-2 h-2 rounded-full bg-status-done shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
+<span class="font-label-sm text-label-sm text-status-done bg-status-done/10 px-2 py-0.5 rounded-md">Connected</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface px-2 py-1 rounded-md shadow-sm">Pri: 1</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-stack-sm relative z-10 mt-stack-xs">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Default Model</span>
+<span class="font-mono text-body-md text-on-surface truncate">gpt-4o-mini</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Latency</span>
+<span class="font-mono text-body-md text-on-surface">124ms</span>
+</div>
+<div class="flex flex-col mt-stack-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Usage (30d)</span>
+<span class="font-mono text-body-md text-on-surface">84.2M</span>
+</div>
+<div class="flex flex-col mt-stack-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Error Rate</span>
+<span class="font-mono text-body-md text-on-surface">0.02%</span>
+</div>
+</div>
+<div class="mt-stack-sm pt-stack-sm border-t border-outline-variant/10 flex justify-end gap-stack-sm relative z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="px-stack-sm py-1 rounded-md font-label-sm text-label-sm text-on-surface-variant hover:bg-surface hover:text-on-surface transition-colors" onclick="event.stopPropagation()">Logs</button>
+<button class="px-stack-sm py-1 rounded-md font-label-sm text-label-sm text-primary hover:bg-primary/10 transition-colors" onclick="event.stopPropagation()">Test</button>
+</div>
+</div>
+<!-- Google Gemini Card -->
+<div class="group bg-surface-container rounded-xl p-stack-md flex flex-col gap-stack-md relative overflow-hidden transition-all hover:bg-surface-container-high border border-transparent cursor-pointer" onclick="openPanel('gemini')">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex items-start justify-between relative z-10">
+<div class="flex items-center gap-stack-sm">
+<div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center shadow-sm">
+<!-- Simple Star SVG for Gemini -->
+<svg class="w-6 h-6 text-[#4285F4]" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2L14.8 9.2L22 12L14.8 14.8L12 22L9.2 14.8L2 12L9.2 9.2L12 2Z"></path></svg>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Google Gemini</h3>
+<div class="flex items-center gap-stack-xs mt-1">
+<span class="w-2 h-2 rounded-full bg-status-done shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
+<span class="font-label-sm text-label-sm text-status-done bg-status-done/10 px-2 py-0.5 rounded-md">Connected</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface px-2 py-1 rounded-md shadow-sm">Pri: 2</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-stack-sm relative z-10 mt-stack-xs">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Default Model</span>
+<span class="font-mono text-body-md text-on-surface truncate">gemini-1.5-pro</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Latency</span>
+<span class="font-mono text-body-md text-on-surface">340ms</span>
+</div>
+<div class="flex flex-col mt-stack-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Usage (30d)</span>
+<span class="font-mono text-body-md text-on-surface">45.1M</span>
+</div>
+<div class="flex flex-col mt-stack-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Error Rate</span>
+<span class="font-mono text-body-md text-on-surface">0.15%</span>
+</div>
+</div>
+<div class="mt-stack-sm pt-stack-sm border-t border-outline-variant/10 flex justify-end gap-stack-sm relative z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="px-stack-sm py-1 rounded-md font-label-sm text-label-sm text-on-surface-variant hover:bg-surface hover:text-on-surface transition-colors" onclick="event.stopPropagation()">Logs</button>
+<button class="px-stack-sm py-1 rounded-md font-label-sm text-label-sm text-primary hover:bg-primary/10 transition-colors" onclick="event.stopPropagation()">Test</button>
+</div>
+</div>
+<!-- vLLM Card (Rate Limited) -->
+<div class="group bg-surface-container rounded-xl p-stack-md flex flex-col gap-stack-md relative overflow-hidden transition-all hover:bg-surface-container-high border border-status-review/30 shadow-[0_0_15px_rgba(139,92,246,0.1)] cursor-pointer" onclick="openPanel('vllm')">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-status-review/50 via-status-review to-status-review/50 animate-pulse"></div>
+<div class="flex items-start justify-between relative z-10">
+<div class="flex items-center gap-stack-sm">
+<div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-status-review">memory</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Self-Hosted vLLM</h3>
+<div class="flex items-center gap-stack-xs mt-1">
+<span class="w-2 h-2 rounded-full bg-status-review animate-ping absolute opacity-75"></span>
+<span class="w-2 h-2 rounded-full bg-status-review relative"></span>
+<span class="font-label-sm text-label-sm text-status-review bg-status-review/10 px-2 py-0.5 rounded-md">Rate Limited</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface px-2 py-1 rounded-md shadow-sm">Pri: 3</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-stack-sm relative z-10 mt-stack-xs">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Default Model</span>
+<span class="font-mono text-body-md text-on-surface truncate">llama-3-70b-instruct</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Latency</span>
+<span class="font-mono text-body-md text-warning-amber">850ms</span>
+</div>
+<div class="flex flex-col mt-stack-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Queue Depth</span>
+<span class="font-mono text-body-md text-status-review">42 req</span>
+</div>
+<div class="flex flex-col mt-stack-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Error Rate</span>
+<span class="font-mono text-body-md text-warning-amber">2.4%</span>
+</div>
+</div>
+<div class="mt-stack-sm pt-stack-sm border-t border-outline-variant/10 flex justify-end gap-stack-sm relative z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="px-stack-sm py-1 rounded-md font-label-sm text-label-sm text-on-surface-variant hover:bg-surface hover:text-on-surface transition-colors" onclick="event.stopPropagation()">Logs</button>
+<button class="px-stack-sm py-1 rounded-md font-label-sm text-label-sm text-primary hover:bg-primary/10 transition-colors" onclick="event.stopPropagation()">Test</button>
+</div>
+</div>
+<!-- Ollama Card (Offline) -->
+<div class="group bg-surface-container/50 rounded-xl p-stack-md flex flex-col gap-stack-md relative overflow-hidden transition-all hover:bg-surface-container-high border border-transparent cursor-pointer opacity-80" onclick="openPanel('ollama')">
+<div class="absolute inset-0 bg-gradient-to-br from-error/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex items-start justify-between relative z-10">
+<div class="flex items-center gap-stack-sm">
+<div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center shadow-sm opacity-50 grayscale">
+<span class="material-symbols-outlined text-on-surface">dns</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Local Ollama</h3>
+<div class="flex items-center gap-stack-xs mt-1">
+<span class="w-2 h-2 rounded-full bg-status-blocked"></span>
+<span class="font-label-sm text-label-sm text-status-blocked bg-status-blocked/10 px-2 py-0.5 rounded-md">Offline</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant/50 bg-surface px-2 py-1 rounded-md shadow-sm">Pri: 5</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-stack-sm relative z-10 mt-stack-xs opacity-50">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Default Model</span>
+<span class="font-mono text-body-md text-on-surface truncate">mistral:instruct</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Endpoint</span>
+<span class="font-mono text-body-md text-on-surface truncate">localhost:11434</span>
+</div>
+<div class="col-span-2 mt-stack-xs">
+<div class="bg-error-container/20 p-2 rounded-md flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-error mt-0.5">warning</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Connection refused. Ensure service is running.</span>
+</div>
+</div>
+</div>
+<div class="mt-stack-sm pt-stack-sm border-t border-outline-variant/10 flex justify-end gap-stack-sm relative z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="px-stack-sm py-1 rounded-md font-label-sm text-label-sm text-on-surface-variant hover:bg-surface hover:text-on-surface transition-colors" onclick="event.stopPropagation()">Logs</button>
+<button class="px-stack-sm py-1 rounded-md font-label-sm text-label-sm text-primary hover:bg-primary/10 transition-colors" onclick="event.stopPropagation()">Test</button>
+</div>
+</div>
+<!-- Custom Endpoint Card -->
+<div class="group bg-surface-container rounded-xl p-stack-md flex flex-col gap-stack-md relative overflow-hidden transition-all hover:bg-surface-container-high border border-transparent border-dashed border-outline-variant/30 cursor-pointer" onclick="openPanel('custom')">
+<div class="flex items-start justify-between relative z-10">
+<div class="flex items-center gap-stack-sm">
+<div class="w-10 h-10 rounded-lg bg-surface flex items-center justify-center shadow-sm border border-outline-variant/20">
+<span class="material-symbols-outlined text-on-surface-variant">api</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">AWS Bedrock</h3>
+<div class="flex items-center gap-stack-xs mt-1">
+<span class="w-2 h-2 rounded-full bg-status-backlog"></span>
+<span class="font-label-sm text-label-sm text-status-backlog bg-status-backlog/10 px-2 py-0.5 rounded-md">Draft</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-center justify-center h-24 relative z-10 opacity-70">
+<span class="font-body-sm text-body-sm text-on-surface-variant text-center max-w-[200px]">Configuration incomplete. Requires IAM role binding.</span>
+</div>
+<div class="mt-stack-sm pt-stack-sm border-t border-outline-variant/10 flex justify-end gap-stack-sm relative z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="px-stack-sm py-1 rounded-md font-label-sm text-label-sm text-primary hover:bg-primary/10 transition-colors" onclick="event.stopPropagation()">Continue Setup</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Configuration Panel (Slide-over overlay for mobile, side panel for desktop) -->
+<div class="fixed xl:relative inset-y-0 right-0 w-full xl:w-[480px] bg-surface-container-high border-l border-outline-variant/10 shadow-2xl xl:shadow-none transform translate-x-full xl:translate-x-0 transition-transform duration-300 ease-in-out z-40 flex flex-col pt-20 xl:pt-0 h-screen xl:h-auto overflow-hidden" id="configPanel">
+<!-- Panel Header -->
+<div class="px-stack-lg py-stack-md border-b border-outline-variant/10 flex items-center justify-between bg-surface-container-high z-10">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-primary">tune</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Configure Provider</h2>
+</div>
+<button class="xl:hidden p-2 rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors" onclick="closePanel()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Panel Body -->
+<div class="flex-1 overflow-y-auto px-stack-lg py-stack-lg space-y-stack-lg">
+<!-- Basic Info -->
+<section class="space-y-stack-md">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Provider Name</label>
+<input class="bg-surface border border-outline-variant/30 rounded-lg px-stack-md py-2 text-on-surface font-body-md focus:outline-none focus:border-primary transition-colors" type="text" value="OpenAI"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider flex justify-between">
+                        API Key
+                        <span class="text-primary cursor-pointer hover:underline">Rotate</span>
+</label>
+<div class="relative">
+<input class="w-full bg-surface border border-outline-variant/30 rounded-lg pl-stack-md pr-10 py-2 text-on-surface font-mono text-mono focus:outline-none focus:border-primary transition-colors" type="password" value="sk-proj-xxxxxxxxxxxxxxxxxxxxxxxx"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Base URL</label>
+<input class="bg-surface border border-outline-variant/30 rounded-lg px-stack-md py-2 text-on-surface font-mono text-mono focus:outline-none focus:border-primary transition-colors" type="text" value="https://api.openai.com/v1"/>
+</div>
+</section>
+<hr class="border-outline-variant/10"/>
+<!-- Model Selection -->
+<section class="space-y-stack-md">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-stack-sm">Model Defaults</h3>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Chat / Completion Model</label>
+<select class="bg-surface border border-outline-variant/30 rounded-lg px-stack-md py-2 text-on-surface font-body-md focus:outline-none focus:border-primary transition-colors appearance-none">
+<option>gpt-4o</option>
+<option selected="">gpt-4o-mini</option>
+<option>gpt-4-turbo</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Embedding Model</label>
+<select class="bg-surface border border-outline-variant/30 rounded-lg px-stack-md py-2 text-on-surface font-body-md focus:outline-none focus:border-primary transition-colors appearance-none">
+<option selected="">text-embedding-3-small</option>
+<option>text-embedding-3-large</option>
+</select>
+</div>
+</section>
+<hr class="border-outline-variant/10"/>
+<!-- Routing & Governance -->
+<section class="space-y-stack-md">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-stack-sm">Routing & Governance</h3>
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Enable Fallback</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Route to next priority if this fails</span>
+</div>
+<!-- Toggle Switch -->
+<div class="w-10 h-6 bg-primary rounded-full relative cursor-pointer shadow-inner">
+<div class="absolute right-1 top-1 w-4 h-4 bg-on-primary rounded-full shadow-sm"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2 mt-stack-md">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Priority Level</label>
+<div class="flex items-center gap-4">
+<span class="font-mono text-body-sm text-on-surface-variant">1</span>
+<input class="flex-1 accent-primary" max="5" min="1" type="range" value="1"/>
+<span class="font-mono text-body-sm text-on-surface-variant">5</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-stack-md mt-stack-md">
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Monthly Budget</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">$</span>
+<input class="w-full bg-surface border border-outline-variant/30 rounded-lg pl-8 pr-3 py-2 text-on-surface font-mono text-mono focus:outline-none focus:border-primary transition-colors" type="number" value="1000"/>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Timeout (s)</label>
+<input class="bg-surface border border-outline-variant/30 rounded-lg px-stack-md py-2 text-on-surface font-mono text-mono focus:outline-none focus:border-primary transition-colors" type="number" value="60"/>
+</div>
+</div>
+</section>
+</div>
+<!-- Panel Footer -->
+<div class="px-stack-lg py-stack-md border-t border-outline-variant/10 bg-surface-container-high flex flex-col gap-stack-sm">
+<button class="w-full flex items-center justify-center gap-2 bg-surface text-on-surface border border-outline-variant/30 px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">cell_tower</span>
+                Test Connection
+            </button>
+<div class="flex gap-stack-sm">
+<button class="flex-1 bg-error/10 text-error px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-error/20 transition-colors">
+                    Disable
+                </button>
+<button class="flex-[2] bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:brightness-110 transition-all shadow-md">
+                    Save Changes
+                </button>
+</div>
+</div>
+</div>
+<!-- Mobile Overlay Backdrop -->
+<div class="fixed inset-0 bg-surface/80 backdrop-blur-sm z-30 hidden xl:hidden transition-opacity opacity-0" id="panelBackdrop" onclick="closePanel()"></div>
+</div>
+</div>
+<script>
+    function openPanel(providerId) {
+        const panel = document.getElementById('configPanel');
+        const backdrop = document.getElementById('panelBackdrop');
+        
+        // Show mobile backdrop
+        backdrop.classList.remove('hidden');
+        // Small delay to allow display:block to apply before animating opacity
+        setTimeout(() => {
+            backdrop.classList.remove('opacity-0');
+        }, 10);
+
+        // Slide in panel
+        panel.classList.remove('translate-x-full');
+    }
+
+    function closePanel() {
+        const panel = document.getElementById('configPanel');
+        const backdrop = document.getElementById('panelBackdrop');
+        
+        // Slide out panel
+        panel.classList.add('translate-x-full');
+        
+        // Hide mobile backdrop
+        backdrop.classList.add('opacity-0');
+        setTimeout(() => {
+            backdrop.classList.add('hidden');
+        }, 300); // match transition duration
+    }
+
+    // Open panel by default on desktop for the first item to show the UI state
+    if (window.innerWidth >= 1280) {
+        // We don't need to actually call openPanel because translate-x-0 is default on xl
+        // But we could populate data based on selection.
+    }
+</script></main></div></body></html>

@@ -40,6 +40,7 @@ import {
     ArrowRight,
     HelpCircle,
     TrendingUp,
+    ShieldAlert,
 } from 'lucide-react';
 
 interface Project {
@@ -244,6 +245,13 @@ export default function PlanningPokerIndex({
                         >
                             <TrendingUp className="h-3.5 w-3.5" />
                             <span>Prakiraan & Monte Carlo</span>
+                        </Link>
+                        <Link
+                            href={`/projects/${project.id}/sprints/health`}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+                        >
+                            <ShieldAlert className="h-3.5 w-3.5" />
+                            <span>Kesehatan Sprint & Blocker</span>
                         </Link>
                     </div>
                 </div>

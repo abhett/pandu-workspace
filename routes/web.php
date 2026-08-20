@@ -42,6 +42,7 @@ use App\Http\Controllers\SkillMatrixController;
 use App\Http\Controllers\SlaController;
 use App\Http\Controllers\SprintController;
 use App\Http\Controllers\SprintForecastController;
+use App\Http\Controllers\SprintHealthController;
 use App\Http\Controllers\SprintRetrospectiveController;
 use App\Http\Controllers\SsoController;
 use App\Http\Controllers\SystemFeedbackController;
@@ -210,6 +211,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/projects/{project}/sprints/{sprint}/complete', [SprintController::class, 'complete'])->name('projects.sprints.complete');
     Route::patch('/projects/{project}/tasks/{task}/sprint', [SprintController::class, 'moveTask'])->name('projects.tasks.sprint');
     Route::get('/projects/{project}/sprints/{sprint}/burndown', [SprintController::class, 'burndown'])->name('projects.sprints.burndown');
+
+    // Advanced Scrum Sprint Health Radar, Blockers Heatmap & Impediment Escalator
+    Route::get('/projects/{project}/sprints/health', [SprintHealthController::class, 'index'])->name('projects.sprints.health.index');
+    Route::get('/projects/{project}/sprints/{sprint}/health', [SprintHealthController::class, 'show'])->name('projects.sprints.health.show');
+    Route::post('/projects/{project}/sprints/{sprint}/impediments', [SprintHealthController::class, 'storeImpediment'])->name('projects.sprints.impediments.store');
+    Route::post('/projects/{project}/sprints/impediments/{impediment}/escalate', [SprintHealthController::class, 'escalateImpediment'])->name('projects.sprints.impediments.escalate');
+    Route::post('/projects/{project}/sprints/impediments/{impediment}/resolve', [SprintHealthController::class, 'resolveImpediment'])->name('projects.sprints.impediments.resolve');
+    Route::delete('/projects/{project}/sprints/impediments/{impediment}', [SprintHealthController::class, 'destroyImpediment'])->name('projects.sprints.impediments.destroy');
 
     // Teams Management
     Route::get('/teams', [TeamController::class, 'index'])->name('teams.index');

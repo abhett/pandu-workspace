@@ -164,4 +164,14 @@ class Sprint extends Model
     {
         return $this->hasMany(SprintDailyMetric::class)->orderBy('date');
     }
+
+    /**
+     * Get all impediments raised during this sprint.
+     *
+     * @return HasMany<SprintImpediment, $this>
+     */
+    public function impediments(): HasMany
+    {
+        return $this->hasMany(SprintImpediment::class);
+    }
 }

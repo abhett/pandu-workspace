@@ -274,4 +274,14 @@ class Project extends Model
     {
         return $this->hasMany(ProjectForecastScenario::class);
     }
+
+    /**
+     * Get all sprint impediments in this project.
+     *
+     * @return HasMany<SprintImpediment, $this>
+     */
+    public function impediments(): HasMany
+    {
+        return $this->hasMany(SprintImpediment::class);
+    }
 }

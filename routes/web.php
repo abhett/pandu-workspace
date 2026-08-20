@@ -24,8 +24,10 @@ use App\Http\Controllers\OrganizationInvitationController;
 use App\Http\Controllers\OrganizationMemberController;
 use App\Http\Controllers\OrganizationWebhookController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\ProjectBudgetController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectMemberController;
+use App\Http\Controllers\ProjectRiskController;
 use App\Http\Controllers\ProjectWorkflowController;
 use App\Http\Controllers\PublicChangelogController;
 use App\Http\Controllers\PublicPageController;
@@ -34,6 +36,8 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\ScrumMasterController;
 use App\Http\Controllers\SessionSecurityController;
+use App\Http\Controllers\SkillMatrixController;
+use App\Http\Controllers\SlaController;
 use App\Http\Controllers\SprintController;
 use App\Http\Controllers\SsoController;
 use App\Http\Controllers\SystemFeedbackController;
@@ -45,6 +49,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskDependencyController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TimelineController;
+use App\Http\Controllers\WhiteboardController;
 use App\Http\Controllers\WikiController;
 
 Route::inertia('/', 'welcome')->name('home');
@@ -116,6 +121,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/projects/{project}/dependencies', [TaskDependencyController::class, 'store'])->name('projects.dependencies.store');
     Route::delete('/projects/{project}/dependencies/{dependency}', [TaskDependencyController::class, 'destroy'])->name('projects.dependencies.destroy');
     Route::post('/projects/{project}/dependencies/simulate-cascade', [TaskDependencyController::class, 'simulateCascade'])->name('projects.dependencies.simulate-cascade');
+
+    // Project Budgeting, Cost Tracking & Expense Approvals
+    Route::get('/projects/{project}/budget', [ProjectBudgetController::class, 'index'])->name('projects.budget.index');
+    Route::post('/projects/{project}/budget', [ProjectBudgetController::class, 'storeOrUpdateBudget'])->name('projects.budget.store-or-update');
+    Route::post('/projects/{project}/budget/rates', [ProjectBudgetController::class, 'storeMemberRate'])->name('projects.budget.rates.store');
+    Route::post('/projects/{project}/budget/worklogs', [ProjectBudgetController::class, 'storeWorklog'])->name('projects.budget.worklogs.store');
+    Route::post('/projects/{project}/budget/expenses', [ProjectBudgetController::class, 'storeExpense'])->name('projects.budget.expenses.store');
+    Route::post('/projects/{project}/budget/expenses/{expense}/approve', [ProjectBudgetController::class, 'approveExpense'])->name('projects.budget.expenses.approve');
+    Route::post('/projects/{project}/budget/expenses/{expense}/reject', [ProjectBudgetController::class, 'rejectExpense'])->name('projects.budget.expenses.reject');
+    Route::delete('/projects/{project}/budget/expenses/{expense}', [ProjectBudgetController::class, 'destroyExpense'])->name('projects.budget.expenses.destroy');
+
+    // Interactive Whiteboard, Mind Map & Ideation Canvas
+    Route::get('/projects/{project}/whiteboard', [WhiteboardController::class, 'index'])->name('projects.whiteboard.index');
+    Route::post('/projects/{project}/whiteboards', [WhiteboardController::class, 'store'])->name('projects.whiteboard.store');
+    Route::post('/projects/{project}/whiteboards/{whiteboard}/nodes', [WhiteboardController::class, 'storeNode'])->name('projects.whiteboard.nodes.store');
+    Route::put('/projects/{project}/whiteboards/{whiteboard}/nodes/{node}', [WhiteboardController::class, 'updateNode'])->name('projects.whiteboard.nodes.update');
+    Route::delete('/projects/{project}/whiteboards/{whiteboard}/nodes/{node}', [WhiteboardController::class, 'destroyNode'])->name('projects.whiteboard.nodes.destroy');
+    Route::post('/projects/{project}/whiteboards/{whiteboard}/edges', [WhiteboardController::class, 'storeEdge'])->name('projects.whiteboard.edges.store');
+    Route::delete('/projects/{project}/whiteboards/{whiteboard}/edges/{edge}', [WhiteboardController::class, 'destroyEdge'])->name('projects.whiteboard.edges.destroy');
+    Route::post('/projects/{project}/whiteboards/{whiteboard}/nodes/{node}/convert-to-task', [WhiteboardController::class, 'convertToTask'])->name('projects.whiteboard.nodes.convert-to-task');
+    Route::post('/projects/{project}/whiteboards/{whiteboard}/viewport', [WhiteboardController::class, 'updateViewport'])->name('projects.whiteboard.viewport');
+
+    // Project Risk Management & Mitigation Register
+    Route::get('/projects/{project}/risks', [ProjectRiskController::class, 'index'])->name('projects.risks.index');
+    Route::post('/projects/{project}/risks', [ProjectRiskController::class, 'store'])->name('projects.risks.store');
+    Route::put('/projects/{project}/risks/{risk}', [ProjectRiskController::class, 'update'])->name('projects.risks.update');
+    Route::delete('/projects/{project}/risks/{risk}', [ProjectRiskController::class, 'destroy'])->name('projects.risks.destroy');
+    Route::post('/projects/{project}/risks/{risk}/action-logs', [ProjectRiskController::class, 'storeActionLog'])->name('projects.risks.action-logs.store');
 
     // Scrum Backlog & Sprint Lifecycle
     Route::get('/projects/{project}/backlog', [SprintController::class, 'index'])->name('projects.backlog');
@@ -234,6 +267,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/organization/webhooks/{webhook}/test', [OrganizationWebhookController::class, 'test'])->name('organization.webhooks.test');
     Route::get('/organization/webhooks/{webhook}/deliveries', [OrganizationWebhookController::class, 'deliveries'])->name('organization.webhooks.deliveries');
     Route::post('/organization/webhooks/deliveries/{delivery}/redeliver', [OrganizationWebhookController::class, 'redeliver'])->name('organization.webhooks.redeliver');
+
+    // SLA (Service Level Agreement) Engine & Automated Escalation Matrix
+    Route::get('/organization/sla', [SlaController::class, 'index'])->name('organization.sla.index');
+    Route::post('/organization/sla', [SlaController::class, 'store'])->name('organization.sla.store');
+    Route::put('/organization/sla/{policy}', [SlaController::class, 'update'])->name('organization.sla.update');
+    Route::delete('/organization/sla/{policy}', [SlaController::class, 'destroy'])->name('organization.sla.destroy');
+    Route::post('/organization/sla/{policy}/escalation-rules', [SlaController::class, 'storeRule'])->name('organization.sla.escalation-rules.store');
+    Route::delete('/organization/sla/escalation-rules/{rule}', [SlaController::class, 'destroyRule'])->name('organization.sla.escalation-rules.destroy');
+    Route::post('/organization/sla/run-scan', [SlaController::class, 'runScan'])->name('organization.sla.run-scan');
+
+    // Team Skills Inventory & Smart Resource Allocation AI
+    Route::get('/organization/skills', [SkillMatrixController::class, 'index'])->name('organization.skills.index');
+    Route::post('/organization/skills', [SkillMatrixController::class, 'store'])->name('organization.skills.store');
+    Route::put('/organization/skills/{skill}', [SkillMatrixController::class, 'update'])->name('organization.skills.update');
+    Route::delete('/organization/skills/{skill}', [SkillMatrixController::class, 'destroy'])->name('organization.skills.destroy');
+    Route::post('/organization/skills/member-skills', [SkillMatrixController::class, 'storeMemberSkill'])->name('organization.skills.member-skills.store');
+    Route::delete('/organization/skills/member-skills/{userSkill}', [SkillMatrixController::class, 'destroyMemberSkill'])->name('organization.skills.member-skills.destroy');
+    Route::get('/tasks/{task}/recommend-assignees', [SkillMatrixController::class, 'recommendAssignees'])->name('tasks.recommend-assignees');
+    Route::post('/tasks/{task}/required-skills', [SkillMatrixController::class, 'storeTaskSkills'])->name('tasks.required-skills.store');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

@@ -184,4 +184,64 @@ class Project extends Model
     {
         return $this->hasOne(Sprint::class)->where('status', 'active');
     }
+
+    /**
+     * Get the financial budget configuration for this project.
+     *
+     * @return HasOne<ProjectBudget, $this>
+     */
+    public function budget(): HasOne
+    {
+        return $this->hasOne(ProjectBudget::class);
+    }
+
+    /**
+     * Get member hourly billing rates for this project.
+     *
+     * @return HasMany<ProjectMemberRate, $this>
+     */
+    public function memberRates(): HasMany
+    {
+        return $this->hasMany(ProjectMemberRate::class);
+    }
+
+    /**
+     * Get all task worklogs and labor costs logged in this project.
+     *
+     * @return HasMany<TaskWorklog, $this>
+     */
+    public function worklogs(): HasMany
+    {
+        return $this->hasMany(TaskWorklog::class);
+    }
+
+    /**
+     * Get all operational and capital expenses in this project.
+     *
+     * @return HasMany<ProjectExpense, $this>
+     */
+    public function expenses(): HasMany
+    {
+        return $this->hasMany(ProjectExpense::class);
+    }
+
+    /**
+     * Get all whiteboard ideation canvases in this project.
+     *
+     * @return HasMany<ProjectWhiteboard, $this>
+     */
+    public function whiteboards(): HasMany
+    {
+        return $this->hasMany(ProjectWhiteboard::class);
+    }
+
+    /**
+     * Get all risk register items in this project.
+     *
+     * @return HasMany<ProjectRisk, $this>
+     */
+    public function risks(): HasMany
+    {
+        return $this->hasMany(ProjectRisk::class);
+    }
 }

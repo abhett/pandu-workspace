@@ -162,4 +162,14 @@ class Organization extends Model
     {
         return $this->hasMany(AiUsageLog::class)->latest('created_at');
     }
+
+    /**
+     * Get all skills catalog for the organization.
+     *
+     * @return HasMany<Skill, $this>
+     */
+    public function skills(): HasMany
+    {
+        return $this->hasMany(Skill::class);
+    }
 }

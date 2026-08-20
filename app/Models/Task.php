@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
@@ -253,7 +254,7 @@ class Task extends Model
      *
      * @return HasOne<TaskBlocker, $this>
      */
-    public function activeBlocker(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function activeBlocker(): HasOne
     {
         return $this->hasOne(TaskBlocker::class)->where('is_resolved', false)->latestOfMany();
     }
@@ -300,5 +301,25 @@ class Task extends Model
         return $this->belongsToMany(Task::class, 'task_dependencies', 'predecessor_id', 'successor_id')
             ->withPivot(['id', 'type', 'lag_days'])
             ->withTimestamps();
+    }
+
+    /**
+     * Get the SLA tracker associated with this task.
+     *
+     * @return HasOne<TaskSlaTracker, $this>
+     */
+    public function slaTracker(): HasOne
+    {
+        return $this->hasOne(TaskSlaTracker::class);
+    }
+
+    /**
+     * Get the skills required to complete this task.
+     *
+     * @return HasMany<TaskRequiredSkill, $this>
+     */
+    public function requiredSkills(): HasMany
+    {
+        return $this->hasMany(TaskRequiredSkill::class);
     }
 }

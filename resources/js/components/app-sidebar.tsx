@@ -7,6 +7,7 @@ import {
     CheckSquare,
     CreditCard,
     FolderKanban,
+    GraduationCap,
     HardDrive,
     History,
     Inbox,
@@ -22,6 +23,7 @@ import {
     ShieldCheck,
     Smartphone,
     Sparkles,
+    Timer,
     Upload,
     UserCheck,
     Users,
@@ -174,6 +176,16 @@ export function AppSidebar() {
                       title: 'Webhook & Outbound Hub',
                       href: '/organization/webhooks',
                       icon: Webhook,
+                  },
+                  {
+                      title: 'SLA & Matriks Eskalasi',
+                      href: '/organization/sla',
+                      icon: Timer,
+                  },
+                  {
+                      title: 'Keahlian & Alokasi Tim',
+                      href: '/organization/skills',
+                      icon: GraduationCap,
                   },
               ]
             : []),

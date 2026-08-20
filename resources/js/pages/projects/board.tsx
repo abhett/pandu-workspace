@@ -29,6 +29,8 @@ import {
     Sparkles,
     CheckSquare,
     Workflow,
+    DollarSign,
+    PenTool,
 } from 'lucide-react';
 import { CreateTaskModal } from '@/components/tasks/create-task-modal';
 import { TaskDetailDrawer, TaskDetailData } from '@/components/tasks/task-detail-drawer';
@@ -350,6 +352,27 @@ export default function KanbanBoardPage({
                         >
                             <Workflow className="h-3.5 w-3.5" />
                             <span>Graf Dependensi</span>
+                        </Link>
+                        <Link
+                            href={`/projects/${project.id}/budget`}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+                        >
+                            <DollarSign className="h-3.5 w-3.5" />
+                            <span>Anggaran & Biaya</span>
+                        </Link>
+                        <Link
+                            href={`/projects/${project.id}/whiteboard`}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+                        >
+                            <PenTool className="h-3.5 w-3.5" />
+                            <span>Kanvas & Ideasi</span>
+                        </Link>
+                        <Link
+                            href={`/projects/${project.id}/risks`}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+                        >
+                            <AlertTriangle className="h-3.5 w-3.5" />
+                            <span>Risiko & Mitigasi</span>
                         </Link>
                         <Link
                             href={`/projects/${project.id}/settings`}

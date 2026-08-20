@@ -254,4 +254,24 @@ class Project extends Model
     {
         return $this->hasMany(SprintRetrospective::class);
     }
+
+    /**
+     * Get all planning poker sessions in this project.
+     *
+     * @return HasMany<PlanningPokerSession, $this>
+     */
+    public function planningPokerSessions(): HasMany
+    {
+        return $this->hasMany(PlanningPokerSession::class);
+    }
+
+    /**
+     * Get all forecast scenarios in this project.
+     *
+     * @return HasMany<ProjectForecastScenario, $this>
+     */
+    public function forecastScenarios(): HasMany
+    {
+        return $this->hasMany(ProjectForecastScenario::class);
+    }
 }

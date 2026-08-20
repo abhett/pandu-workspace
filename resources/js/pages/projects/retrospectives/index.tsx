@@ -40,6 +40,7 @@ import {
     Repeat,
     Shield,
     Trash2,
+    TrendingUp,
 } from 'lucide-react';
 
 interface Project {
@@ -228,6 +229,20 @@ export default function RetrospectivesIndex({
                         >
                             <MessageSquareQuote className="h-3.5 w-3.5" />
                             <span>Retrospektif</span>
+                        </Link>
+                        <Link
+                            href={`/projects/${project.id}/planning-poker`}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+                        >
+                            <Sparkles className="h-3.5 w-3.5" />
+                            <span>Planning Poker</span>
+                        </Link>
+                        <Link
+                            href={`/projects/${project.id}/forecast`}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+                        >
+                            <TrendingUp className="h-3.5 w-3.5" />
+                            <span>Prakiraan & Monte Carlo</span>
                         </Link>
                         <Link
                             href={`/projects/${project.id}/settings`}

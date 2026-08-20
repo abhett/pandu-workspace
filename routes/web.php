@@ -23,6 +23,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrganizationInvitationController;
 use App\Http\Controllers\OrganizationMemberController;
 use App\Http\Controllers\OrganizationWebhookController;
+use App\Http\Controllers\PlanningPokerController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProjectBudgetController;
 use App\Http\Controllers\ProjectController;
@@ -40,6 +41,7 @@ use App\Http\Controllers\SessionSecurityController;
 use App\Http\Controllers\SkillMatrixController;
 use App\Http\Controllers\SlaController;
 use App\Http\Controllers\SprintController;
+use App\Http\Controllers\SprintForecastController;
 use App\Http\Controllers\SprintRetrospectiveController;
 use App\Http\Controllers\SsoController;
 use App\Http\Controllers\SystemFeedbackController;
@@ -172,6 +174,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/projects/{project}/retrospectives/items/{item}', [SprintRetrospectiveController::class, 'destroyItem'])->name('projects.retrospectives.items.destroy');
     Route::post('/projects/{project}/retrospectives/items/{item}/vote', [SprintRetrospectiveController::class, 'voteItem'])->name('projects.retrospectives.items.vote');
     Route::post('/projects/{project}/retrospectives/items/{item}/convert-to-task', [SprintRetrospectiveController::class, 'convertToTask'])->name('projects.retrospectives.items.convert-to-task');
+
+    // Smart Sprint Planning Poker & Real-Time Story Point Estimation Room
+    Route::get('/projects/{project}/planning-poker', [PlanningPokerController::class, 'index'])->name('projects.planning-poker.index');
+    Route::post('/projects/{project}/planning-poker', [PlanningPokerController::class, 'store'])->name('projects.planning-poker.store');
+    Route::get('/projects/{project}/planning-poker/{session}', [PlanningPokerController::class, 'show'])->name('projects.planning-poker.show');
+    Route::post('/projects/{project}/planning-poker/{session}/vote', [PlanningPokerController::class, 'vote'])->name('projects.planning-poker.vote');
+    Route::post('/projects/{project}/planning-poker/{session}/reveal', [PlanningPokerController::class, 'reveal'])->name('projects.planning-poker.reveal');
+    Route::post('/projects/{project}/planning-poker/{session}/reset', [PlanningPokerController::class, 'reset'])->name('projects.planning-poker.reset');
+    Route::post('/projects/{project}/planning-poker/{session}/apply-points', [PlanningPokerController::class, 'applyPoints'])->name('projects.planning-poker.apply-points');
+    Route::post('/projects/{project}/planning-poker/{session}/select-task', [PlanningPokerController::class, 'selectTask'])->name('projects.planning-poker.select-task');
+    Route::delete('/projects/{project}/planning-poker/{session}', [PlanningPokerController::class, 'destroy'])->name('projects.planning-poker.destroy');
+
+    // Advanced Sprint Velocity Forecast, Monte Carlo Simulation & Release Readiness Predictor
+    Route::get('/projects/{project}/forecast', [SprintForecastController::class, 'index'])->name('projects.forecast.index');
+    Route::post('/projects/{project}/forecast/simulate', [SprintForecastController::class, 'simulate'])->name('projects.forecast.simulate');
+    Route::post('/projects/{project}/forecast/scenarios', [SprintForecastController::class, 'storeScenario'])->name('projects.forecast.scenarios.store');
+    Route::delete('/projects/{project}/forecast/scenarios/{scenario}', [SprintForecastController::class, 'destroyScenario'])->name('projects.forecast.scenarios.destroy');
 
     // Scrum Backlog & Sprint Lifecycle
     Route::get('/projects/{project}/backlog', [SprintController::class, 'index'])->name('projects.backlog');

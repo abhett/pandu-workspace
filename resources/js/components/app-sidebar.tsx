@@ -7,6 +7,7 @@ import {
     CheckSquare,
     CreditCard,
     FolderKanban,
+    Gauge,
     GraduationCap,
     HardDrive,
     History,
@@ -186,6 +187,11 @@ export function AppSidebar() {
                       title: 'Keahlian & Alokasi Tim',
                       href: '/organization/skills',
                       icon: GraduationCap,
+                  },
+                  {
+                      title: 'Kapasitas & Beban Kerja',
+                      href: '/organization/capacity',
+                      icon: Gauge,
                   },
               ]
             : []),

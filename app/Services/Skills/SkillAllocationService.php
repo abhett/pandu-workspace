@@ -254,7 +254,7 @@ class SkillAllocationService
             }
 
             // Workload factor: count incomplete tasks assigned
-            $activeWorkloadCount = Task::where('assignee_id', $member->id)
+            $activeWorkloadCount = Task::whereHas('assignees', fn ($q) => $q->where('users.id', $member->id))
                 ->whereNull('completed_at')
                 ->count();
 

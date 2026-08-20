@@ -33,6 +33,7 @@ use App\Http\Controllers\PublicChangelogController;
 use App\Http\Controllers\PublicPageController;
 use App\Http\Controllers\ReleaseController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ResourceCapacityController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\ScrumMasterController;
 use App\Http\Controllers\SessionSecurityController;
@@ -286,6 +287,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/organization/skills/member-skills/{userSkill}', [SkillMatrixController::class, 'destroyMemberSkill'])->name('organization.skills.member-skills.destroy');
     Route::get('/tasks/{task}/recommend-assignees', [SkillMatrixController::class, 'recommendAssignees'])->name('tasks.recommend-assignees');
     Route::post('/tasks/{task}/required-skills', [SkillMatrixController::class, 'storeTaskSkills'])->name('tasks.required-skills.store');
+
+    // Live Team Workload Balancing & Resource Capacity Planner
+    Route::get('/organization/capacity', [ResourceCapacityController::class, 'index'])->name('organization.capacity.index');
+    Route::post('/organization/capacity/member-settings', [ResourceCapacityController::class, 'storeMemberSetting'])->name('organization.capacity.settings.store');
+    Route::post('/organization/capacity/time-off', [ResourceCapacityController::class, 'storeTimeOff'])->name('organization.capacity.time-off.store');
+    Route::delete('/organization/capacity/time-off/{timeOff}', [ResourceCapacityController::class, 'destroyTimeOff'])->name('organization.capacity.time-off.destroy');
+    Route::post('/organization/capacity/reassign-task', [ResourceCapacityController::class, 'rebalanceTask'])->name('organization.capacity.reassign-task');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

@@ -244,4 +244,14 @@ class Project extends Model
     {
         return $this->hasMany(ProjectRisk::class);
     }
+
+    /**
+     * Get all sprint retrospectives in this project.
+     *
+     * @return HasMany<SprintRetrospective, $this>
+     */
+    public function retrospectives(): HasMany
+    {
+        return $this->hasMany(SprintRetrospective::class);
+    }
 }

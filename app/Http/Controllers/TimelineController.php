@@ -75,7 +75,7 @@ class TimelineController extends Controller
      */
     public function storeDependency(Request $request, Project $project): JsonResponse|RedirectResponse
     {
-        $this->authorizeProjectAccess($request, $project);
+        $this->authorizeProjectAccess($request, $project, 'manage_timeline');
 
         $validated = $request->validate([
             'predecessor_id' => ['required', 'string', 'exists:tasks,id'],
@@ -122,7 +122,7 @@ class TimelineController extends Controller
      */
     public function destroyDependency(Request $request, Project $project, TaskDependency $dependency): JsonResponse|RedirectResponse
     {
-        $this->authorizeProjectAccess($request, $project);
+        $this->authorizeProjectAccess($request, $project, 'manage_timeline');
 
         if ($dependency->project_id !== $project->id) {
             abort(404, 'Dependensi tidak ditemukan dalam proyek ini.');
@@ -145,7 +145,7 @@ class TimelineController extends Controller
      */
     public function updateSchedule(Request $request, Project $project, Task $task): JsonResponse|RedirectResponse
     {
-        $this->authorizeProjectAccess($request, $project);
+        $this->authorizeProjectAccess($request, $project, 'manage_timeline');
 
         if ($task->project_id !== $project->id) {
             abort(404, 'Tugas tidak ditemukan dalam proyek ini.');
@@ -174,16 +174,67 @@ class TimelineController extends Controller
         return back()->with('success', 'Jadwal tugas berhasil diperbarui.');
     }
 
-    protected function authorizeProjectAccess(Request $request, Project $project): void
+    /**
+     * Auto-schedule entire project cascading downstream dependencies.
+     */
+    public function autoSchedule(Request $request, Project $project): JsonResponse|RedirectResponse
+    {
+        $this->authorizeProjectAccess($request, $project, 'manage_timeline');
+
+        $result = $this->timelineService->autoScheduleCascading($project);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Jadwal berhasil diselaraskan otomatis ({$result['updated_tasks']} tugas diperbarui).",
+                'result' => $result,
+            ]);
+        }
+
+        return back()->with('success', "Jadwal berhasil diselaraskan otomatis ({$result['updated_tasks']} tugas diperbarui).");
+    }
+
+    /**
+     * Toggle milestone flag on a task.
+     */
+    public function toggleMilestone(Request $request, Project $project, Task $task): JsonResponse|RedirectResponse
+    {
+        $this->authorizeProjectAccess($request, $project, 'manage_timeline');
+
+        if ($task->project_id !== $project->id) {
+            abort(404, 'Tugas tidak ditemukan dalam proyek ini.');
+        }
+
+        $updatedTask = $this->timelineService->toggleMilestone($task);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Status milestone berhasil diperbarui.',
+                'task' => $updatedTask,
+            ]);
+        }
+
+        return back()->with('success', 'Status milestone berhasil diperbarui.');
+    }
+
+    protected function authorizeProjectAccess(Request $request, Project $project, string $action = 'view'): void
     {
         $user = $request->user();
-        $isMember = $user->organizations()
-            ->where('organizations.id', $project->organization_id)
-            ->wherePivot('status', 'active')
-            ->exists();
+        $orgId = session('current_organization_id') ?? $user->memberships()->value('organization_id');
+        $organization = Organization::where('id', (string) $orgId)->firstOrFail();
 
-        if (! $isMember) {
+        if ($project->organization_id !== $organization->id) {
+            abort(404);
+        }
+
+        $role = $user->roleInOrganization($organization);
+        if (! in_array($role, ['owner', 'admin', 'manager', 'member', 'guest'])) {
             abort(403, 'Anda tidak memiliki akses ke proyek ini.');
+        }
+
+        if ($action === 'manage_timeline' && in_array($role, ['guest'])) {
+            abort(403, 'Role Guest tidak memiliki izin mengubah jadwal timeline proyek.');
         }
     }
 }

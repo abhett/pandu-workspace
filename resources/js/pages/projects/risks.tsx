@@ -39,6 +39,7 @@ import {
     PenTool,
     Settings,
     Workflow,
+    MessageSquareQuote,
     AlertCircle,
     Activity,
     Check,
@@ -360,6 +361,13 @@ export default function ProjectRisksPage({
                         >
                             <AlertTriangle className="h-3.5 w-3.5" />
                             <span>Risiko & Mitigasi</span>
+                        </Link>
+                        <Link
+                            href={`/projects/${project.id}/retrospectives`}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+                        >
+                            <MessageSquareQuote className="h-3.5 w-3.5" />
+                            <span>Retrospektif</span>
                         </Link>
                         <Link
                             href={`/projects/${project.id}/settings`}

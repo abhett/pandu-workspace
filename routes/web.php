@@ -40,6 +40,7 @@ use App\Http\Controllers\SessionSecurityController;
 use App\Http\Controllers\SkillMatrixController;
 use App\Http\Controllers\SlaController;
 use App\Http\Controllers\SprintController;
+use App\Http\Controllers\SprintRetrospectiveController;
 use App\Http\Controllers\SsoController;
 use App\Http\Controllers\SystemFeedbackController;
 use App\Http\Controllers\SystemStatusController;
@@ -49,6 +50,7 @@ use App\Http\Controllers\TaskCommentController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskDependencyController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\TeamMoodPulseController;
 use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\WhiteboardController;
 use App\Http\Controllers\WikiController;
@@ -123,6 +125,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/projects/{project}/dependencies/{dependency}', [TaskDependencyController::class, 'destroy'])->name('projects.dependencies.destroy');
     Route::post('/projects/{project}/dependencies/simulate-cascade', [TaskDependencyController::class, 'simulateCascade'])->name('projects.dependencies.simulate-cascade');
 
+    // Advanced Project Timeline, Milestone Gantt Chart & Critical Path Engine
+    Route::get('/projects/{project}/timeline', [TimelineController::class, 'index'])->name('projects.timeline.index');
+    Route::post('/projects/{project}/timeline/dependencies', [TimelineController::class, 'storeDependency'])->name('projects.timeline.dependencies.store');
+    Route::delete('/projects/{project}/timeline/dependencies/{dependency}', [TimelineController::class, 'destroyDependency'])->name('projects.timeline.dependencies.destroy');
+    Route::put('/projects/{project}/timeline/tasks/{task}/schedule', [TimelineController::class, 'updateSchedule'])->name('projects.timeline.tasks.schedule');
+    Route::post('/projects/{project}/timeline/auto-schedule', [TimelineController::class, 'autoSchedule'])->name('projects.timeline.auto-schedule');
+    Route::post('/projects/{project}/timeline/tasks/{task}/milestone', [TimelineController::class, 'toggleMilestone'])->name('projects.timeline.tasks.milestone');
+
     // Project Budgeting, Cost Tracking & Expense Approvals
     Route::get('/projects/{project}/budget', [ProjectBudgetController::class, 'index'])->name('projects.budget.index');
     Route::post('/projects/{project}/budget', [ProjectBudgetController::class, 'storeOrUpdateBudget'])->name('projects.budget.store-or-update');
@@ -150,6 +160,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/projects/{project}/risks/{risk}', [ProjectRiskController::class, 'update'])->name('projects.risks.update');
     Route::delete('/projects/{project}/risks/{risk}', [ProjectRiskController::class, 'destroy'])->name('projects.risks.destroy');
     Route::post('/projects/{project}/risks/{risk}/action-logs', [ProjectRiskController::class, 'storeActionLog'])->name('projects.risks.action-logs.store');
+
+    // Agile Sprint Retrospectives & Action Item Tracking
+    Route::get('/projects/{project}/retrospectives', [SprintRetrospectiveController::class, 'index'])->name('projects.retrospectives.index');
+    Route::get('/projects/{project}/retrospectives/{retrospective}', [SprintRetrospectiveController::class, 'show'])->name('projects.retrospectives.show');
+    Route::post('/projects/{project}/retrospectives', [SprintRetrospectiveController::class, 'store'])->name('projects.retrospectives.store');
+    Route::put('/projects/{project}/retrospectives/{retrospective}', [SprintRetrospectiveController::class, 'update'])->name('projects.retrospectives.update');
+    Route::post('/projects/{project}/retrospectives/{retrospective}/close', [SprintRetrospectiveController::class, 'close'])->name('projects.retrospectives.close');
+    Route::delete('/projects/{project}/retrospectives/{retrospective}', [SprintRetrospectiveController::class, 'destroy'])->name('projects.retrospectives.destroy');
+    Route::post('/projects/{project}/retrospectives/{retrospective}/items', [SprintRetrospectiveController::class, 'storeItem'])->name('projects.retrospectives.items.store');
+    Route::delete('/projects/{project}/retrospectives/items/{item}', [SprintRetrospectiveController::class, 'destroyItem'])->name('projects.retrospectives.items.destroy');
+    Route::post('/projects/{project}/retrospectives/items/{item}/vote', [SprintRetrospectiveController::class, 'voteItem'])->name('projects.retrospectives.items.vote');
+    Route::post('/projects/{project}/retrospectives/items/{item}/convert-to-task', [SprintRetrospectiveController::class, 'convertToTask'])->name('projects.retrospectives.items.convert-to-task');
 
     // Scrum Backlog & Sprint Lifecycle
     Route::get('/projects/{project}/backlog', [SprintController::class, 'index'])->name('projects.backlog');
@@ -294,6 +316,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/organization/capacity/time-off', [ResourceCapacityController::class, 'storeTimeOff'])->name('organization.capacity.time-off.store');
     Route::delete('/organization/capacity/time-off/{timeOff}', [ResourceCapacityController::class, 'destroyTimeOff'])->name('organization.capacity.time-off.destroy');
     Route::post('/organization/capacity/reassign-task', [ResourceCapacityController::class, 'rebalanceTask'])->name('organization.capacity.reassign-task');
+
+    // Interactive Team Mood, Daily Pulse & Agile Wellness Radar
+    Route::get('/organization/pulse', [TeamMoodPulseController::class, 'index'])->name('organization.pulse.index');
+    Route::post('/organization/pulse/check-in', [TeamMoodPulseController::class, 'checkIn'])->name('organization.pulse.check-in');
+    Route::post('/organization/pulse/initiatives', [TeamMoodPulseController::class, 'storeInitiative'])->name('organization.pulse.initiatives.store');
+    Route::put('/organization/pulse/initiatives/{initiative}', [TeamMoodPulseController::class, 'updateInitiative'])->name('organization.pulse.initiatives.update');
+    Route::delete('/organization/pulse/initiatives/{initiative}', [TeamMoodPulseController::class, 'destroyInitiative'])->name('organization.pulse.initiatives.destroy');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

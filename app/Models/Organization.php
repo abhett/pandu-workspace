@@ -172,4 +172,24 @@ class Organization extends Model
     {
         return $this->hasMany(Skill::class);
     }
+
+    /**
+     * Get all team mood pulses for the organization.
+     *
+     * @return HasMany<TeamMoodPulse, $this>
+     */
+    public function moodPulses(): HasMany
+    {
+        return $this->hasMany(TeamMoodPulse::class);
+    }
+
+    /**
+     * Get all wellness initiatives for the organization.
+     *
+     * @return HasMany<WellnessInitiative, $this>
+     */
+    public function wellnessInitiatives(): HasMany
+    {
+        return $this->hasMany(WellnessInitiative::class);
+    }
 }

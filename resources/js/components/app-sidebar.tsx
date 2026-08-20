@@ -10,6 +10,7 @@ import {
     Gauge,
     GraduationCap,
     HardDrive,
+    HeartHandshake,
     History,
     Inbox,
     Key,
@@ -127,6 +128,11 @@ export function AppSidebar() {
             title: 'Direktori Tim',
             href: '/teams',
             icon: UsersRound,
+        },
+        {
+            title: 'Mood & Pulse Tim',
+            href: '/organization/pulse',
+            icon: HeartHandshake,
         },
         ...(canViewMembers
             ? [

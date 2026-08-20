@@ -47,6 +47,7 @@ import {
     CheckCircle2,
     Palette,
     Edit3,
+    Radio,
 } from 'lucide-react';
 
 interface Project {
@@ -684,6 +685,14 @@ export default function WhiteboardPage({
                                 <Maximize2 className="h-3 w-3" />
                             </button>
                         </div>
+                        {/* Live Collaborative Room Button */}
+                        <Link
+                            href={`/projects/${project.id}/whiteboards/${currentWhiteboard.id}/live`}
+                            className="inline-flex items-center gap-1.5 px-3 h-7 rounded-lg text-xs font-semibold bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-xs hover:opacity-90 transition-opacity"
+                        >
+                            <Radio className="h-3.5 w-3.5 animate-pulse" />
+                            <span>Ruang Kolaborasi Live</span>
+                        </Link>
                     </div>
                 </div>
 

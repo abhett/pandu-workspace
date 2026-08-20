@@ -54,4 +54,9 @@ class ProjectWhiteboard extends Model
     {
         return $this->hasMany(WhiteboardEdge::class, 'whiteboard_id');
     }
+
+    public function presenceSessions(): HasMany
+    {
+        return $this->hasMany(WhiteboardPresenceSession::class, 'whiteboard_id');
+    }
 }

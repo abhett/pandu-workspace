@@ -55,6 +55,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamMoodPulseController;
 use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\WhiteboardController;
+use App\Http\Controllers\WhiteboardLiveController;
 use App\Http\Controllers\WikiController;
 
 Route::inertia('/', 'welcome')->name('home');
@@ -155,6 +156,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/projects/{project}/whiteboards/{whiteboard}/edges/{edge}', [WhiteboardController::class, 'destroyEdge'])->name('projects.whiteboard.edges.destroy');
     Route::post('/projects/{project}/whiteboards/{whiteboard}/nodes/{node}/convert-to-task', [WhiteboardController::class, 'convertToTask'])->name('projects.whiteboard.nodes.convert-to-task');
     Route::post('/projects/{project}/whiteboards/{whiteboard}/viewport', [WhiteboardController::class, 'updateViewport'])->name('projects.whiteboard.viewport');
+
+    // Live Collaborative Whiteboard Sync & Real-Time Multi-Cursor Presence
+    Route::get('/projects/{project}/whiteboard/live', [WhiteboardLiveController::class, 'live'])->name('projects.whiteboard.live');
+    Route::get('/projects/{project}/whiteboards/{whiteboard}/live', [WhiteboardLiveController::class, 'live'])->name('projects.whiteboard.live.room');
+    Route::post('/projects/{project}/whiteboards/{whiteboard}/live/presence', [WhiteboardLiveController::class, 'presence'])->name('projects.whiteboard.live.presence');
+    Route::post('/projects/{project}/whiteboards/{whiteboard}/live/lock', [WhiteboardLiveController::class, 'lock'])->name('projects.whiteboard.live.lock');
+    Route::post('/projects/{project}/whiteboards/{whiteboard}/live/sync', [WhiteboardLiveController::class, 'sync'])->name('projects.whiteboard.live.sync');
+    Route::post('/projects/{project}/whiteboards/{whiteboard}/live/leave', [WhiteboardLiveController::class, 'leave'])->name('projects.whiteboard.live.leave');
 
     // Project Risk Management & Mitigation Register
     Route::get('/projects/{project}/risks', [ProjectRiskController::class, 'index'])->name('projects.risks.index');

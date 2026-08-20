@@ -7,8 +7,10 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -65,6 +67,16 @@ class User extends Authenticatable
             'last_login_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the current active organization.
+     *
+     * @return BelongsTo<Organization, $this>
+     */
+    public function currentOrganization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class, 'current_organization_id');
     }
 
     /**
@@ -218,5 +230,45 @@ class User extends Authenticatable
         }
 
         return $channel === 'email' ? $pref->email_enabled : $pref->in_app_enabled;
+    }
+
+    /**
+     * Get all connected third-party OAuth accounts for the user.
+     *
+     * @return HasMany<UserConnectedAccount, $this>
+     */
+    public function connectedAccounts(): HasMany
+    {
+        return $this->hasMany(UserConnectedAccount::class);
+    }
+
+    /**
+     * Get the AI preferences for the user.
+     *
+     * @return HasOne<UserAiPreference, $this>
+     */
+    public function aiPreference(): HasOne
+    {
+        return $this->hasOne(UserAiPreference::class);
+    }
+
+    /**
+     * Get the regional & timezone preferences for the user.
+     *
+     * @return HasOne<UserRegionalPreference, $this>
+     */
+    public function regionalPreference(): HasOne
+    {
+        return $this->hasOne(UserRegionalPreference::class);
+    }
+
+    /**
+     * Get accessibility and shortcut preferences for the user.
+     *
+     * @return HasOne<UserAccessibilityPreference, $this>
+     */
+    public function accessibilityPreference(): HasOne
+    {
+        return $this->hasOne(UserAccessibilityPreference::class);
     }
 }

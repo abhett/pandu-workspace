@@ -31,6 +31,10 @@ class OrganizationMemberController extends Controller
 
         $organization = Organization::where('id', (string) $orgId)->firstOrFail();
 
+        if (! $user->hasPermissionInOrganization($organization, 'members:view') && ! in_array($user->roleInOrganization($organization), ['owner', 'admin'])) {
+            abort(403, 'Anda tidak memiliki hak akses untuk melihat direktori anggota.');
+        }
+
         // Fetch members with user info, roles, and teams
         $members = OrganizationMembership::with(['user.teams' => function ($q) use ($orgId) {
             $q->where('teams.organization_id', $orgId);

@@ -1,15 +1,32 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
+    Activity,
     BarChart3,
+    BookOpen,
+    Calendar,
     CheckSquare,
+    CreditCard,
     FolderKanban,
+    HardDrive,
+    History,
     Inbox,
     Key,
+    Layers,
+    LayoutDashboard,
     LayoutGrid,
+    Lock,
     PieChart,
+    Plug,
+    Rocket,
+    Shield,
+    ShieldCheck,
+    Smartphone,
     Sparkles,
+    Upload,
+    UserCheck,
     Users,
     UsersRound,
+    Webhook,
     Zap,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
@@ -40,7 +57,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Kotak Masuk',
-        href: '/notifications',
+        href: '/inbox',
         icon: Inbox,
     },
 ];
@@ -49,11 +66,19 @@ export function AppSidebar() {
     const { auth } = usePage<{ auth?: Auth }>().props;
     const role = auth?.organization?.role || 'guest';
     const permissions = auth?.permissions || [];
-    const isOwnerOrAdmin = role === 'owner' || role === 'admin';
+    const isOwner = role === 'owner';
+    const isOwnerOrAdmin = isOwner || role === 'admin';
+    const isManagerPlus = isOwnerOrAdmin || role === 'manager';
 
     const canViewMembers = isOwnerOrAdmin || permissions.includes('members:view') || permissions.includes('members:invite');
     const canManageRoles = isOwnerOrAdmin || permissions.includes('roles:manage');
-    const canManageAi = isOwnerOrAdmin || permissions.includes('organization:manage');
+    const canManageOrg = isOwnerOrAdmin || permissions.includes('org:manage');
+    const canViewAudit = isOwnerOrAdmin || permissions.includes('audit:view');
+    const canManageBilling = isOwner || permissions.includes('org:billing');
+    const canManageAi = isOwnerOrAdmin || permissions.includes('ai:configure') || permissions.includes('org:manage');
+    const canManageAutomations = isOwnerOrAdmin || permissions.includes('automations:manage');
+    const canImportData = isOwnerOrAdmin || permissions.includes('projects:create') || permissions.includes('org:manage');
+    const canManageIntegrations = isOwnerOrAdmin || permissions.includes('org:manage');
 
     const workspaceNavItems: NavItem[] = [
         {
@@ -61,10 +86,39 @@ export function AppSidebar() {
             href: '/projects',
             icon: FolderKanban,
         },
+        ...(isManagerPlus || permissions.includes('portfolios:manage')
+            ? [
+                  {
+                      title: 'Portofolio',
+                      href: '/portfolio',
+                      icon: PieChart,
+                  },
+              ]
+            : []),
         {
-            title: 'Portofolio',
-            href: '#',
-            icon: PieChart,
+            title: 'Daily Standup Tim',
+            href: '/scrum/daily-standup',
+            icon: UserCheck,
+        },
+        {
+            title: 'Catatan Rilis & Changelog',
+            href: '/releases',
+            icon: Rocket,
+        },
+        {
+            title: 'Timeline & Roadmap',
+            href: '/timeline',
+            icon: Calendar,
+        },
+        {
+            title: 'Kalender & Jadwal',
+            href: '/calendar',
+            icon: Calendar,
+        },
+        {
+            title: 'Kapasitas Tim',
+            href: '/workload',
+            icon: Layers,
         },
         {
             title: 'Direktori Tim',
@@ -82,20 +136,125 @@ export function AppSidebar() {
             : []),
         {
             title: 'Laporan & Metrik',
-            href: '#',
+            href: '/reports',
             icon: BarChart3,
+        },
+        {
+            title: 'Executive BI & Widget Builder',
+            href: '/dashboard/builder',
+            icon: LayoutDashboard,
+        },
+        {
+            title: 'Performa Kolaborasi',
+            href: '/reports/collaboration',
+            icon: PieChart,
+        },
+        ...(canImportData
+            ? [
+                  {
+                      title: 'Pusat Impor Data',
+                      href: '/import',
+                      icon: Upload,
+                  },
+              ]
+            : []),
+        {
+            title: 'Wiki & Dokumen',
+            href: '/wiki',
+            icon: BookOpen,
+        },
+        ...(canManageIntegrations
+            ? [
+                  {
+                      title: 'Marketplace Integrasi',
+                      href: '/integrations',
+                      icon: Plug,
+                  },
+                  {
+                      title: 'Webhook & Outbound Hub',
+                      href: '/organization/webhooks',
+                      icon: Webhook,
+                  },
+              ]
+            : []),
+        {
+            title: 'Manajemen Berkas',
+            href: '/files',
+            icon: HardDrive,
+        },
+        {
+            title: 'Mode Mobile Companion',
+            href: '/mobile',
+            icon: Smartphone,
         },
     ];
 
-    const securityNavItems: NavItem[] = canManageRoles
-        ? [
-              {
-                  title: 'Peran & Izin (RBAC)',
-                  href: '/organization/roles',
-                  icon: Key,
-              },
-          ]
-        : [];
+    const securityNavItems: NavItem[] = [
+        ...(canManageRoles
+            ? [
+                  {
+                      title: 'Peran & Izin (RBAC)',
+                      href: '/organization/roles',
+                      icon: Key,
+                  },
+              ]
+            : []),
+        ...(canManageOrg
+            ? [
+                  {
+                      title: 'Single Sign-On (SSO)',
+                      href: '/organization/sso',
+                      icon: Lock,
+                  },
+                  {
+                      title: 'Keamanan Sesi & Akses',
+                      href: '/organization/security-settings',
+                      icon: Shield,
+                  },
+              ]
+            : []),
+        ...(canViewAudit
+            ? [
+                  {
+                      title: 'Log Audit Sistem',
+                      href: '/organization/audit-logs',
+                      icon: ShieldCheck,
+                  },
+              ]
+            : []),
+        ...(canManageBilling
+            ? [
+                  {
+                      title: 'Tagihan & Penggunaan',
+                      href: '/organization/billing',
+                      icon: CreditCard,
+                  },
+              ]
+            : []),
+        ...(canManageOrg
+            ? [
+                  {
+                      title: 'Retensi & Kepatuhan',
+                      href: '/organization/data-retention',
+                      icon: History,
+                  },
+                  {
+                      title: 'Status & Kesehatan Sistem',
+                      href: '/system-status',
+                      icon: Activity,
+                  },
+              ]
+            : []),
+        ...(isOwnerOrAdmin
+            ? [
+                  {
+                      title: 'Sistem Desain UI',
+                      href: '/design-system',
+                      icon: Layers,
+                  },
+              ]
+            : []),
+    ];
 
     const aiNavItems: NavItem[] = [
         {
@@ -112,11 +271,15 @@ export function AppSidebar() {
                   },
               ]
             : []),
-        {
-            title: 'Otomasi Workflow',
-            href: '#',
-            icon: Zap,
-        },
+        ...(canManageAutomations
+            ? [
+                  {
+                      title: 'Otomasi Workflow',
+                      href: '/automation',
+                      icon: Zap,
+                  },
+              ]
+            : []),
     ];
 
     return (

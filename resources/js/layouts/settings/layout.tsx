@@ -26,6 +26,31 @@ const sidebarNavItems: NavItem[] = [
         href: editAppearance(),
         icon: null,
     },
+    {
+        title: 'Language & Timezone',
+        href: '/settings/language-timezone',
+        icon: null,
+    },
+    {
+        title: 'Notifications',
+        href: '/settings/notifications',
+        icon: null,
+    },
+    {
+        title: 'Integrations & API',
+        href: '/settings/api-tokens',
+        icon: null,
+    },
+    {
+        title: 'AI Preferences',
+        href: '/settings/ai-preferences',
+        icon: null,
+    },
+    {
+        title: 'Keyboard Shortcuts',
+        href: '/settings/keyboard-shortcuts',
+        icon: null,
+    },
 ];
 
 export default function SettingsLayout({ children }: PropsWithChildren) {

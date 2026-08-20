@@ -9,6 +9,7 @@ use App\Models\TaskActivity;
 use App\Models\User;
 use App\Models\WorkflowStatus;
 use App\Notifications\TaskAssignedNotification;
+use App\Services\Automation\AutomationService;
 use Illuminate\Support\Facades\DB;
 
 final class TaskService
@@ -48,11 +49,18 @@ final class TaskService
 
             $status = WorkflowStatus::find($statusId);
             $isCompleted = $status?->is_completed ?? false;
+            $points = null;
+            if (isset($data['story_points']) && $data['story_points'] !== '') {
+                $points = (float) $data['story_points'];
+            } elseif (isset($data['estimate_points']) && $data['estimate_points'] !== '') {
+                $points = (float) $data['estimate_points'];
+            }
 
             $task = Task::create([
                 'organization_id' => $project->organization_id,
                 'project_id' => $project->id,
                 'status_id' => $statusId,
+                'sprint_id' => $data['sprint_id'] ?? null,
                 'parent_id' => $data['parent_id'] ?? null,
                 'sequence_number' => $sequenceNumber,
                 'key' => $key,
@@ -60,8 +68,10 @@ final class TaskService
                 'description' => $data['description'] ?? null,
                 'type' => $data['type'] ?? 'task',
                 'priority' => $data['priority'] ?? 'medium',
-                'estimate_points' => isset($data['estimate_points']) && $data['estimate_points'] !== '' ? (float) $data['estimate_points'] : null,
+                'estimate_points' => $points,
                 'due_date' => $data['due_date'] ?? null,
+                'start_date' => $data['start_date'] ?? null,
+                'is_milestone' => (bool) ($data['is_milestone'] ?? false),
                 'completed_at' => $isCompleted ? now() : null,
                 'rank' => $rank,
                 'version' => 1,
@@ -105,6 +115,23 @@ final class TaskService
                     'status_name' => $status?->name,
                 ],
             ]);
+
+            // Trigger Automation Engine
+            try {
+                app(AutomationService::class)->evaluateAndExecute('task.created', $project->organization, [
+                    'task_id' => $task->id,
+                    'task' => $task,
+                    'title' => $task->title,
+                    'priority' => $task->priority,
+                    'is_milestone' => (bool) $task->is_milestone,
+                    'estimate_points' => $task->estimate_points,
+                    'project_id' => $project->id,
+                    'project_lead_id' => $project->lead_user_id,
+                    'actor_id' => $actor->id,
+                ], $project);
+            } catch (\Throwable) {
+                // Non-blocking automation error
+            }
 
             return $task->load(['assignees', 'status', 'labels', 'creator']);
         });

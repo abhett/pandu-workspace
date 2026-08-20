@@ -50,6 +50,8 @@ use Illuminate\Support\Carbon;
     'priority',
     'estimate_points',
     'due_date',
+    'start_date',
+    'is_milestone',
     'completed_at',
     'rank',
     'version',
@@ -70,10 +72,28 @@ class Task extends Model
             'sequence_number' => 'integer',
             'estimate_points' => 'float',
             'due_date' => 'date',
+            'start_date' => 'date',
+            'is_milestone' => 'boolean',
             'completed_at' => 'datetime',
             'version' => 'integer',
             'created_by' => 'integer',
         ];
+    }
+
+    /**
+     * Accessor for story_points (alias of estimate_points).
+     */
+    public function getStoryPointsAttribute(): ?float
+    {
+        return $this->estimate_points;
+    }
+
+    /**
+     * Mutator for story_points.
+     */
+    public function setStoryPointsAttribute($value): void
+    {
+        $this->attributes['estimate_points'] = $value !== null ? (float) $value : null;
     }
 
     /**
@@ -102,6 +122,16 @@ class Task extends Model
      * @return BelongsTo<WorkflowStatus, $this>
      */
     public function status(): BelongsTo
+    {
+        return $this->belongsTo(WorkflowStatus::class, 'status_id');
+    }
+
+    /**
+     * Alias for status relation.
+     *
+     * @return BelongsTo<WorkflowStatus, $this>
+     */
+    public function workflowStatus(): BelongsTo
     {
         return $this->belongsTo(WorkflowStatus::class, 'status_id');
     }
@@ -206,5 +236,69 @@ class Task extends Model
     public function checklists(): HasMany
     {
         return $this->hasMany(TaskChecklist::class)->orderBy('position');
+    }
+
+    /**
+     * Get all blockers for this task.
+     *
+     * @return HasMany<TaskBlocker, $this>
+     */
+    public function blockers(): HasMany
+    {
+        return $this->hasMany(TaskBlocker::class)->latest('created_at');
+    }
+
+    /**
+     * Get the active blocker for this task.
+     *
+     * @return HasOne<TaskBlocker, $this>
+     */
+    public function activeBlocker(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(TaskBlocker::class)->where('is_resolved', false)->latestOfMany();
+    }
+
+    /**
+     * Get all dependencies where this task is the successor (it depends on predecessor).
+     *
+     * @return HasMany<TaskDependency, $this>
+     */
+    public function predecessorDependencies(): HasMany
+    {
+        return $this->hasMany(TaskDependency::class, 'successor_id');
+    }
+
+    /**
+     * Get all dependencies where this task is the predecessor (other tasks depend on it).
+     *
+     * @return HasMany<TaskDependency, $this>
+     */
+    public function successorDependencies(): HasMany
+    {
+        return $this->hasMany(TaskDependency::class, 'predecessor_id');
+    }
+
+    /**
+     * Get all predecessor tasks that must be done before this task.
+     *
+     * @return BelongsToMany<Task, $this>
+     */
+    public function predecessors(): BelongsToMany
+    {
+        return $this->belongsToMany(Task::class, 'task_dependencies', 'successor_id', 'predecessor_id')
+            ->withPivot(['id', 'type', 'lag_days'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Get all successor tasks that depend on this task.
+     *
+     * @return BelongsToMany<Task, $this>
+     */
+    public function successors(): BelongsToMany
+    {
+        return $this->belongsToMany(Task::class, 'task_dependencies', 'predecessor_id', 'successor_id')
+            ->withPivot(['id', 'type', 'lag_days'])
+            ->withTimestamps();
     }
 }

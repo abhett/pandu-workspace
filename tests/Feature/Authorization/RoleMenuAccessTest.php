@@ -17,6 +17,7 @@ beforeEach(function () {
 
     $this->ownerRole = Role::whereNull('organization_id')->where('slug', 'owner')->first();
     $this->adminRole = Role::whereNull('organization_id')->where('slug', 'admin')->first();
+    $this->managerRole = Role::whereNull('organization_id')->where('slug', 'manager')->first();
     $this->memberRole = Role::whereNull('organization_id')->where('slug', 'member')->first();
     $this->guestRole = Role::whereNull('organization_id')->where('slug', 'guest')->first();
 
@@ -42,6 +43,16 @@ beforeEach(function () {
         'joined_at' => now(),
     ]);
 
+    $this->managerUser = User::factory()->create(['name' => 'Project Manager', 'email' => 'manager@example.com']);
+    OrganizationMembership::create([
+        'organization_id' => $this->org->id,
+        'user_id' => $this->managerUser->id,
+        'role' => 'manager',
+        'role_id' => $this->managerRole?->id,
+        'status' => 'active',
+        'joined_at' => now(),
+    ]);
+
     $this->memberUser = User::factory()->create(['name' => 'Regular Member', 'email' => 'member@example.com']);
     OrganizationMembership::create([
         'organization_id' => $this->org->id,
@@ -63,50 +74,135 @@ beforeEach(function () {
     ]);
 });
 
-test('owner and admin can access role management and ai settings', function () {
-    // Owner access
-    $this->actingAs($this->ownerUser)
-        ->withSession(['current_organization_id' => $this->org->id])
-        ->get('/organization/roles')
-        ->assertOk();
+test('owner can access all modules including billing and security settings', function () {
+    $endpoints = [
+        '/organization/billing',
+        '/organization/roles',
+        '/organization/sso',
+        '/organization/security-settings',
+        '/organization/audit-logs',
+        '/organization/data-retention',
+        '/organization/ai-settings',
+        '/integrations',
+        '/import',
+        '/automation',
+        '/portfolio',
+        '/organization/members',
+    ];
 
-    $this->actingAs($this->ownerUser)
-        ->withSession(['current_organization_id' => $this->org->id])
-        ->get('/organization/ai-settings')
-        ->assertOk();
-
-    // Admin access
-    $this->actingAs($this->adminUser)
-        ->withSession(['current_organization_id' => $this->org->id])
-        ->get('/organization/roles')
-        ->assertOk();
-
-    $this->actingAs($this->adminUser)
-        ->withSession(['current_organization_id' => $this->org->id])
-        ->get('/organization/ai-settings')
-        ->assertOk();
+    foreach ($endpoints as $endpoint) {
+        $this->actingAs($this->ownerUser)
+            ->withSession(['current_organization_id' => $this->org->id])
+            ->get($endpoint)
+            ->assertOk();
+    }
 });
 
-test('regular member and guest are forbidden from accessing role management and ai settings', function () {
-    // Member forbidden
-    $this->actingAs($this->memberUser)
-        ->withSession(['current_organization_id' => $this->org->id])
-        ->get('/organization/roles')
-        ->assertForbidden();
+test('admin can access security and integrations but is forbidden from billing by default', function () {
+    $allowedEndpoints = [
+        '/organization/roles',
+        '/organization/sso',
+        '/organization/security-settings',
+        '/organization/audit-logs',
+        '/organization/data-retention',
+        '/organization/ai-settings',
+        '/integrations',
+        '/import',
+        '/automation',
+        '/portfolio',
+        '/organization/members',
+    ];
 
-    $this->actingAs($this->memberUser)
-        ->withSession(['current_organization_id' => $this->org->id])
-        ->get('/organization/ai-settings')
-        ->assertForbidden();
+    foreach ($allowedEndpoints as $endpoint) {
+        $this->actingAs($this->adminUser)
+            ->withSession(['current_organization_id' => $this->org->id])
+            ->get($endpoint)
+            ->assertOk();
+    }
 
-    // Guest forbidden
-    $this->actingAs($this->guestUser)
+    // Admin without explicit org:billing permission cannot access billing
+    $this->actingAs($this->adminUser)
         ->withSession(['current_organization_id' => $this->org->id])
-        ->get('/organization/roles')
+        ->get('/organization/billing')
         ->assertForbidden();
+});
 
-    $this->actingAs($this->guestUser)
-        ->withSession(['current_organization_id' => $this->org->id])
-        ->get('/organization/ai-settings')
-        ->assertForbidden();
+test('manager can access workspace features but is forbidden from admin and security settings', function () {
+    $allowedEndpoints = [
+        '/portfolio',
+        '/import',
+        '/automation',
+        '/organization/members',
+    ];
+
+    foreach ($allowedEndpoints as $endpoint) {
+        $this->actingAs($this->managerUser)
+            ->withSession(['current_organization_id' => $this->org->id])
+            ->get($endpoint)
+            ->assertOk();
+    }
+
+    $forbiddenEndpoints = [
+        '/organization/billing',
+        '/organization/roles',
+        '/organization/sso',
+        '/organization/security-settings',
+        '/organization/audit-logs',
+        '/organization/data-retention',
+        '/organization/ai-settings',
+        '/integrations',
+    ];
+
+    foreach ($forbiddenEndpoints as $endpoint) {
+        $this->actingAs($this->managerUser)
+            ->withSession(['current_organization_id' => $this->org->id])
+            ->get($endpoint)
+            ->assertForbidden();
+    }
+});
+
+test('regular member is forbidden from admin, security, billing, and integrations', function () {
+    $forbiddenEndpoints = [
+        '/organization/billing',
+        '/organization/roles',
+        '/organization/sso',
+        '/organization/security-settings',
+        '/organization/audit-logs',
+        '/organization/data-retention',
+        '/organization/ai-settings',
+        '/integrations',
+        '/import',
+        '/automation',
+    ];
+
+    foreach ($forbiddenEndpoints as $endpoint) {
+        $this->actingAs($this->memberUser)
+            ->withSession(['current_organization_id' => $this->org->id])
+            ->get($endpoint)
+            ->assertForbidden();
+    }
+});
+
+test('guest is strictly forbidden from administrative and member-only pages', function () {
+    $forbiddenEndpoints = [
+        '/organization/billing',
+        '/organization/roles',
+        '/organization/sso',
+        '/organization/security-settings',
+        '/organization/audit-logs',
+        '/organization/data-retention',
+        '/organization/ai-settings',
+        '/integrations',
+        '/import',
+        '/automation',
+        '/portfolio',
+        '/organization/members',
+    ];
+
+    foreach ($forbiddenEndpoints as $endpoint) {
+        $this->actingAs($this->guestUser)
+            ->withSession(['current_organization_id' => $this->org->id])
+            ->get($endpoint)
+            ->assertForbidden();
+    }
 });

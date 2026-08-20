@@ -1,5 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import AppLayoutTemplate from '@/layouts/app/app-sidebar-layout';
+import KeyboardShortcutsModal from '@/components/keyboard-shortcuts-modal';
+import { KineticToastContainer } from '@/components/kinetic-toast';
 import type { BreadcrumbItem } from '@/types';
 
 export default function AppLayout({
@@ -18,6 +20,8 @@ export default function AppLayout({
     return (
         <AppLayoutTemplate breadcrumbs={finalBreadcrumbs}>
             {children}
+            <KeyboardShortcutsModal />
+            <KineticToastContainer />
         </AppLayoutTemplate>
     );
 }

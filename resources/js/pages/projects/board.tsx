@@ -28,6 +28,7 @@ import {
     Hash,
     Sparkles,
     CheckSquare,
+    Workflow,
 } from 'lucide-react';
 import { CreateTaskModal } from '@/components/tasks/create-task-modal';
 import { TaskDetailDrawer, TaskDetailData } from '@/components/tasks/task-detail-drawer';
@@ -342,6 +343,13 @@ export default function KanbanBoardPage({
                         >
                             <ListTodo className="h-3.5 w-3.5" />
                             <span>Daftar Tugas</span>
+                        </Link>
+                        <Link
+                            href={`/projects/${project.id}/dependencies`}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+                        >
+                            <Workflow className="h-3.5 w-3.5" />
+                            <span>Graf Dependensi</span>
                         </Link>
                         <Link
                             href={`/projects/${project.id}/settings`}

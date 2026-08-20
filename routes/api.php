@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\SprintController;
 use App\Http\Controllers\Api\V1\TaskController;
 use App\Http\Controllers\Api\V1\TokenController;
 use App\Http\Controllers\Api\V1\WebhookController;
+use App\Http\Controllers\SystemStatusController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')
@@ -71,3 +72,6 @@ Route::prefix('v1')
         Route::post('/projects/{project}/ai/task-breakdown', [AiApiController::class, 'taskBreakdown'])->name('api.v1.ai.task-breakdown');
         Route::post('/projects/{project}/ai/acceptance-criteria', [AiApiController::class, 'acceptanceCriteria'])->name('api.v1.ai.acceptance-criteria');
     });
+
+// Public Uptime & Synthetic Health Monitoring
+Route::get('/v1/system-status/health', [SystemStatusController::class, 'healthApi'])->name('api.v1.system-status.health');

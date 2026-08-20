@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\ApiTokenController;
+use App\Http\Controllers\Settings\KeyboardShortcutController;
 use App\Http\Controllers\Settings\NotificationPreferenceController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
+use App\Http\Controllers\Settings\UserPreferenceController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\UserSessionController;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +48,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('notifications.preferences.edit');
     Route::put('settings/notifications', [NotificationPreferenceController::class, 'update'])
         ->name('notifications.preferences.update');
+
+    // Personal Developer API Tokens & Connected Accounts
+    Route::get('settings/api-tokens', [ApiTokenController::class, 'index'])
+        ->name('settings.api-tokens');
+    Route::post('settings/api-tokens', [ApiTokenController::class, 'store'])
+        ->name('settings.api-tokens.store');
+    Route::delete('settings/api-tokens/{token}', [ApiTokenController::class, 'destroy'])
+        ->name('settings.api-tokens.destroy');
+    Route::post('settings/connected-accounts/toggle', [ApiTokenController::class, 'toggleAccount'])
+        ->name('settings.connected-accounts.toggle');
+
+    // Personal AI Preferences & Directives
+    Route::get('settings/ai-preferences', [UserPreferenceController::class, 'aiIndex'])
+        ->name('settings.ai-preferences');
+    Route::put('settings/ai-preferences', [UserPreferenceController::class, 'updateAi'])
+        ->name('settings.ai-preferences.update');
+
+    // Language, Regional Formats & Timezone
+    Route::get('settings/language-timezone', [UserPreferenceController::class, 'regionalIndex'])
+        ->name('settings.language-timezone');
+    Route::put('settings/language-timezone', [UserPreferenceController::class, 'updateRegional'])
+        ->name('settings.language-timezone.update');
+
+    // Keyboard Shortcuts & Accessibility
+    Route::get('settings/keyboard-shortcuts', [KeyboardShortcutController::class, 'index'])
+        ->name('settings.keyboard-shortcuts');
+    Route::put('settings/keyboard-shortcuts', [KeyboardShortcutController::class, 'update'])
+        ->name('settings.keyboard-shortcuts.update');
 
     Route::inertia('settings/appearance', 'settings/appearance')->name('appearance.edit');
 });

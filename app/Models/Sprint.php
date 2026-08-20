@@ -154,4 +154,14 @@ class Sprint extends Model
     {
         return $this->status === 'completed';
     }
+
+    /**
+     * Get all daily snapshot metrics recorded for this sprint.
+     *
+     * @return HasMany<SprintDailyMetric, $this>
+     */
+    public function dailyMetrics(): HasMany
+    {
+        return $this->hasMany(SprintDailyMetric::class)->orderBy('date');
+    }
 }

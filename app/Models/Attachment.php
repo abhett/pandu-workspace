@@ -34,6 +34,7 @@ use Illuminate\Support\Carbon;
 #[Fillable([
     'organization_id',
     'project_id',
+    'folder_id',
     'attachable_type',
     'attachable_id',
     'uploader_id',
@@ -103,5 +104,15 @@ class Attachment extends Model
     public function uploader(): BelongsTo
     {
         return $this->belongsTo(User::class, 'uploader_id');
+    }
+
+    /**
+     * Get the folder containing the attachment.
+     *
+     * @return BelongsTo<Folder, $this>
+     */
+    public function folder(): BelongsTo
+    {
+        return $this->belongsTo(Folder::class);
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\AutomationController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\CicdPipelineController;
 use App\Http\Controllers\CollaborationReportController;
 use App\Http\Controllers\ComplianceController;
 use App\Http\Controllers\CostAllocationController;
@@ -45,6 +46,7 @@ use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\ScrumMasterController;
 use App\Http\Controllers\SessionSecurityController;
 use App\Http\Controllers\SkillMatrixController;
+use App\Http\Controllers\SlaBreachForecastController;
 use App\Http\Controllers\SlaController;
 use App\Http\Controllers\SprintController;
 use App\Http\Controllers\SprintForecastController;
@@ -418,6 +420,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/organization/analytics/custom-dashboards/{dashboard}/duplicate', [CustomDashboardStudioController::class, 'duplicate'])->name('organization.analytics.custom-dashboards.duplicate');
     Route::post('/organization/analytics/custom-dashboards/{dashboard}/toggle-star', [CustomDashboardStudioController::class, 'toggleStar'])->name('organization.analytics.custom-dashboards.toggle-star');
     Route::delete('/organization/analytics/custom-dashboards/{dashboard}', [CustomDashboardStudioController::class, 'destroy'])->name('organization.analytics.custom-dashboards.destroy');
+
+    // Automated Enterprise SLA Breach Forecasting & Customer Support Escalation Engine
+    Route::get('/organization/sla/forecast', [SlaBreachForecastController::class, 'index'])->name('organization.sla.forecast.index');
+    Route::post('/organization/sla/forecast/tasks/{task}/escalate', [SlaBreachForecastController::class, 'escalate'])->name('organization.sla.forecast.escalate');
+    Route::post('/organization/sla/forecast/tasks/{task}/mitigate', [SlaBreachForecastController::class, 'mitigate'])->name('organization.sla.forecast.mitigate');
+
+    // Automated Continuous Integration / Continuous Deployment (CI/CD) Pipeline & Deployment Gate Orchestrator
+    Route::get('/organization/devops/pipelines', [CicdPipelineController::class, 'index'])->name('organization.devops.pipelines.index');
+    Route::post('/organization/devops/pipelines/configs', [CicdPipelineController::class, 'storeConfig'])->name('organization.devops.pipelines.configs.store');
+    Route::post('/organization/devops/pipelines/configs/{config}/trigger', [CicdPipelineController::class, 'trigger'])->name('organization.devops.pipelines.trigger');
+    Route::post('/organization/devops/pipelines/runs/{run}/approve-gate', [CicdPipelineController::class, 'approveGate'])->name('organization.devops.pipelines.runs.approve-gate');
+    Route::post('/organization/devops/pipelines/runs/{run}/reject-gate', [CicdPipelineController::class, 'rejectGate'])->name('organization.devops.pipelines.runs.reject-gate');
+    Route::post('/organization/devops/pipelines/runs/{run}/rollback', [CicdPipelineController::class, 'rollback'])->name('organization.devops.pipelines.runs.rollback');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

@@ -322,4 +322,14 @@ class Task extends Model
     {
         return $this->hasMany(TaskRequiredSkill::class);
     }
+
+    /**
+     * Get all SLA escalation logs for this task.
+     *
+     * @return HasMany<SlaEscalationLog, $this>
+     */
+    public function slaEscalationLogs(): HasMany
+    {
+        return $this->hasMany(SlaEscalationLog::class);
+    }
 }

@@ -262,4 +262,34 @@ class Organization extends Model
     {
         return $this->hasMany(CustomDashboard::class);
     }
+
+    /**
+     * Get all SLA escalation logs for this organization.
+     *
+     * @return HasMany<SlaEscalationLog, $this>
+     */
+    public function slaEscalationLogs(): HasMany
+    {
+        return $this->hasMany(SlaEscalationLog::class);
+    }
+
+    /**
+     * Get all CI/CD pipeline configurations for this organization.
+     *
+     * @return HasMany<CicdPipelineConfig, $this>
+     */
+    public function cicdPipelineConfigs(): HasMany
+    {
+        return $this->hasMany(CicdPipelineConfig::class);
+    }
+
+    /**
+     * Get all CI/CD pipeline runs for this organization.
+     *
+     * @return HasMany<CicdPipelineRun, $this>
+     */
+    public function cicdPipelineRuns(): HasMany
+    {
+        return $this->hasMany(CicdPipelineRun::class);
+    }
 }

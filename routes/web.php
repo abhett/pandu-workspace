@@ -17,9 +17,12 @@ use App\Http\Controllers\CrossProjectDependencyController;
 use App\Http\Controllers\CustomDashboardStudioController;
 use App\Http\Controllers\DailyStandupController;
 use App\Http\Controllers\DashboardBuilderController;
+use App\Http\Controllers\DatabaseDriftController;
+use App\Http\Controllers\DataPrivacyController;
 use App\Http\Controllers\DesignSystemController;
 use App\Http\Controllers\DeveloperFocusRadarController;
 use App\Http\Controllers\EmptyStateGalleryController;
+use App\Http\Controllers\ExecutiveBoardroomController;
 use App\Http\Controllers\FeatureFlagController;
 use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\ImportController;
@@ -525,6 +528,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/organization/releases/publisher/{publication}/publish', [ReleasePublisherController::class, 'publish'])->name('organization.releases.publisher.publish');
     Route::put('/organization/releases/publisher/{publication}', [ReleasePublisherController::class, 'update'])->name('organization.releases.publisher.update');
     Route::delete('/organization/releases/publisher/{publication}', [ReleasePublisherController::class, 'destroy'])->name('organization.releases.publisher.destroy');
+
+    // Database Migration Drift, Index Health & Zero-Downtime Safe DDL Studio
+    Route::get('/organization/database/drift', [DatabaseDriftController::class, 'index'])->name('organization.database.drift.index');
+    Route::post('/organization/database/drift/scan', [DatabaseDriftController::class, 'scan'])->name('organization.database.drift.scan');
+    Route::post('/organization/database/drift/{report}/resolve', [DatabaseDriftController::class, 'resolve'])->name('organization.database.drift.resolve');
+    Route::post('/organization/database/drift/generate-ddl', [DatabaseDriftController::class, 'generateDdl'])->name('organization.database.drift.generate-ddl');
+    Route::delete('/organization/database/drift/{report}', [DatabaseDriftController::class, 'destroy'])->name('organization.database.drift.destroy');
+
+    // Multi-Tenant Data Residency, PII Masking & Data Redaction Studio
+    Route::get('/organization/compliance/data-privacy', [DataPrivacyController::class, 'index'])->name('organization.compliance.data-privacy.index');
+    Route::post('/organization/compliance/data-privacy/residency', [DataPrivacyController::class, 'updateResidency'])->name('organization.compliance.data-privacy.residency.update');
+    Route::post('/organization/compliance/data-privacy/rules', [DataPrivacyController::class, 'storeRule'])->name('organization.compliance.data-privacy.rules.store');
+    Route::post('/organization/compliance/data-privacy/rules/{rule}/toggle', [DataPrivacyController::class, 'toggleRule'])->name('organization.compliance.data-privacy.rules.toggle');
+    Route::delete('/organization/compliance/data-privacy/rules/{rule}', [DataPrivacyController::class, 'destroyRule'])->name('organization.compliance.data-privacy.rules.destroy');
+    Route::post('/organization/compliance/data-privacy/dsar', [DataPrivacyController::class, 'storeDsar'])->name('organization.compliance.data-privacy.dsar.store');
+    Route::post('/organization/compliance/data-privacy/dsar/{dsar}/process', [DataPrivacyController::class, 'processDsar'])->name('organization.compliance.data-privacy.dsar.process');
+    Route::post('/organization/compliance/data-privacy/test-mask', [DataPrivacyController::class, 'testMask'])->name('organization.compliance.data-privacy.test-mask');
+
+    // Live Executive KPI Boardroom & Investor Pitch Export Studio
+    Route::get('/organization/reports/boardroom', [ExecutiveBoardroomController::class, 'index'])->name('organization.reports.boardroom.index');
+    Route::post('/organization/reports/boardroom', [ExecutiveBoardroomController::class, 'store'])->name('organization.reports.boardroom.store');
+    Route::put('/organization/reports/boardroom/{briefing}', [ExecutiveBoardroomController::class, 'update'])->name('organization.reports.boardroom.update');
+    Route::post('/organization/reports/boardroom/{briefing}/finalize', [ExecutiveBoardroomController::class, 'finalize'])->name('organization.reports.boardroom.finalize');
+    Route::delete('/organization/reports/boardroom/{briefing}', [ExecutiveBoardroomController::class, 'destroy'])->name('organization.reports.boardroom.destroy');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

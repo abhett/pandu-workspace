@@ -472,4 +472,64 @@ class Organization extends Model
     {
         return $this->hasMany(ReleasePublication::class);
     }
+
+    /**
+     * Get all database environments for this organization.
+     *
+     * @return HasMany<DatabaseEnvironment, $this>
+     */
+    public function databaseEnvironments(): HasMany
+    {
+        return $this->hasMany(DatabaseEnvironment::class);
+    }
+
+    /**
+     * Get all schema drift reports for this organization.
+     *
+     * @return HasMany<SchemaDriftReport, $this>
+     */
+    public function schemaDriftReports(): HasMany
+    {
+        return $this->hasMany(SchemaDriftReport::class);
+    }
+
+    /**
+     * Get data residency configuration for this organization.
+     *
+     * @return HasOne<DataResidencyConfig, $this>
+     */
+    public function dataResidencyConfig(): HasOne
+    {
+        return $this->hasOne(DataResidencyConfig::class);
+    }
+
+    /**
+     * Get all PII masking rules for this organization.
+     *
+     * @return HasMany<PiiMaskingRule, $this>
+     */
+    public function piiMaskingRules(): HasMany
+    {
+        return $this->hasMany(PiiMaskingRule::class);
+    }
+
+    /**
+     * Get all DSAR requests for this organization.
+     *
+     * @return HasMany<DataSubjectAccessRequest, $this>
+     */
+    public function dataSubjectAccessRequests(): HasMany
+    {
+        return $this->hasMany(DataSubjectAccessRequest::class);
+    }
+
+    /**
+     * Get all executive boardroom briefings for this organization.
+     *
+     * @return HasMany<BoardroomBriefing, $this>
+     */
+    public function boardroomBriefings(): HasMany
+    {
+        return $this->hasMany(BoardroomBriefing::class);
+    }
 }

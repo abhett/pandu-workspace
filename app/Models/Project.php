@@ -344,4 +344,44 @@ class Project extends Model
     {
         return $this->hasMany(ArchitectureDecisionRecord::class);
     }
+
+    /**
+     * Get all feature flags for this project.
+     *
+     * @return HasMany<FeatureFlag, $this>
+     */
+    public function featureFlags(): HasMany
+    {
+        return $this->hasMany(FeatureFlag::class);
+    }
+
+    /**
+     * Get all incidents for this project.
+     *
+     * @return HasMany<Incident, $this>
+     */
+    public function incidents(): HasMany
+    {
+        return $this->hasMany(Incident::class);
+    }
+
+    /**
+     * Get all pull request reviews for this project.
+     *
+     * @return HasMany<PullRequestReview, $this>
+     */
+    public function pullRequestReviews(): HasMany
+    {
+        return $this->hasMany(PullRequestReview::class);
+    }
+
+    /**
+     * Get all release publications for this project.
+     *
+     * @return HasMany<ReleasePublication, $this>
+     */
+    public function releasePublications(): HasMany
+    {
+        return $this->hasMany(ReleasePublication::class);
+    }
 }

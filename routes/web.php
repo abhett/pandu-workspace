@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AiAssistantController;
+use App\Http\Controllers\ApiRateLimiterController;
 use App\Http\Controllers\ArchitectureDecisionRecordController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\AuditLogController;
@@ -19,9 +20,11 @@ use App\Http\Controllers\DashboardBuilderController;
 use App\Http\Controllers\DesignSystemController;
 use App\Http\Controllers\DeveloperFocusRadarController;
 use App\Http\Controllers\EmptyStateGalleryController;
+use App\Http\Controllers\FeatureFlagController;
 use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\InboxController;
+use App\Http\Controllers\IncidentManagementController;
 use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\KaizenImprovementController;
 use App\Http\Controllers\LiveAuditStreamController;
@@ -41,9 +44,11 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectMemberController;
 use App\Http\Controllers\ProjectRiskController;
 use App\Http\Controllers\ProjectWorkflowController;
+use App\Http\Controllers\PrReviewSlaController;
 use App\Http\Controllers\PublicChangelogController;
 use App\Http\Controllers\PublicPageController;
 use App\Http\Controllers\ReleaseController;
+use App\Http\Controllers\ReleasePublisherController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ResourceCapacityController;
 use App\Http\Controllers\RolePermissionController;
@@ -68,6 +73,7 @@ use App\Http\Controllers\TaskDependencyController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamMoodPulseController;
 use App\Http\Controllers\TimelineController;
+use App\Http\Controllers\WebhookDlqController;
 use App\Http\Controllers\WhiteboardController;
 use App\Http\Controllers\WhiteboardLiveController;
 use App\Http\Controllers\WikiController;
@@ -468,6 +474,57 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/organization/productivity/focus', [DeveloperFocusRadarController::class, 'index'])->name('organization.productivity.focus.index');
     Route::post('/organization/productivity/focus/recommendations/{recommendation}/apply', [DeveloperFocusRadarController::class, 'applyRecommendation'])->name('organization.productivity.focus.recommendations.apply');
     Route::post('/organization/productivity/focus/recommendations/{recommendation}/acknowledge', [DeveloperFocusRadarController::class, 'acknowledgeRecommendation'])->name('organization.productivity.focus.recommendations.acknowledge');
+
+    // Enterprise Feature Flag & Progressive Rollout Orchestrator
+    Route::get('/organization/devops/feature-flags', [FeatureFlagController::class, 'index'])->name('organization.devops.feature-flags.index');
+    Route::post('/organization/devops/feature-flags', [FeatureFlagController::class, 'store'])->name('organization.devops.feature-flags.store');
+    Route::put('/organization/devops/feature-flags/{featureFlag}', [FeatureFlagController::class, 'update'])->name('organization.devops.feature-flags.update');
+    Route::post('/organization/devops/feature-flags/{featureFlag}/toggle', [FeatureFlagController::class, 'toggle'])->name('organization.devops.feature-flags.toggle');
+    Route::post('/organization/devops/feature-flags/{featureFlag}/rollout', [FeatureFlagController::class, 'rollout'])->name('organization.devops.feature-flags.rollout');
+    Route::post('/organization/devops/feature-flags/{featureFlag}/kill', [FeatureFlagController::class, 'kill'])->name('organization.devops.feature-flags.kill');
+    Route::delete('/organization/devops/feature-flags/{featureFlag}', [FeatureFlagController::class, 'destroy'])->name('organization.devops.feature-flags.destroy');
+
+    // Enterprise API Rate Limiter & Traffic Throttling Console
+    Route::get('/organization/developer/rate-limits', [ApiRateLimiterController::class, 'index'])->name('organization.developer.rate-limits.index');
+    Route::post('/organization/developer/rate-limits', [ApiRateLimiterController::class, 'store'])->name('organization.developer.rate-limits.store');
+    Route::put('/organization/developer/rate-limits/{policy}', [ApiRateLimiterController::class, 'update'])->name('organization.developer.rate-limits.update');
+    Route::post('/organization/developer/rate-limits/{policy}/toggle', [ApiRateLimiterController::class, 'toggleThrottling'])->name('organization.developer.rate-limits.toggle');
+    Route::post('/organization/developer/rate-limits/simulate', [ApiRateLimiterController::class, 'simulate'])->name('organization.developer.rate-limits.simulate');
+    Route::delete('/organization/developer/rate-limits/{policy}', [ApiRateLimiterController::class, 'destroy'])->name('organization.developer.rate-limits.destroy');
+
+    // Real-Time Webhook Dead-Letter Queue (DLQ) & Event Replay Engine
+    Route::get('/organization/developer/webhooks/dlq', [WebhookDlqController::class, 'index'])->name('organization.developer.webhooks.dlq.index');
+    Route::post('/organization/developer/webhooks/dlq/{attempt}/replay', [WebhookDlqController::class, 'replay'])->name('organization.developer.webhooks.dlq.replay');
+    Route::post('/organization/developer/webhooks/dlq/bulk-replay', [WebhookDlqController::class, 'bulkReplay'])->name('organization.developer.webhooks.dlq.bulk-replay');
+    Route::post('/organization/developer/webhooks/endpoints', [WebhookDlqController::class, 'storeEndpoint'])->name('organization.developer.webhooks.endpoints.store');
+    Route::put('/organization/developer/webhooks/endpoints/{endpoint}', [WebhookDlqController::class, 'updateEndpoint'])->name('organization.developer.webhooks.endpoints.update');
+    Route::delete('/organization/developer/webhooks/endpoints/{endpoint}', [WebhookDlqController::class, 'destroyEndpoint'])->name('organization.developer.webhooks.endpoints.destroy');
+    Route::delete('/organization/developer/webhooks/dlq/{attempt}', [WebhookDlqController::class, 'destroyAttempt'])->name('organization.developer.webhooks.dlq.destroy');
+
+    // Real-Time Incident War Room, On-Call Rota & Post-Mortem Studio
+    Route::get('/organization/ops/incidents', [IncidentManagementController::class, 'index'])->name('organization.ops.incidents.index');
+    Route::post('/organization/ops/incidents', [IncidentManagementController::class, 'store'])->name('organization.ops.incidents.store');
+    Route::post('/organization/ops/incidents/{incident}/updates', [IncidentManagementController::class, 'postUpdate'])->name('organization.ops.incidents.updates.store');
+    Route::post('/organization/ops/incidents/{incident}/resolve', [IncidentManagementController::class, 'resolve'])->name('organization.ops.incidents.resolve');
+    Route::post('/organization/ops/incidents/{incident}/post-mortem', [IncidentManagementController::class, 'savePostMortem'])->name('organization.ops.incidents.post-mortem.store');
+    Route::post('/organization/ops/incidents/on-call-rota', [IncidentManagementController::class, 'updateRota'])->name('organization.ops.incidents.rota.update');
+    Route::delete('/organization/ops/incidents/{incident}', [IncidentManagementController::class, 'destroy'])->name('organization.ops.incidents.destroy');
+
+    // Pull Request Review SLA, Code Reviewer Load Balancer & Bottleneck Radar
+    Route::get('/organization/devops/pr-reviews', [PrReviewSlaController::class, 'index'])->name('organization.devops.pr-reviews.index');
+    Route::post('/organization/devops/pr-reviews', [PrReviewSlaController::class, 'store'])->name('organization.devops.pr-reviews.store');
+    Route::post('/organization/devops/pr-reviews/{pr}/reassign', [PrReviewSlaController::class, 'reassign'])->name('organization.devops.pr-reviews.reassign');
+    Route::post('/organization/devops/pr-reviews/{pr}/status', [PrReviewSlaController::class, 'updateStatus'])->name('organization.devops.pr-reviews.status');
+    Route::post('/organization/devops/codeowners', [PrReviewSlaController::class, 'storeCodeownerRule'])->name('organization.devops.codeowners.store');
+    Route::delete('/organization/devops/codeowners/{rule}', [PrReviewSlaController::class, 'destroyCodeownerRule'])->name('organization.devops.codeowners.destroy');
+    Route::delete('/organization/devops/pr-reviews/{pr}', [PrReviewSlaController::class, 'destroy'])->name('organization.devops.pr-reviews.destroy');
+
+    // Automated AI Release Notes & SemVer Changelog Publisher Studio
+    Route::get('/organization/releases/publisher', [ReleasePublisherController::class, 'index'])->name('organization.releases.publisher.index');
+    Route::post('/organization/releases/publisher/generate', [ReleasePublisherController::class, 'generate'])->name('organization.releases.publisher.generate');
+    Route::post('/organization/releases/publisher/{publication}/publish', [ReleasePublisherController::class, 'publish'])->name('organization.releases.publisher.publish');
+    Route::put('/organization/releases/publisher/{publication}', [ReleasePublisherController::class, 'update'])->name('organization.releases.publisher.update');
+    Route::delete('/organization/releases/publisher/{publication}', [ReleasePublisherController::class, 'destroy'])->name('organization.releases.publisher.destroy');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

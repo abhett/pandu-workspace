@@ -372,4 +372,104 @@ class Organization extends Model
     {
         return $this->hasMany(FocusTimeRecommendation::class);
     }
+
+    /**
+     * Get all feature flags for this organization.
+     *
+     * @return HasMany<FeatureFlag, $this>
+     */
+    public function featureFlags(): HasMany
+    {
+        return $this->hasMany(FeatureFlag::class);
+    }
+
+    /**
+     * Get all API rate limit policies for this organization.
+     *
+     * @return HasMany<ApiRateLimitPolicy, $this>
+     */
+    public function apiRateLimitPolicies(): HasMany
+    {
+        return $this->hasMany(ApiRateLimitPolicy::class);
+    }
+
+    /**
+     * Get all API traffic snapshots for this organization.
+     *
+     * @return HasMany<ApiTrafficSnapshot, $this>
+     */
+    public function apiTrafficSnapshots(): HasMany
+    {
+        return $this->hasMany(ApiTrafficSnapshot::class);
+    }
+
+    /**
+     * Get all webhook endpoints for this organization.
+     *
+     * @return HasMany<WebhookEndpoint, $this>
+     */
+    public function webhookEndpoints(): HasMany
+    {
+        return $this->hasMany(WebhookEndpoint::class);
+    }
+
+    /**
+     * Get all webhook delivery attempts for this organization.
+     *
+     * @return HasMany<WebhookDeliveryAttempt, $this>
+     */
+    public function webhookDeliveryAttempts(): HasMany
+    {
+        return $this->hasMany(WebhookDeliveryAttempt::class);
+    }
+
+    /**
+     * Get all incidents for this organization.
+     *
+     * @return HasMany<Incident, $this>
+     */
+    public function incidents(): HasMany
+    {
+        return $this->hasMany(Incident::class);
+    }
+
+    /**
+     * Get all on-call rotas for this organization.
+     *
+     * @return HasMany<OnCallRota, $this>
+     */
+    public function onCallRotas(): HasMany
+    {
+        return $this->hasMany(OnCallRota::class);
+    }
+
+    /**
+     * Get all pull request reviews for this organization.
+     *
+     * @return HasMany<PullRequestReview, $this>
+     */
+    public function pullRequestReviews(): HasMany
+    {
+        return $this->hasMany(PullRequestReview::class);
+    }
+
+    /**
+     * Get all codeowner rules for this organization.
+     *
+     * @return HasMany<CodeownerRule, $this>
+     */
+    public function codeownerRules(): HasMany
+    {
+        return $this->hasMany(CodeownerRule::class);
+    }
+
+    /**
+     * Get all release publications for this organization.
+     *
+     * @return HasMany<ReleasePublication, $this>
+     */
+    public function releasePublications(): HasMany
+    {
+        return $this->hasMany(ReleasePublication::class);
+    }
 }

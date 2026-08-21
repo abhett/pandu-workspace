@@ -292,4 +292,34 @@ class Organization extends Model
     {
         return $this->hasMany(CicdPipelineRun::class);
     }
+
+    /**
+     * Get all cloud cost snapshots for this organization.
+     *
+     * @return HasMany<CloudCostSnapshot, $this>
+     */
+    public function cloudCostSnapshots(): HasMany
+    {
+        return $this->hasMany(CloudCostSnapshot::class);
+    }
+
+    /**
+     * Get all cloud cost anomalies for this organization.
+     *
+     * @return HasMany<CloudCostAnomaly, $this>
+     */
+    public function cloudCostAnomalies(): HasMany
+    {
+        return $this->hasMany(CloudCostAnomaly::class);
+    }
+
+    /**
+     * Get all cloud cost recommendations for this organization.
+     *
+     * @return HasMany<CloudCostRecommendation, $this>
+     */
+    public function cloudCostRecommendations(): HasMany
+    {
+        return $this->hasMany(CloudCostRecommendation::class);
+    }
 }

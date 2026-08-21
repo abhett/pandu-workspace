@@ -7,6 +7,7 @@ use App\Http\Controllers\AutomationController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CicdPipelineController;
+use App\Http\Controllers\CloudCostAnomalyController;
 use App\Http\Controllers\CollaborationReportController;
 use App\Http\Controllers\ComplianceController;
 use App\Http\Controllers\CostAllocationController;
@@ -433,6 +434,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/organization/devops/pipelines/runs/{run}/approve-gate', [CicdPipelineController::class, 'approveGate'])->name('organization.devops.pipelines.runs.approve-gate');
     Route::post('/organization/devops/pipelines/runs/{run}/reject-gate', [CicdPipelineController::class, 'rejectGate'])->name('organization.devops.pipelines.runs.reject-gate');
     Route::post('/organization/devops/pipelines/runs/{run}/rollback', [CicdPipelineController::class, 'rollback'])->name('organization.devops.pipelines.runs.rollback');
+
+    // Enterprise Resource Utilization & Cloud Cost Anomaly Detector
+    Route::get('/organization/cloud/costs', [CloudCostAnomalyController::class, 'index'])->name('organization.cloud.costs.index');
+    Route::post('/organization/cloud/costs/anomalies/{anomaly}/resolve', [CloudCostAnomalyController::class, 'resolveAnomaly'])->name('organization.cloud.costs.anomalies.resolve');
+    Route::post('/organization/cloud/costs/recommendations/{recommendation}/apply', [CloudCostAnomalyController::class, 'applyRecommendation'])->name('organization.cloud.costs.recommendations.apply');
+    Route::post('/organization/cloud/costs/recommendations/{recommendation}/dismiss', [CloudCostAnomalyController::class, 'dismissRecommendation'])->name('organization.cloud.costs.recommendations.dismiss');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

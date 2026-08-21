@@ -8,6 +8,7 @@ use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CollaborationReportController;
 use App\Http\Controllers\ComplianceController;
+use App\Http\Controllers\CostAllocationController;
 use App\Http\Controllers\CrossProjectDependencyController;
 use App\Http\Controllers\DailyStandupController;
 use App\Http\Controllers\DashboardBuilderController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\InboxController;
 use App\Http\Controllers\IntegrationController;
+use App\Http\Controllers\LiveAuditStreamController;
 use App\Http\Controllers\MobileCompanionController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OkrController;
@@ -382,6 +384,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/organization/okrs/key-results/{keyResult}', [OkrController::class, 'destroyKeyResult'])->name('organization.okrs.key-results.destroy');
     Route::post('/organization/okrs/key-results/{keyResult}/link-task', [OkrController::class, 'linkTask'])->name('organization.okrs.key-results.link-task');
     Route::delete('/organization/okrs/key-results/{keyResult}/tasks/{task}', [OkrController::class, 'unlinkTask'])->name('organization.okrs.key-results.unlink-task');
+
+    // Comprehensive Enterprise Cost Allocation & Profitability Analytics Hub
+    Route::get('/organization/financials/cost-allocation', [CostAllocationController::class, 'index'])->name('organization.financials.cost-allocation.index');
+    Route::post('/organization/financials/cost-centers', [CostAllocationController::class, 'storeCostCenter'])->name('organization.financials.cost-centers.store');
+    Route::put('/organization/financials/cost-centers/{costCenter}', [CostAllocationController::class, 'updateCostCenter'])->name('organization.financials.cost-centers.update');
+    Route::delete('/organization/financials/cost-centers/{costCenter}', [CostAllocationController::class, 'destroyCostCenter'])->name('organization.financials.cost-centers.destroy');
+    Route::post('/organization/financials/cost-centers/{costCenter}/allocate', [CostAllocationController::class, 'allocateProject'])->name('organization.financials.cost-centers.allocate');
+    Route::delete('/organization/financials/allocations/{allocationId}', [CostAllocationController::class, 'destroyAllocation'])->name('organization.financials.allocations.destroy');
+
+    // Real-Time Live Event Log & Enterprise Compliance Audit Trail Streamer
+    Route::get('/organization/compliance/live-stream', [LiveAuditStreamController::class, 'index'])->name('organization.compliance.live-stream.index');
+    Route::get('/organization/compliance/live-stream/feed', [LiveAuditStreamController::class, 'feed'])->name('organization.compliance.live-stream.feed');
+    Route::post('/organization/compliance/incidents', [LiveAuditStreamController::class, 'storeIncident'])->name('organization.compliance.incidents.store');
+    Route::put('/organization/compliance/incidents/{incident}', [LiveAuditStreamController::class, 'updateIncident'])->name('organization.compliance.incidents.update');
+    Route::delete('/organization/compliance/incidents/{incident}', [LiveAuditStreamController::class, 'destroyIncident'])->name('organization.compliance.incidents.destroy');
+    Route::get('/organization/compliance/certification-export', [LiveAuditStreamController::class, 'exportCertification'])->name('organization.compliance.certification-export');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

@@ -212,4 +212,24 @@ class Organization extends Model
     {
         return $this->hasMany(OkrObjective::class);
     }
+
+    /**
+     * Get all cost centers for the organization.
+     *
+     * @return HasMany<CostCenter, $this>
+     */
+    public function costCenters(): HasMany
+    {
+        return $this->hasMany(CostCenter::class);
+    }
+
+    /**
+     * Get all compliance security incidents for the organization.
+     *
+     * @return HasMany<ComplianceIncident, $this>
+     */
+    public function complianceIncidents(): HasMany
+    {
+        return $this->hasMany(ComplianceIncident::class);
+    }
 }

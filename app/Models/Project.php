@@ -226,6 +226,16 @@ class Project extends Model
     }
 
     /**
+     * Get cost center allocations for this project.
+     *
+     * @return HasMany<ProjectCostCenterAllocation, $this>
+     */
+    public function costCenterAllocations(): HasMany
+    {
+        return $this->hasMany(ProjectCostCenterAllocation::class);
+    }
+
+    /**
      * Get all whiteboard ideation canvases in this project.
      *
      * @return HasMany<ProjectWhiteboard, $this>

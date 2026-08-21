@@ -252,4 +252,14 @@ class Organization extends Model
     {
         return $this->hasMany(MfaGraceExemption::class);
     }
+
+    /**
+     * Get all custom enterprise dashboards for this organization.
+     *
+     * @return HasMany<CustomDashboard, $this>
+     */
+    public function customDashboards(): HasMany
+    {
+        return $this->hasMany(CustomDashboard::class);
+    }
 }

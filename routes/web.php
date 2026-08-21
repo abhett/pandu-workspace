@@ -10,6 +10,7 @@ use App\Http\Controllers\CollaborationReportController;
 use App\Http\Controllers\ComplianceController;
 use App\Http\Controllers\CostAllocationController;
 use App\Http\Controllers\CrossProjectDependencyController;
+use App\Http\Controllers\CustomDashboardStudioController;
 use App\Http\Controllers\DailyStandupController;
 use App\Http\Controllers\DashboardBuilderController;
 use App\Http\Controllers\DesignSystemController;
@@ -409,6 +410,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/organization/security/mfa-enforcement/exempt/{user}', [MfaEnforcementController::class, 'exempt'])->name('organization.security.mfa-enforcement.exempt');
     Route::delete('/organization/security/mfa-enforcement/exemptions/{exemptionId}', [MfaEnforcementController::class, 'revokeExemption'])->name('organization.security.mfa-enforcement.exemptions.destroy');
     Route::post('/organization/security/mfa-enforcement/kill-switch', [MfaEnforcementController::class, 'killSwitch'])->name('organization.security.mfa-enforcement.kill-switch');
+
+    // Dynamic Enterprise Custom Dashboard Studio & Executive Widget Builder
+    Route::get('/organization/analytics/custom-dashboards', [CustomDashboardStudioController::class, 'index'])->name('organization.analytics.custom-dashboards.index');
+    Route::post('/organization/analytics/custom-dashboards', [CustomDashboardStudioController::class, 'store'])->name('organization.analytics.custom-dashboards.store');
+    Route::put('/organization/analytics/custom-dashboards/{dashboard}', [CustomDashboardStudioController::class, 'update'])->name('organization.analytics.custom-dashboards.update');
+    Route::post('/organization/analytics/custom-dashboards/{dashboard}/duplicate', [CustomDashboardStudioController::class, 'duplicate'])->name('organization.analytics.custom-dashboards.duplicate');
+    Route::post('/organization/analytics/custom-dashboards/{dashboard}/toggle-star', [CustomDashboardStudioController::class, 'toggleStar'])->name('organization.analytics.custom-dashboards.toggle-star');
+    Route::delete('/organization/analytics/custom-dashboards/{dashboard}', [CustomDashboardStudioController::class, 'destroy'])->name('organization.analytics.custom-dashboards.destroy');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

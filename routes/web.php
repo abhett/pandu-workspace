@@ -21,6 +21,7 @@ use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\InboxController;
 use App\Http\Controllers\IntegrationController;
+use App\Http\Controllers\KaizenImprovementController;
 use App\Http\Controllers\LiveAuditStreamController;
 use App\Http\Controllers\MfaEnforcementController;
 use App\Http\Controllers\MobileCompanionController;
@@ -440,6 +441,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/organization/cloud/costs/anomalies/{anomaly}/resolve', [CloudCostAnomalyController::class, 'resolveAnomaly'])->name('organization.cloud.costs.anomalies.resolve');
     Route::post('/organization/cloud/costs/recommendations/{recommendation}/apply', [CloudCostAnomalyController::class, 'applyRecommendation'])->name('organization.cloud.costs.recommendations.apply');
     Route::post('/organization/cloud/costs/recommendations/{recommendation}/dismiss', [CloudCostAnomalyController::class, 'dismissRecommendation'])->name('organization.cloud.costs.recommendations.dismiss');
+
+    // AI-Driven Sprint Retrospective Action Tracker & Kaizen Improvement Engine
+    Route::get('/organization/agile/kaizen', [KaizenImprovementController::class, 'index'])->name('organization.agile.kaizen.index');
+    Route::post('/organization/agile/kaizen/initiatives', [KaizenImprovementController::class, 'store'])->name('organization.agile.kaizen.initiatives.store');
+    Route::put('/organization/agile/kaizen/initiatives/{initiative}', [KaizenImprovementController::class, 'update'])->name('organization.agile.kaizen.initiatives.update');
+    Route::post('/organization/agile/kaizen/initiatives/{initiative}/verify', [KaizenImprovementController::class, 'verify'])->name('organization.agile.kaizen.initiatives.verify');
+    Route::delete('/organization/agile/kaizen/initiatives/{initiative}', [KaizenImprovementController::class, 'destroy'])->name('organization.agile.kaizen.initiatives.destroy');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

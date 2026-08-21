@@ -314,4 +314,14 @@ class Project extends Model
     {
         return $this->hasMany(CicdPipelineRun::class);
     }
+
+    /**
+     * Get all Kaizen continuous improvement initiatives in this project.
+     *
+     * @return HasMany<KaizenInitiative, $this>
+     */
+    public function kaizenInitiatives(): HasMany
+    {
+        return $this->hasMany(KaizenInitiative::class);
+    }
 }

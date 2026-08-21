@@ -322,4 +322,14 @@ class Organization extends Model
     {
         return $this->hasMany(CloudCostRecommendation::class);
     }
+
+    /**
+     * Get all Kaizen continuous improvement initiatives for this organization.
+     *
+     * @return HasMany<KaizenInitiative, $this>
+     */
+    public function kaizenInitiatives(): HasMany
+    {
+        return $this->hasMany(KaizenInitiative::class);
+    }
 }

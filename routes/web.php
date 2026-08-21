@@ -58,6 +58,7 @@ use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\WhiteboardController;
 use App\Http\Controllers\WhiteboardLiveController;
 use App\Http\Controllers\WikiController;
+use App\Http\Controllers\WorkloadBalancerController;
 
 Route::inertia('/', 'welcome')->name('home');
 
@@ -353,6 +354,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/organization/capacity/time-off', [ResourceCapacityController::class, 'storeTimeOff'])->name('organization.capacity.time-off.store');
     Route::delete('/organization/capacity/time-off/{timeOff}', [ResourceCapacityController::class, 'destroyTimeOff'])->name('organization.capacity.time-off.destroy');
     Route::post('/organization/capacity/reassign-task', [ResourceCapacityController::class, 'rebalanceTask'])->name('organization.capacity.reassign-task');
+    Route::get('/organization/capacity/balancer', [WorkloadBalancerController::class, 'index'])->name('organization.capacity.balancer.index');
+    Route::get('/organization/capacity/balancer/suggestions/{user}', [WorkloadBalancerController::class, 'suggestions'])->name('organization.capacity.balancer.suggestions');
+    Route::post('/organization/capacity/balancer/reassign', [WorkloadBalancerController::class, 'reassign'])->name('organization.capacity.balancer.reassign');
+    Route::post('/organization/capacity/balancer/batch', [WorkloadBalancerController::class, 'batch'])->name('organization.capacity.balancer.batch');
 
     // Interactive Team Mood, Daily Pulse & Agile Wellness Radar
     Route::get('/organization/pulse', [TeamMoodPulseController::class, 'index'])->name('organization.pulse.index');

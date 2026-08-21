@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,6 +42,7 @@ import {
     Check,
     X,
     Filter,
+    Layers,
 } from 'lucide-react';
 
 interface ActiveTaskItem {
@@ -264,6 +265,14 @@ export default function ResourceCapacityPage({
                     </div>
 
                     <div className="flex items-center gap-2 flex-wrap">
+                        <Link
+                            href="/organization/capacity/balancer"
+                            className="inline-flex items-center gap-1.5 px-3 h-8 rounded-lg text-xs font-semibold bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xs hover:opacity-90 transition-opacity"
+                        >
+                            <Layers className="h-3.5 w-3.5" />
+                            <span>Matriks Lintas Proyek</span>
+                        </Link>
+
                         <Button
                             variant="outline"
                             size="sm"

@@ -192,4 +192,14 @@ class Organization extends Model
     {
         return $this->hasMany(WellnessInitiative::class);
     }
+
+    /**
+     * Get all workload rebalance audit logs for the organization.
+     *
+     * @return HasMany<WorkloadRebalanceLog, $this>
+     */
+    public function workloadRebalanceLogs(): HasMany
+    {
+        return $this->hasMany(WorkloadRebalanceLog::class)->latest('created_at');
+    }
 }

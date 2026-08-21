@@ -19,6 +19,7 @@ use App\Http\Controllers\ImportController;
 use App\Http\Controllers\InboxController;
 use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\LiveAuditStreamController;
+use App\Http\Controllers\MfaEnforcementController;
 use App\Http\Controllers\MobileCompanionController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OkrController;
@@ -400,6 +401,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/organization/compliance/incidents/{incident}', [LiveAuditStreamController::class, 'updateIncident'])->name('organization.compliance.incidents.update');
     Route::delete('/organization/compliance/incidents/{incident}', [LiveAuditStreamController::class, 'destroyIncident'])->name('organization.compliance.incidents.destroy');
     Route::get('/organization/compliance/certification-export', [LiveAuditStreamController::class, 'exportCertification'])->name('organization.compliance.certification-export');
+
+    // Enterprise Multi-Factor Authentication (MFA/TOTP) Enforcement & Session Security Gate
+    Route::get('/organization/security/mfa-enforcement', [MfaEnforcementController::class, 'index'])->name('organization.security.mfa-enforcement.index');
+    Route::put('/organization/security/mfa-enforcement', [MfaEnforcementController::class, 'update'])->name('organization.security.mfa-enforcement.update');
+    Route::post('/organization/security/mfa-enforcement/remind/{user}', [MfaEnforcementController::class, 'remind'])->name('organization.security.mfa-enforcement.remind');
+    Route::post('/organization/security/mfa-enforcement/exempt/{user}', [MfaEnforcementController::class, 'exempt'])->name('organization.security.mfa-enforcement.exempt');
+    Route::delete('/organization/security/mfa-enforcement/exemptions/{exemptionId}', [MfaEnforcementController::class, 'revokeExemption'])->name('organization.security.mfa-enforcement.exemptions.destroy');
+    Route::post('/organization/security/mfa-enforcement/kill-switch', [MfaEnforcementController::class, 'killSwitch'])->name('organization.security.mfa-enforcement.kill-switch');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

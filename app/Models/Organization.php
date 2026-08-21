@@ -232,4 +232,24 @@ class Organization extends Model
     {
         return $this->hasMany(ComplianceIncident::class);
     }
+
+    /**
+     * Get the enterprise MFA enforcement settings for this organization.
+     *
+     * @return HasOne<OrganizationMfaSetting, $this>
+     */
+    public function mfaSetting(): HasOne
+    {
+        return $this->hasOne(OrganizationMfaSetting::class);
+    }
+
+    /**
+     * Get all MFA grace period exemptions for this organization.
+     *
+     * @return HasMany<MfaGraceExemption, $this>
+     */
+    public function mfaGraceExemptions(): HasMany
+    {
+        return $this->hasMany(MfaGraceExemption::class);
+    }
 }

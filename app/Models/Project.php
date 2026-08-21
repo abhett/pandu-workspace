@@ -324,4 +324,24 @@ class Project extends Model
     {
         return $this->hasMany(KaizenInitiative::class);
     }
+
+    /**
+     * Get all SBOM dependency packages for this project.
+     *
+     * @return HasMany<SbomPackage, $this>
+     */
+    public function sbomPackages(): HasMany
+    {
+        return $this->hasMany(SbomPackage::class);
+    }
+
+    /**
+     * Get all Architecture Decision Records (ADRs) for this project.
+     *
+     * @return HasMany<ArchitectureDecisionRecord, $this>
+     */
+    public function architectureDecisionRecords(): HasMany
+    {
+        return $this->hasMany(ArchitectureDecisionRecord::class);
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AiAssistantController;
+use App\Http\Controllers\ArchitectureDecisionRecordController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\AutomationController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\CustomDashboardStudioController;
 use App\Http\Controllers\DailyStandupController;
 use App\Http\Controllers\DashboardBuilderController;
 use App\Http\Controllers\DesignSystemController;
+use App\Http\Controllers\DeveloperFocusRadarController;
 use App\Http\Controllers\EmptyStateGalleryController;
 use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\ImportController;
@@ -45,6 +47,7 @@ use App\Http\Controllers\ReleaseController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ResourceCapacityController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\SbomScannerController;
 use App\Http\Controllers\ScrumMasterController;
 use App\Http\Controllers\SessionSecurityController;
 use App\Http\Controllers\SkillMatrixController;
@@ -448,6 +451,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/organization/agile/kaizen/initiatives/{initiative}', [KaizenImprovementController::class, 'update'])->name('organization.agile.kaizen.initiatives.update');
     Route::post('/organization/agile/kaizen/initiatives/{initiative}/verify', [KaizenImprovementController::class, 'verify'])->name('organization.agile.kaizen.initiatives.verify');
     Route::delete('/organization/agile/kaizen/initiatives/{initiative}', [KaizenImprovementController::class, 'destroy'])->name('organization.agile.kaizen.initiatives.destroy');
+
+    // Enterprise License Compliance, Open-Source SBOM & Software Dependency Vulnerability Scanner
+    Route::get('/organization/security/sbom', [SbomScannerController::class, 'index'])->name('organization.security.sbom.index');
+    Route::post('/organization/security/sbom/scan', [SbomScannerController::class, 'scan'])->name('organization.security.sbom.scan');
+    Route::post('/organization/security/sbom/vulnerabilities/{vulnerability}/triage', [SbomScannerController::class, 'triage'])->name('organization.security.sbom.vulnerabilities.triage');
+    Route::get('/organization/security/sbom/export', [SbomScannerController::class, 'export'])->name('organization.security.sbom.export');
+
+    // AI-Driven Architecture Decision Record (ADR) & Technical Governance Studio
+    Route::get('/organization/architecture/adr', [ArchitectureDecisionRecordController::class, 'index'])->name('organization.architecture.adr.index');
+    Route::post('/organization/architecture/adr', [ArchitectureDecisionRecordController::class, 'store'])->name('organization.architecture.adr.store');
+    Route::put('/organization/architecture/adr/{adr}', [ArchitectureDecisionRecordController::class, 'update'])->name('organization.architecture.adr.update');
+    Route::delete('/organization/architecture/adr/{adr}', [ArchitectureDecisionRecordController::class, 'destroy'])->name('organization.architecture.adr.destroy');
+
+    // Real-Time Developer Focus & Context Switching Radar
+    Route::get('/organization/productivity/focus', [DeveloperFocusRadarController::class, 'index'])->name('organization.productivity.focus.index');
+    Route::post('/organization/productivity/focus/recommendations/{recommendation}/apply', [DeveloperFocusRadarController::class, 'applyRecommendation'])->name('organization.productivity.focus.recommendations.apply');
+    Route::post('/organization/productivity/focus/recommendations/{recommendation}/acknowledge', [DeveloperFocusRadarController::class, 'acknowledgeRecommendation'])->name('organization.productivity.focus.recommendations.acknowledge');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

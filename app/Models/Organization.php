@@ -332,4 +332,44 @@ class Organization extends Model
     {
         return $this->hasMany(KaizenInitiative::class);
     }
+
+    /**
+     * Get all SBOM dependency packages for this organization.
+     *
+     * @return HasMany<SbomPackage, $this>
+     */
+    public function sbomPackages(): HasMany
+    {
+        return $this->hasMany(SbomPackage::class);
+    }
+
+    /**
+     * Get all Architecture Decision Records (ADRs) for this organization.
+     *
+     * @return HasMany<ArchitectureDecisionRecord, $this>
+     */
+    public function architectureDecisionRecords(): HasMany
+    {
+        return $this->hasMany(ArchitectureDecisionRecord::class);
+    }
+
+    /**
+     * Get all developer focus snapshots for this organization.
+     *
+     * @return HasMany<DeveloperFocusSnapshot, $this>
+     */
+    public function developerFocusSnapshots(): HasMany
+    {
+        return $this->hasMany(DeveloperFocusSnapshot::class);
+    }
+
+    /**
+     * Get all focus time recommendations for this organization.
+     *
+     * @return HasMany<FocusTimeRecommendation, $this>
+     */
+    public function focusTimeRecommendations(): HasMany
+    {
+        return $this->hasMany(FocusTimeRecommendation::class);
+    }
 }

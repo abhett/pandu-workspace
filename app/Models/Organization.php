@@ -202,4 +202,14 @@ class Organization extends Model
     {
         return $this->hasMany(WorkloadRebalanceLog::class)->latest('created_at');
     }
+
+    /**
+     * Get all strategic OKR objectives for the organization.
+     *
+     * @return HasMany<OkrObjective, $this>
+     */
+    public function okrObjectives(): HasMany
+    {
+        return $this->hasMany(OkrObjective::class);
+    }
 }

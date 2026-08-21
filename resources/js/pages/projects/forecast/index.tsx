@@ -45,6 +45,7 @@ import {
     HelpCircle,
     Info,
     ShieldAlert,
+    GitFork,
 } from 'lucide-react';
 
 interface Project {
@@ -287,6 +288,13 @@ export default function SprintForecastIndex({
                         >
                             <Workflow className="h-3.5 w-3.5" />
                             <span>Graf Dependensi</span>
+                        </Link>
+                        <Link
+                            href={`/projects/${project.id}/dependencies/matrix`}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:bg-muted transition-colors"
+                        >
+                            <GitFork className="h-3.5 w-3.5" />
+                            <span>Matriks Lintas Proyek</span>
                         </Link>
                         <Link
                             href={`/projects/${project.id}/budget`}

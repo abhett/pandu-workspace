@@ -8,6 +8,7 @@ use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\CollaborationReportController;
 use App\Http\Controllers\ComplianceController;
+use App\Http\Controllers\CrossProjectDependencyController;
 use App\Http\Controllers\DailyStandupController;
 use App\Http\Controllers\DashboardBuilderController;
 use App\Http\Controllers\DesignSystemController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\InboxController;
 use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\MobileCompanionController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\OkrController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrganizationInvitationController;
@@ -129,6 +131,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/projects/{project}/dependencies', [TaskDependencyController::class, 'store'])->name('projects.dependencies.store');
     Route::delete('/projects/{project}/dependencies/{dependency}', [TaskDependencyController::class, 'destroy'])->name('projects.dependencies.destroy');
     Route::post('/projects/{project}/dependencies/simulate-cascade', [TaskDependencyController::class, 'simulateCascade'])->name('projects.dependencies.simulate-cascade');
+    Route::get('/projects/{project}/dependencies/matrix', [CrossProjectDependencyController::class, 'index'])->name('projects.dependencies.matrix.index');
+    Route::post('/projects/{project}/dependencies/matrix/simulate', [CrossProjectDependencyController::class, 'simulate'])->name('projects.dependencies.matrix.simulate');
+    Route::post('/projects/{project}/dependencies/matrix/store', [CrossProjectDependencyController::class, 'store'])->name('projects.dependencies.matrix.store');
+    Route::delete('/projects/{project}/dependencies/matrix/{dependency}', [CrossProjectDependencyController::class, 'destroy'])->name('projects.dependencies.matrix.destroy');
 
     // Advanced Project Timeline, Milestone Gantt Chart & Critical Path Engine
     Route::get('/projects/{project}/timeline', [TimelineController::class, 'index'])->name('projects.timeline.index');
@@ -365,6 +371,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/organization/pulse/initiatives', [TeamMoodPulseController::class, 'storeInitiative'])->name('organization.pulse.initiatives.store');
     Route::put('/organization/pulse/initiatives/{initiative}', [TeamMoodPulseController::class, 'updateInitiative'])->name('organization.pulse.initiatives.update');
     Route::delete('/organization/pulse/initiatives/{initiative}', [TeamMoodPulseController::class, 'destroyInitiative'])->name('organization.pulse.initiatives.destroy');
+
+    // Interactive Multi-Tier Goal & OKR Alignment Tree Visualizer
+    Route::get('/organization/okrs/tree', [OkrController::class, 'index'])->name('organization.okrs.tree');
+    Route::post('/organization/okrs/objectives', [OkrController::class, 'storeObjective'])->name('organization.okrs.objectives.store');
+    Route::put('/organization/okrs/objectives/{objective}', [OkrController::class, 'updateObjective'])->name('organization.okrs.objectives.update');
+    Route::delete('/organization/okrs/objectives/{objective}', [OkrController::class, 'destroyObjective'])->name('organization.okrs.objectives.destroy');
+    Route::post('/organization/okrs/objectives/{objective}/key-results', [OkrController::class, 'storeKeyResult'])->name('organization.okrs.key-results.store');
+    Route::put('/organization/okrs/key-results/{keyResult}', [OkrController::class, 'updateKeyResult'])->name('organization.okrs.key-results.update');
+    Route::delete('/organization/okrs/key-results/{keyResult}', [OkrController::class, 'destroyKeyResult'])->name('organization.okrs.key-results.destroy');
+    Route::post('/organization/okrs/key-results/{keyResult}/link-task', [OkrController::class, 'linkTask'])->name('organization.okrs.key-results.link-task');
+    Route::delete('/organization/okrs/key-results/{keyResult}/tasks/{task}', [OkrController::class, 'unlinkTask'])->name('organization.okrs.key-results.unlink-task');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

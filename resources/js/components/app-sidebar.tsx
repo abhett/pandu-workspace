@@ -304,6 +304,20 @@ export function AppSidebar() {
                   },
               ]
             : []),
+        ...(isOwnerOrAdmin
+            ? [
+                  {
+                      title: 'AI Root Cause Analysis (RCA)',
+                      href: '/organization/sre/rca',
+                      icon: Sparkles,
+                  },
+                  {
+                      title: 'Distributed Traces & SRE',
+                      href: '/organization/sre/traces',
+                      icon: Activity,
+                  },
+              ]
+            : []),
     ];
 
     return (

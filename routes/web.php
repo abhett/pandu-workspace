@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AiAssistantController;
+use App\Http\Controllers\ApiPlaygroundController;
 use App\Http\Controllers\ApiRateLimiterController;
 use App\Http\Controllers\ArchitectureDecisionRecordController;
 use App\Http\Controllers\AttachmentController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\AutomationController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\ChaosGameDayController;
 use App\Http\Controllers\CicdPipelineController;
 use App\Http\Controllers\CloudCostAnomalyController;
 use App\Http\Controllers\CollaborationReportController;
@@ -19,8 +21,10 @@ use App\Http\Controllers\DailyStandupController;
 use App\Http\Controllers\DashboardBuilderController;
 use App\Http\Controllers\DatabaseDriftController;
 use App\Http\Controllers\DataPrivacyController;
+use App\Http\Controllers\DeploymentPipelineController;
 use App\Http\Controllers\DesignSystemController;
 use App\Http\Controllers\DeveloperFocusRadarController;
+use App\Http\Controllers\DistributedTraceController;
 use App\Http\Controllers\EmptyStateGalleryController;
 use App\Http\Controllers\ExecutiveBoardroomController;
 use App\Http\Controllers\FeatureFlagController;
@@ -28,6 +32,7 @@ use App\Http\Controllers\FileManagerController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\InboxController;
 use App\Http\Controllers\IncidentManagementController;
+use App\Http\Controllers\IncidentRunbookController;
 use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\KaizenImprovementController;
 use App\Http\Controllers\LiveAuditStreamController;
@@ -35,7 +40,9 @@ use App\Http\Controllers\MfaEnforcementController;
 use App\Http\Controllers\MobileCompanionController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OkrController;
+use App\Http\Controllers\OmniSearchController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\OncallScheduleController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrganizationInvitationController;
 use App\Http\Controllers\OrganizationMemberController;
@@ -55,6 +62,7 @@ use App\Http\Controllers\ReleasePublisherController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ResourceCapacityController;
 use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\RootCauseAnalysisController;
 use App\Http\Controllers\SbomScannerController;
 use App\Http\Controllers\ScrumMasterController;
 use App\Http\Controllers\SessionSecurityController;
@@ -66,6 +74,7 @@ use App\Http\Controllers\SprintForecastController;
 use App\Http\Controllers\SprintHealthController;
 use App\Http\Controllers\SprintRetrospectiveController;
 use App\Http\Controllers\SsoController;
+use App\Http\Controllers\SyntheticMonitorController;
 use App\Http\Controllers\SystemFeedbackController;
 use App\Http\Controllers\SystemStatusController;
 use App\Http\Controllers\TaskActivityController;
@@ -552,6 +561,69 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/organization/reports/boardroom/{briefing}', [ExecutiveBoardroomController::class, 'update'])->name('organization.reports.boardroom.update');
     Route::post('/organization/reports/boardroom/{briefing}/finalize', [ExecutiveBoardroomController::class, 'finalize'])->name('organization.reports.boardroom.finalize');
     Route::delete('/organization/reports/boardroom/{briefing}', [ExecutiveBoardroomController::class, 'destroy'])->name('organization.reports.boardroom.destroy');
+
+    // Unified Search & Global Command Palette (Spotlight ⌘K Studio)
+    Route::get('/search/omnibar', [OmniSearchController::class, 'index'])->name('search.omnibar.index');
+    Route::get('/search/omnibar/query', [OmniSearchController::class, 'query'])->name('search.omnibar.query');
+    Route::post('/search/omnibar/click', [OmniSearchController::class, 'recordClick'])->name('search.omnibar.click');
+    Route::post('/search/omnibar/clear', [OmniSearchController::class, 'clearHistory'])->name('search.omnibar.clear');
+
+    // Interactive API Playground & Multi-Language SDK Generator Studio
+    Route::get('/organization/developer/api-playground', [ApiPlaygroundController::class, 'index'])->name('organization.developer.api-playground.index');
+    Route::post('/organization/developer/api-playground/execute', [ApiPlaygroundController::class, 'execute'])->name('organization.developer.api-playground.execute');
+    Route::post('/organization/developer/api-playground/presets', [ApiPlaygroundController::class, 'storePreset'])->name('organization.developer.api-playground.presets.store');
+    Route::delete('/organization/developer/api-playground/presets/{preset}', [ApiPlaygroundController::class, 'destroyPreset'])->name('organization.developer.api-playground.presets.destroy');
+
+    // Enterprise Resilience & Chaos Engineering GameDay Studio
+    Route::get('/organization/sre/chaos-gameday', [ChaosGameDayController::class, 'index'])->name('organization.sre.chaos-gameday.index');
+    Route::post('/organization/sre/chaos-gameday', [ChaosGameDayController::class, 'store'])->name('organization.sre.chaos-gameday.store');
+    Route::post('/organization/sre/chaos-gameday/{experiment}/run', [ChaosGameDayController::class, 'run'])->name('organization.sre.chaos-gameday.run');
+    Route::post('/organization/sre/chaos-gameday/{experiment}/abort', [ChaosGameDayController::class, 'abort'])->name('organization.sre.chaos-gameday.abort');
+    Route::delete('/organization/sre/chaos-gameday/{experiment}', [ChaosGameDayController::class, 'destroy'])->name('organization.sre.chaos-gameday.destroy');
+
+    // Multi-Environment Deployment Pipeline Tracker & Rollout Risk Analyzer Studio
+    Route::get('/organization/sre/deployments', [DeploymentPipelineController::class, 'index'])->name('organization.sre.deployments.index');
+    Route::post('/organization/sre/deployments', [DeploymentPipelineController::class, 'store'])->name('organization.sre.deployments.store');
+    Route::post('/organization/sre/deployments/{pipeline}/promote', [DeploymentPipelineController::class, 'promote'])->name('organization.sre.deployments.promote');
+    Route::post('/organization/sre/deployments/{pipeline}/rollback', [DeploymentPipelineController::class, 'rollback'])->name('organization.sre.deployments.rollback');
+    Route::delete('/organization/sre/deployments/{pipeline}', [DeploymentPipelineController::class, 'destroy'])->name('organization.sre.deployments.destroy');
+
+    // On-Call Rotation Manager & Escalation Policy Studio
+    Route::get('/organization/sre/oncall', [OncallScheduleController::class, 'index'])->name('organization.sre.oncall.index');
+    Route::post('/organization/sre/oncall', [OncallScheduleController::class, 'store'])->name('organization.sre.oncall.store');
+    Route::post('/organization/sre/oncall/{schedule}/page', [OncallScheduleController::class, 'page'])->name('organization.sre.oncall.page');
+    Route::post('/organization/sre/oncall/logs/{log}/acknowledge', [OncallScheduleController::class, 'acknowledge'])->name('organization.sre.oncall.acknowledge');
+    Route::post('/organization/sre/oncall/logs/{log}/resolve', [OncallScheduleController::class, 'resolve'])->name('organization.sre.oncall.resolve');
+    Route::delete('/organization/sre/oncall/{schedule}', [OncallScheduleController::class, 'destroy'])->name('organization.sre.oncall.destroy');
+
+    // Synthetic Monitoring & Global Uptime Probe Studio
+    Route::get('/organization/sre/synthetics', [SyntheticMonitorController::class, 'index'])->name('organization.sre.synthetics.index');
+    Route::post('/organization/sre/synthetics', [SyntheticMonitorController::class, 'store'])->name('organization.sre.synthetics.store');
+    Route::post('/organization/sre/synthetics/{monitor}/probe', [SyntheticMonitorController::class, 'probe'])->name('organization.sre.synthetics.probe');
+    Route::post('/organization/sre/synthetics/{monitor}/toggle', [SyntheticMonitorController::class, 'toggleStatus'])->name('organization.sre.synthetics.toggle');
+    Route::delete('/organization/sre/synthetics/{monitor}', [SyntheticMonitorController::class, 'destroy'])->name('organization.sre.synthetics.destroy');
+
+    // Automated Incident Remediation Runbooks & Operational Playbook Studio
+    Route::get('/organization/sre/runbooks', [IncidentRunbookController::class, 'index'])->name('organization.sre.runbooks.index');
+    Route::post('/organization/sre/runbooks', [IncidentRunbookController::class, 'store'])->name('organization.sre.runbooks.store');
+    Route::post('/organization/sre/runbooks/{runbook}/execute', [IncidentRunbookController::class, 'execute'])->name('organization.sre.runbooks.execute');
+    Route::delete('/organization/sre/runbooks/{runbook}', [IncidentRunbookController::class, 'destroy'])->name('organization.sre.runbooks.destroy');
+
+    // Distributed Tracing, Service Mesh Topology & Latency Profiler Studio
+    Route::get('/organization/sre/traces', [DistributedTraceController::class, 'index'])->name('organization.sre.traces.index');
+    Route::post('/organization/sre/traces', [DistributedTraceController::class, 'store'])->name('organization.sre.traces.store');
+    Route::get('/organization/sre/traces/{trace}', [DistributedTraceController::class, 'show'])->name('organization.sre.traces.show');
+    Route::delete('/organization/sre/traces/{trace}', [DistributedTraceController::class, 'destroy'])->name('organization.sre.traces.destroy');
+
+    // AI-Powered Automated Root Cause Analysis (RCA) & Smart Post-Mortem Copilot
+    Route::get('/organization/sre/rca', [RootCauseAnalysisController::class, 'index'])->name('organization.sre.rca.index');
+    Route::post('/organization/sre/rca/analyze', [RootCauseAnalysisController::class, 'store'])->name('organization.sre.rca.analyze');
+    Route::get('/organization/sre/rca/{rca}', [RootCauseAnalysisController::class, 'show'])->name('organization.sre.rca.show');
+    Route::post('/organization/sre/rca/{rca}/verify', [RootCauseAnalysisController::class, 'verify'])->name('organization.sre.rca.verify');
+    Route::get('/organization/sre/rca/{rca}/export', [RootCauseAnalysisController::class, 'export'])->name('organization.sre.rca.export');
+    Route::post('/organization/sre/rca/{rca}/action-items', [RootCauseAnalysisController::class, 'storeActionItem'])->name('organization.sre.rca.action-items.store');
+    Route::patch('/organization/sre/rca/action-items/{actionItem}', [RootCauseAnalysisController::class, 'updateActionItem'])->name('organization.sre.rca.action-items.update');
+    Route::delete('/organization/sre/rca/{rca}', [RootCauseAnalysisController::class, 'destroy'])->name('organization.sre.rca.destroy');
 
     // Centralized File Manager & Digital Asset Management
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');

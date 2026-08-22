@@ -532,4 +532,114 @@ class Organization extends Model
     {
         return $this->hasMany(BoardroomBriefing::class);
     }
+
+    /**
+     * Get all search histories for this organization.
+     *
+     * @return HasMany<SearchHistory, $this>
+     */
+    public function searchHistories(): HasMany
+    {
+        return $this->hasMany(SearchHistory::class);
+    }
+
+    /**
+     * Get all API request presets for this organization.
+     *
+     * @return HasMany<ApiRequestPreset, $this>
+     */
+    public function apiRequestPresets(): HasMany
+    {
+        return $this->hasMany(ApiRequestPreset::class);
+    }
+
+    /**
+     * Get all chaos engineering experiments for this organization.
+     *
+     * @return HasMany<ChaosExperiment, $this>
+     */
+    public function chaosExperiments(): HasMany
+    {
+        return $this->hasMany(ChaosExperiment::class);
+    }
+
+    /**
+     * Get all deployment pipelines for this organization.
+     *
+     * @return HasMany<DeploymentPipeline, $this>
+     */
+    public function deploymentPipelines(): HasMany
+    {
+        return $this->hasMany(DeploymentPipeline::class);
+    }
+
+    /**
+     * Get all on-call schedules for this organization.
+     *
+     * @return HasMany<OncallSchedule, $this>
+     */
+    public function oncallSchedules(): HasMany
+    {
+        return $this->hasMany(OncallSchedule::class);
+    }
+
+    /**
+     * Get all synthetic monitors for this organization.
+     *
+     * @return HasMany<SyntheticMonitor, $this>
+     */
+    public function syntheticMonitors(): HasMany
+    {
+        return $this->hasMany(SyntheticMonitor::class);
+    }
+
+    /**
+     * Get all incident remediation runbooks for this organization.
+     *
+     * @return HasMany<IncidentRunbook, $this>
+     */
+    public function incidentRunbooks(): HasMany
+    {
+        return $this->hasMany(IncidentRunbook::class);
+    }
+
+    /**
+     * Get all service mesh topology nodes for this organization.
+     *
+     * @return HasMany<ServiceNode, $this>
+     */
+    public function serviceNodes(): HasMany
+    {
+        return $this->hasMany(ServiceNode::class);
+    }
+
+    /**
+     * Get all distributed traces for this organization.
+     *
+     * @return HasMany<DistributedTrace, $this>
+     */
+    public function distributedTraces(): HasMany
+    {
+        return $this->hasMany(DistributedTrace::class);
+    }
+
+    /**
+     * Get all root cause analyses for this organization.
+     *
+     * @return HasMany<RootCauseAnalysis, $this>
+     */
+    public function rootCauseAnalyses(): HasMany
+    {
+        return $this->hasMany(RootCauseAnalysis::class);
+    }
+
+    /**
+     * Get all RCA action items for this organization.
+     *
+     * @return HasMany<RcaActionItem, $this>
+     */
+    public function rcaActionItems(): HasMany
+    {
+        return $this->hasMany(RcaActionItem::class);
+    }
 }

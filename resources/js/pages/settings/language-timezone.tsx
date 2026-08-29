@@ -72,16 +72,10 @@ export default function LanguageTimezonePage({ regional_preferences }: Props) {
     };
 
     return (
-        <AppLayout
-            breadcrumbs={[
-                { title: 'Pengaturan', href: '/settings/profile' },
-                { title: 'Bahasa & Zona Waktu', href: '#' },
-            ]}
-        >
+        <>
             <Head title="Bahasa & Zona Waktu - Pengaturan Pribadi" />
 
-            <SettingsLayout>
-                <form onSubmit={handleSave} className="space-y-8 animate-fade-in">
+            <form onSubmit={handleSave} className="space-y-8 animate-fade-in">
                     {/* Header Section */}
                     <div className="space-y-1 pb-2 border-b border-border">
                         <h1 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
@@ -239,7 +233,12 @@ export default function LanguageTimezonePage({ regional_preferences }: Props) {
                         </Button>
                     </div>
                 </form>
-            </SettingsLayout>
-        </AppLayout>
+        </>
     );
 }
+
+LanguageTimezonePage.breadcrumbs = [
+    { title: 'Pengaturan', href: '/settings/profile' },
+    { title: 'Bahasa & Zona Waktu', href: '/settings/language-timezone' },
+];
+

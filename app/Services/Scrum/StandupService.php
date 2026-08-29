@@ -19,7 +19,7 @@ class StandupService
         return DailyStandup::where('organization_id', $organization->id)
             ->where('date', $targetDate)
             ->when($projectId, fn ($q) => $q->where('project_id', $projectId))
-            ->with(['user:id,name,email,avatar', 'project:id,name,key'])
+            ->with(['user:id,name,email', 'project:id,name,key'])
             ->orderByDesc('created_at')
             ->get();
     }

@@ -19,6 +19,7 @@ use App\Http\Controllers\CrossProjectDependencyController;
 use App\Http\Controllers\CustomDashboardStudioController;
 use App\Http\Controllers\DailyStandupController;
 use App\Http\Controllers\DashboardBuilderController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DatabaseDriftController;
 use App\Http\Controllers\DataPrivacyController;
 use App\Http\Controllers\DeploymentPipelineController;
@@ -111,7 +112,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/organizations/{organization}/switch', [OrganizationController::class, 'switch'])->name('organizations.switch');
 
     // Dashboard
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     // Projects Management
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');

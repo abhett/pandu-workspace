@@ -192,7 +192,7 @@ class WidgetBuilderService
 
         // Recent Standup & Releases
         $recentStandups = DailyStandup::where('organization_id', $organization->id)
-            ->with('user:id,name,avatar')
+            ->with('user:id,name,email')
             ->orderByDesc('created_at')
             ->take(3)
             ->get();

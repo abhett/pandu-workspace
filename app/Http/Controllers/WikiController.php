@@ -40,7 +40,7 @@ class WikiController extends Controller
         $activePage = null;
 
         if ($activePageId) {
-            $activePage = WikiPage::where('id', $activePageId)->with(['space', 'creator:id,name,avatar', 'lastEditor:id,name,avatar', 'revisions.author:id,name,avatar'])->first();
+            $activePage = WikiPage::where('id', $activePageId)->with(['space', 'creator:id,name,email', 'lastEditor:id,name,email', 'revisions.author:id,name,email'])->first();
         }
 
         if (! $activePage && $treeData['favorites']->isNotEmpty()) {
@@ -55,7 +55,7 @@ class WikiController extends Controller
         }
 
         if ($activePage && ! $activePage->relationLoaded('revisions')) {
-            $activePage->load(['space', 'creator:id,name,avatar', 'lastEditor:id,name,avatar', 'revisions.author:id,name,avatar']);
+            $activePage->load(['space', 'creator:id,name,email', 'lastEditor:id,name,email', 'revisions.author:id,name,email']);
         }
 
         return Inertia::render('wiki/index', [
@@ -88,7 +88,7 @@ class WikiController extends Controller
         }
 
         $treeData = $this->wikiService->getWikiTree($organization, null, $user);
-        $page->load(['space', 'creator:id,name,avatar', 'lastEditor:id,name,avatar', 'revisions.author:id,name,avatar']);
+        $page->load(['space', 'creator:id,name,email', 'lastEditor:id,name,email', 'revisions.author:id,name,email']);
 
         return Inertia::render('wiki/index', [
             'organization' => [

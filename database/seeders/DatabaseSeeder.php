@@ -230,5 +230,8 @@ class DatabaseSeeder extends Seeder
                 $dina->id => ['id' => (string) Str::uuid7(), 'role' => 'member', 'joined_at' => now()],
             ]);
         }
+
+        // 8. Seed Comprehensive Wiki & Documentation Base
+        $this->call(WikiDocumentationSeeder::class);
     }
 }

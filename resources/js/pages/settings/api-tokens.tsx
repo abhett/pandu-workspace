@@ -147,16 +147,10 @@ export default function ApiTokensPage({ tokens, connected_accounts }: Props) {
     };
 
     return (
-        <AppLayout
-            breadcrumbs={[
-                { title: 'Pengaturan', href: '/settings/profile' },
-                { title: 'Integrasi & API', href: '#' },
-            ]}
-        >
+        <>
             <Head title="Integrasi & Token API - Pengaturan Pribadi" />
 
-            <SettingsLayout>
-                <div className="space-y-8 animate-fade-in">
+            <div className="space-y-8 animate-fade-in">
                     {/* Header Section */}
                     <div className="space-y-1 pb-2 border-b border-border">
                         <h1 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
@@ -467,7 +461,12 @@ export default function ApiTokensPage({ tokens, connected_accounts }: Props) {
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
-            </SettingsLayout>
-        </AppLayout>
+        </>
     );
 }
+
+ApiTokensPage.breadcrumbs = [
+    { title: 'Pengaturan', href: '/settings/profile' },
+    { title: 'Integrasi & API', href: '/settings/api-tokens' },
+];
+

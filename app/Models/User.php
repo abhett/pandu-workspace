@@ -44,6 +44,31 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'avatar',
+    ];
+
+    /**
+     * Get user avatar (generated UI avatar).
+     */
+    public function getAvatarAttribute(): string
+    {
+        return 'https://ui-avatars.com/api/?name='.urlencode($this->name ?? 'User').'&background=6366f1&color=ffffff&bold=true';
+    }
+
+    /**
+     * Get user avatar url.
+     */
+    public function getAvatarUrlAttribute(): string
+    {
+        return $this->getAvatarAttribute();
+    }
+
+    /**
      * The "booted" method of the model.
      */
     protected static function booted(): void

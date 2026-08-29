@@ -93,16 +93,10 @@ export default function KeyboardShortcutsPage({ preferences, shortcuts }: Props)
     };
 
     return (
-        <AppLayout
-            breadcrumbs={[
-                { title: 'Pengaturan', href: '/settings/profile' },
-                { title: 'Pintasan Keyboard', href: '#' },
-            ]}
-        >
+        <>
             <Head title="Pintasan Keyboard & Aksesibilitas - Pengaturan Pribadi" />
 
-            <SettingsLayout>
-                <form onSubmit={handleSave} className="space-y-8 animate-fade-in">
+            <form onSubmit={handleSave} className="space-y-8 animate-fade-in">
                     {/* Header Section */}
                     <div className="space-y-1 pb-2 border-b border-border">
                         <div className="flex items-center justify-between">
@@ -255,7 +249,12 @@ export default function KeyboardShortcutsPage({ preferences, shortcuts }: Props)
                         </Button>
                     </div>
                 </form>
-            </SettingsLayout>
-        </AppLayout>
+        </>
     );
 }
+
+KeyboardShortcutsPage.breadcrumbs = [
+    { title: 'Pengaturan', href: '/settings/profile' },
+    { title: 'Pintasan Keyboard', href: '/settings/keyboard-shortcuts' },
+];
+

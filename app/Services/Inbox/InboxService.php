@@ -68,7 +68,7 @@ class InboxService
         if ($view === 'assigned' || $view === 'overdue') {
             $taskQuery = Task::whereHas('project', fn ($q) => $q->where('organization_id', $organization->id))
                 ->whereHas('assignees', fn ($q) => $q->where('users.id', $user->id))
-                ->with(['project:id,name,key', 'status:id,name,category,color', 'creator:id,name,avatar'])
+                ->with(['project:id,name,key', 'status:id,name,category,color', 'creator:id,name,email'])
                 ->orderBy('due_date');
 
             if ($view === 'overdue') {

@@ -25,7 +25,7 @@ class MobileCompanionController extends Controller
 
         if ($organization) {
             $tasks = Task::where('organization_id', $organization->id)
-                ->with(['assignees:id,name,avatar', 'project:id,name,key'])
+                ->with(['assignees:id,name,email', 'project:id,name,key'])
                 ->orderByDesc('created_at')
                 ->limit(20)
                 ->get();

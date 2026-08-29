@@ -63,7 +63,7 @@ class SprintRetrospectiveController extends Controller
 
         $detail = $this->retroService->getRetrospectiveDetail($retrospective, $request->user());
         $members = $organization->members()
-            ->select(['users.id', 'users.name', 'users.avatar'])
+            ->select(['users.id', 'users.name', 'users.email'])
             ->get();
 
         return Inertia::render('projects/retrospectives/show', [

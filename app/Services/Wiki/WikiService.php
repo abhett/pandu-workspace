@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\WikiPage;
 use App\Models\WikiPageRevision;
 use App\Models\WikiSpace;
-use Illuminate\Database\Eloquent\Collection;
+use Database\Seeders\WikiDocumentationSeeder;
 use Illuminate\Support\Str;
 
 class WikiService
@@ -30,14 +30,18 @@ class WikiService
 
         $spaces = $spacesQuery->with([
             'pages' => function ($q) {
-                $q->whereNull('parent_id')->with(['children.children', 'lastEditor:id,name,avatar'])->orderBy('title');
+                $q->whereNull('parent_id')->with(['children.children', 'lastEditor:id,name,email'])->orderBy('title');
             },
         ])->orderBy('name')->get();
 
         // If org has 0 spaces, initialize default space
         if ($spaces->isEmpty() && $actor) {
-            $defaultSpace = $this->createDefaultSpaces($organization, $project, $actor);
-            $spaces = new Collection([$defaultSpace]);
+            $this->createDefaultSpaces($organization, $project, $actor);
+            $spaces = $spacesQuery->with([
+                'pages' => function ($q) {
+                    $q->whereNull('parent_id')->with(['children.children', 'lastEditor:id,name,email'])->orderBy('title');
+                },
+            ])->orderBy('name')->get();
         }
 
         // Pinned Favorites
@@ -50,7 +54,7 @@ class WikiService
             }
         })
             ->where('is_favorite', true)
-            ->with(['space:id,name,slug', 'lastEditor:id,name,avatar'])
+            ->with(['space:id,name,slug', 'lastEditor:id,name,email'])
             ->orderBy('title')
             ->get();
 
@@ -61,11 +65,16 @@ class WikiService
     }
 
     /**
-     * Create default spaces and welcoming PRD page for a new workspace.
+     * Create default spaces and welcoming documentation pages for a workspace.
      */
     public function createDefaultSpaces(Organization $organization, ?Project $project, User $actor): WikiSpace
     {
-        $space = WikiSpace::create([
+        $seeder = app(WikiDocumentationSeeder::class);
+        $seeder->seedSpacesForOrganization($organization, $actor);
+
+        $space = WikiSpace::where('organization_id', $organization->id)->first();
+
+        return $space ? $space->fresh(['pages.children']) : WikiSpace::create([
             'organization_id' => $organization->id,
             'project_id' => $project?->id,
             'name' => 'Dokumentasi Utama',
@@ -74,23 +83,6 @@ class WikiService
             'description' => 'Pusat pengetahuan dan panduan kerja tim.',
             'created_by' => $actor->id,
         ]);
-
-        $defaultContent = "# Selamat Datang di Wiki Tim Pandu 🚀\n\n"
-            ."Wiki ini adalah pusat dokumentasi dan basis pengetahuan terpadu untuk tim Anda.\n\n"
-            ."### 📌 Fitur Utama Wiki:\n"
-            ."- **Pohon Dokumen Hirarki**: Susun dokumen induk dan sub-halaman.\n"
-            ."- **Template Dokumen Cepat**: Buat PRD, ADR, Meeting Notes, dan Runbook dalam hitungan detik.\n"
-            ."- **Riwayat Versi (Revisions)**: Lacak seluruh jejak perubahan konten dan pemulihan revisi.\n\n"
-            ."```bash\n# Mulai berkolaborasi sekarang!\n```";
-
-        $this->createPage($space, $actor, [
-            'title' => 'Panduan Memulai Ruang Kerja',
-            'icon' => 'auto_stories',
-            'content' => $defaultContent,
-            'is_favorite' => true,
-        ]);
-
-        return $space->fresh(['pages.children']);
     }
 
     /**

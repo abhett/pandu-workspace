@@ -42,13 +42,13 @@ test('user can view wiki index and auto-initializes default documentation space'
     $response->assertOk();
     $response->assertInertia(fn ($page) => $page
         ->component('wiki/index')
-        ->has('spaces', 1)
-        ->has('favorites', 1)
+        ->has('spaces', 6)
+        ->has('favorites')
         ->has('active_page')
     );
 
-    expect(WikiSpace::where('organization_id', $this->org->id)->count())->toBe(1);
-    expect(WikiPage::whereHas('space', fn ($q) => $q->where('organization_id', $this->org->id))->count())->toBe(1);
+    expect(WikiSpace::where('organization_id', $this->org->id)->count())->toBe(6);
+    expect(WikiPage::whereHas('space', fn ($q) => $q->where('organization_id', $this->org->id))->count())->toBe(14);
 });
 
 test('user can create a new wiki space and wiki page', function () {

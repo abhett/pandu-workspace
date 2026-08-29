@@ -19,7 +19,7 @@ class ReleaseService
     {
         return Release::where('organization_id', $organization->id)
             ->when($projectId, fn ($q) => $q->where('project_id', $projectId))
-            ->with(['creator:id,name,avatar', 'project:id,name,key'])
+            ->with(['creator:id,name,email', 'project:id,name,key'])
             ->withCount('reactions')
             ->orderByDesc('created_at')
             ->get();
@@ -33,7 +33,7 @@ class ReleaseService
         return Release::where('status', 'published')
             ->where('is_public', true)
             ->when($organizationId, fn ($q) => $q->where('organization_id', $organizationId))
-            ->with(['creator:id,name,avatar', 'project:id,name,key'])
+            ->with(['creator:id,name,email', 'project:id,name,key'])
             ->withCount('reactions')
             ->orderByDesc('published_at')
             ->get();

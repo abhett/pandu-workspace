@@ -54,7 +54,7 @@ class FileManagerService
 
         // 2. Files Query
         $filesQuery = Attachment::where('organization_id', $organization->id)
-            ->with(['uploader:id,name,avatar', 'project:id,name,key', 'folder:id,name,color'])
+            ->with(['uploader:id,name,email', 'project:id,name,key', 'folder:id,name,color'])
             ->orderByDesc('created_at');
 
         if ($project) {

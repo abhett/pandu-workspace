@@ -39,7 +39,7 @@ class AutomationController extends Controller
         $this->authorizeAutomationAccess($user, $organization);
 
         $rules = AutomationRule::where('organization_id', $organization->id)
-            ->with(['project:id,name,key', 'creator:id,name,avatar'])
+            ->with(['project:id,name,key', 'creator:id,name,email'])
             ->orderByDesc('created_at')
             ->get();
 

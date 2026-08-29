@@ -56,7 +56,7 @@ class AuditLogService
     public function getLogs(Organization $organization, array $filters = []): LengthAwarePaginator
     {
         $query = OrganizationAuditLog::where('organization_id', $organization->id)
-            ->with(['actor:id,name,email,avatar'])
+            ->with(['actor:id,name,email'])
             ->orderByDesc('created_at');
 
         if (! empty($filters['category']) && $filters['category'] !== 'all') {

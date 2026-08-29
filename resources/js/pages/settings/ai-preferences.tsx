@@ -82,16 +82,10 @@ export default function AiPreferencesPage({ ai_preferences }: Props) {
     };
 
     return (
-        <AppLayout
-            breadcrumbs={[
-                { title: 'Pengaturan', href: '/settings/profile' },
-                { title: 'Preferensi AI', href: '#' },
-            ]}
-        >
+        <>
             <Head title="Preferensi AI Pribadi - Pengaturan" />
 
-            <SettingsLayout>
-                <form onSubmit={handleSave} className="space-y-8 animate-fade-in">
+            <form onSubmit={handleSave} className="space-y-8 animate-fade-in">
                     {/* Header Banner */}
                     <div className="bg-card rounded-2xl p-6 border border-border shadow-xs relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary/10 to-transparent pointer-events-none" />
@@ -358,7 +352,12 @@ export default function AiPreferencesPage({ ai_preferences }: Props) {
                         </Button>
                     </div>
                 </form>
-            </SettingsLayout>
-        </AppLayout>
+        </>
     );
 }
+
+AiPreferencesPage.breadcrumbs = [
+    { title: 'Pengaturan', href: '/settings/profile' },
+    { title: 'Preferensi AI', href: '/settings/ai-preferences' },
+];
+

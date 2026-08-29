@@ -267,6 +267,14 @@ export default function ProjectBacklog({
         }
     };
 
+    const handleDeleteTask = (taskId: string) => {
+        if (confirm('Apakah Anda yakin ingin menghapus tugas ini?')) {
+            router.delete(`/projects/${project.id}/tasks/${taskId}`, {
+                preserveScroll: true,
+            });
+        }
+    };
+
     const openBurndownChart = (sprintId: string) => {
         setLoadingBurndown(true);
         setBurndownModalOpen(true);
@@ -603,7 +611,13 @@ export default function ProjectBacklog({
                                                             <MoreHorizontal className="size-4" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
+                                                    <DropdownMenuContent align="end" className="w-52">
+                                                        <DropdownMenuItem asChild>
+                                                            <Link href={`/projects/${project.id}/board`}>
+                                                                <FolderKanban className="mr-2 size-3.5" /> Buka di Papan Kanban
+                                                            </Link>
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuSeparator />
                                                         <DropdownMenuItem onClick={() => handleMoveTask(task.id, null)}>
                                                             <ArrowRight className="mr-2 size-3.5" /> Pindahkan ke Backlog
                                                         </DropdownMenuItem>
@@ -612,6 +626,13 @@ export default function ProjectBacklog({
                                                                 <MoveRight className="mr-2 size-3.5" /> Pindah ke {s.name}
                                                             </DropdownMenuItem>
                                                         ))}
+                                                        <DropdownMenuSeparator />
+                                                        <DropdownMenuItem
+                                                            onClick={() => handleDeleteTask(task.id)}
+                                                            className="text-destructive focus:text-destructive"
+                                                        >
+                                                            <Trash2 className="mr-2 size-3.5" /> Hapus Tugas
+                                                        </DropdownMenuItem>
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
                                             </div>
@@ -723,7 +744,13 @@ export default function ProjectBacklog({
                                                             <MoreHorizontal className="size-4" />
                                                         </Button>
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
+                                                    <DropdownMenuContent align="end" className="w-52">
+                                                        <DropdownMenuItem asChild>
+                                                            <Link href={`/projects/${project.id}/board`}>
+                                                                <FolderKanban className="mr-2 size-3.5" /> Buka di Papan Kanban
+                                                            </Link>
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuSeparator />
                                                         {activeSprint && (
                                                             <DropdownMenuItem onClick={() => handleMoveTask(task.id, activeSprint.id)}>
                                                                 <MoveRight className="mr-2 size-3.5" /> Pindah ke {activeSprint.name} (Aktif)
@@ -731,6 +758,20 @@ export default function ProjectBacklog({
                                                         )}
                                                         <DropdownMenuItem onClick={() => handleMoveTask(task.id, null)}>
                                                             <ArrowRight className="mr-2 size-3.5" /> Pindahkan ke Backlog
+                                                        </DropdownMenuItem>
+                                                        {futureSprints
+                                                            .filter((s) => s.id !== sprint.id)
+                                                            .map((s) => (
+                                                                <DropdownMenuItem key={s.id} onClick={() => handleMoveTask(task.id, s.id)}>
+                                                                    <MoveRight className="mr-2 size-3.5" /> Pindah ke {s.name}
+                                                                </DropdownMenuItem>
+                                                            ))}
+                                                        <DropdownMenuSeparator />
+                                                        <DropdownMenuItem
+                                                            onClick={() => handleDeleteTask(task.id)}
+                                                            className="text-destructive focus:text-destructive"
+                                                        >
+                                                            <Trash2 className="mr-2 size-3.5" /> Hapus Tugas
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
@@ -810,7 +851,13 @@ export default function ProjectBacklog({
                                                         <MoreHorizontal className="size-4" />
                                                     </Button>
                                                 </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end">
+                                                <DropdownMenuContent align="end" className="w-52">
+                                                    <DropdownMenuItem asChild>
+                                                        <Link href={`/projects/${project.id}/board`}>
+                                                            <FolderKanban className="mr-2 size-3.5" /> Buka di Papan Kanban
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuSeparator />
                                                     {activeSprint && (
                                                         <DropdownMenuItem onClick={() => handleMoveTask(task.id, activeSprint.id)}>
                                                             <MoveRight className="mr-2 size-3.5" /> Masukkan ke {activeSprint.name} (Aktif)
@@ -821,6 +868,18 @@ export default function ProjectBacklog({
                                                             <MoveRight className="mr-2 size-3.5" /> Masukkan ke {s.name}
                                                         </DropdownMenuItem>
                                                     ))}
+                                                    {!activeSprint && futureSprints.length === 0 && (
+                                                        <DropdownMenuItem onClick={() => setCreateSprintModalOpen(true)}>
+                                                            <Plus className="mr-2 size-3.5" /> Buat Sprint Baru
+                                                        </DropdownMenuItem>
+                                                    )}
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem
+                                                        onClick={() => handleDeleteTask(task.id)}
+                                                        className="text-destructive focus:text-destructive"
+                                                    >
+                                                        <Trash2 className="mr-2 size-3.5" /> Hapus Tugas
+                                                    </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </div>

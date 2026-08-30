@@ -12,6 +12,7 @@ import {
     DialogFooter,
 } from '@/components/ui/dialog';
 import {
+    AlertTriangle,
     Clock,
     CloudUpload,
     Code,
@@ -31,6 +32,7 @@ import {
     MoreVertical,
     Paperclip,
     Plus,
+    RotateCcw,
     Search,
     Trash2,
     Upload,
@@ -189,9 +191,14 @@ export default function FileManagerPage({ organization, project, folders, files,
     };
 
     const handleDeleteFile = (file: FileItem) => {
-        if (!confirm(`Hapus berkas "${file.filename}"?`)) return;
+        const isTrash = selectedView === 'trash';
+        const msg = isTrash
+            ? `Hapus PERMANEN berkas "${file.filename}"?\n\nBerkas akan dimusnahkan selamanya dari database dan penyimpanan server.`
+            : `Pindahkan berkas "${file.filename}" ke tempat sampah?`;
+        
+        if (!confirm(msg)) return;
 
-        fetch(`/files/${file.id}`, {
+        fetch(`/files/${file.id}${isTrash ? '?force=1' : ''}`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',
@@ -201,6 +208,38 @@ export default function FileManagerPage({ organization, project, folders, files,
             .then((res) => res.json())
             .then(() => {
                 if (selectedFile?.id === file.id) setSelectedFile(null);
+                router.reload();
+            });
+    };
+
+    const handleRestoreFile = (file: FileItem) => {
+        fetch(`/files/${file.id}/restore`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+            .then((res) => res.json())
+            .then(() => {
+                if (selectedFile?.id === file.id) setSelectedFile(null);
+                router.reload();
+            });
+    };
+
+    const handleEmptyTrash = () => {
+        if (!confirm(`Kosongkan seluruh tempat sampah?\n\nSemua berkas di tempat sampah (${total_items} berkas) akan dihapus secara PERMANEN dari database dan penyimpanan disk.`)) return;
+
+        fetch('/files/trash/empty', {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content || '',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        })
+            .then((res) => res.json())
+            .then(() => {
+                setSelectedFile(null);
                 router.reload();
             });
     };
@@ -381,6 +420,19 @@ export default function FileManagerPage({ organization, project, folders, files,
                         </div>
 
                         <div className="flex items-center gap-2 w-full sm:w-auto">
+                            {/* Empty Trash Button in Trash View */}
+                            {selectedView === 'trash' && files.length > 0 && (
+                                <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={handleEmptyTrash}
+                                    className="text-xs h-8 font-semibold gap-1.5 shrink-0"
+                                >
+                                    <Trash2 className="size-3.5" />
+                                    <span className="hidden sm:inline">Kosongkan Tempat Sampah</span>
+                                </Button>
+                            )}
+
                             {/* Search */}
                             <form onSubmit={handleSearchSubmit} className="relative flex-1 sm:w-56">
                                 <Search className="size-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -458,6 +510,36 @@ export default function FileManagerPage({ organization, project, folders, files,
                                                         </span>
                                                     </div>
                                                 )}
+
+                                                {/* Trash Quick Actions Overlay */}
+                                                {selectedView === 'trash' && (
+                                                    <div className="absolute inset-0 bg-background/80 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 p-2">
+                                                        <Button
+                                                            size="icon-sm"
+                                                            variant="outline"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleRestoreFile(file);
+                                                            }}
+                                                            className="size-7 rounded-lg border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10"
+                                                            title="Pulihkan Berkas"
+                                                        >
+                                                            <RotateCcw className="size-3.5" />
+                                                        </Button>
+                                                        <Button
+                                                            size="icon-sm"
+                                                            variant="destructive"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                handleDeleteFile(file);
+                                                            }}
+                                                            className="size-7 rounded-lg"
+                                                            title="Hapus Permanen"
+                                                        >
+                                                            <Trash2 className="size-3.5" />
+                                                        </Button>
+                                                    </div>
+                                                )}
                                             </div>
 
                                             {/* Metadata */}
@@ -514,14 +596,48 @@ export default function FileManagerPage({ organization, project, folders, files,
                                                         {file.created_at_formatted}
                                                     </td>
                                                     <td className="py-2.5 px-4 text-right">
-                                                        <a
-                                                            href={file.download_url}
-                                                            onClick={(e) => e.stopPropagation()}
-                                                            className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-primary transition-colors inline-block"
-                                                            title="Unduh"
-                                                        >
-                                                            <Download className="size-3.5" />
-                                                        </a>
+                                                        <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
+                                                            {selectedView === 'trash' ? (
+                                                                <>
+                                                                    <Button
+                                                                        size="icon-xs"
+                                                                        variant="outline"
+                                                                        onClick={() => handleRestoreFile(file)}
+                                                                        className="size-7 rounded-lg border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10"
+                                                                        title="Pulihkan Berkas"
+                                                                    >
+                                                                        <RotateCcw className="size-3.5" />
+                                                                    </Button>
+                                                                    <Button
+                                                                        size="icon-xs"
+                                                                        variant="destructive"
+                                                                        onClick={() => handleDeleteFile(file)}
+                                                                        className="size-7 rounded-lg"
+                                                                        title="Hapus Permanen"
+                                                                    >
+                                                                        <Trash2 className="size-3.5" />
+                                                                    </Button>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <a
+                                                                        href={file.download_url}
+                                                                        className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-primary transition-colors inline-block"
+                                                                        title="Unduh"
+                                                                    >
+                                                                        <Download className="size-3.5" />
+                                                                    </a>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleDeleteFile(file)}
+                                                                        className="p-1 hover:bg-red-500/10 rounded text-muted-foreground hover:text-red-400 transition-colors inline-block"
+                                                                        title="Hapus"
+                                                                    >
+                                                                        <Trash2 className="size-3.5" />
+                                                                    </button>
+                                                                </>
+                                                            )}
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -533,13 +649,21 @@ export default function FileManagerPage({ organization, project, folders, files,
                             <div className="flex flex-col items-center justify-center p-12 text-center space-y-4 text-muted-foreground border border-dashed border-border rounded-2xl">
                                 <FolderIcon className="size-12 stroke-[1.5]" />
                                 <div className="space-y-1">
-                                    <h3 className="font-bold text-base text-foreground">Tidak Ada Berkas</h3>
-                                    <p className="text-xs">Unggah berkas atau pilih kategori folder lain.</p>
+                                    <h3 className="font-bold text-base text-foreground">
+                                        {selectedView === 'trash' ? 'Tempat Sampah Kosong' : 'Tidak Ada Berkas'}
+                                    </h3>
+                                    <p className="text-xs">
+                                        {selectedView === 'trash'
+                                            ? 'Tidak ada berkas yang berada di tempat sampah saat ini.'
+                                            : 'Unggah berkas atau pilih kategori folder lain.'}
+                                    </p>
                                 </div>
-                                <Button onClick={() => fileInputRef.current?.click()} className="text-xs font-semibold gap-1.5">
-                                    <CloudUpload className="size-3.5" />
-                                    <span>Unggah Berkas Sekarang</span>
-                                </Button>
+                                {selectedView !== 'trash' && (
+                                    <Button onClick={() => fileInputRef.current?.click()} className="text-xs font-semibold gap-1.5">
+                                        <CloudUpload className="size-3.5" />
+                                        <span>Unggah Berkas Sekarang</span>
+                                    </Button>
+                                )}
                             </div>
                         )}
                     </div>
@@ -548,36 +672,57 @@ export default function FileManagerPage({ organization, project, folders, files,
 
             {/* File Preview & Metadata Dialog */}
             <Dialog open={selectedFile !== null} onOpenChange={(open) => !open && setSelectedFile(null)}>
-                <DialogContent className="max-w-lg">
-                    <DialogHeader>
-                        <DialogTitle className="text-base font-bold flex items-center gap-2 truncate">
-                            {selectedFile && getFileIcon(selectedFile.mime_type)}
-                            <span className="truncate">{selectedFile?.filename}</span>
+                <DialogContent className="w-[95vw] max-w-xl max-h-[85vh] flex flex-col p-6 overflow-hidden rounded-2xl border-border bg-card shadow-2xl">
+                    <DialogHeader className="shrink-0 pb-1">
+                        <DialogTitle className="text-base font-bold flex items-center justify-between gap-2 pr-6">
+                            <div className="flex items-center gap-2 truncate min-w-0">
+                                {selectedFile && getFileIcon(selectedFile.mime_type)}
+                                <span className="truncate" title={selectedFile?.filename}>{selectedFile?.filename}</span>
+                            </div>
+                            {selectedView === 'trash' && (
+                                <Badge variant="destructive" className="shrink-0 text-[10px] uppercase font-bold tracking-wider">
+                                    Sampah Terhapus
+                                </Badge>
+                            )}
                         </DialogTitle>
                     </DialogHeader>
 
                     {selectedFile && (
-                        <div className="space-y-4 py-2 text-xs">
+                        <div className="flex-1 overflow-y-auto space-y-4 py-2 text-xs pr-1">
                             {/* Preview Area */}
-                            <div className="max-h-64 rounded-xl bg-muted/60 flex items-center justify-center overflow-hidden border border-border">
+                            <div className="min-h-[140px] max-h-72 rounded-xl bg-muted/60 flex items-center justify-center overflow-hidden border border-border/80 p-2">
                                 {selectedFile.url ? (
                                     <img
                                         src={selectedFile.url}
                                         alt={selectedFile.filename}
-                                        className="max-h-64 w-full object-contain"
+                                        className="max-h-64 max-w-full object-contain rounded-lg shadow-xs"
                                     />
                                 ) : (
-                                    <div className="p-8 flex flex-col items-center gap-2 text-muted-foreground">
-                                        {getFileIcon(selectedFile.mime_type)}
-                                        <span className="font-mono text-xs">{selectedFile.mime_type}</span>
+                                    <div className="p-6 flex flex-col items-center gap-2 text-muted-foreground text-center">
+                                        <div className="p-3.5 rounded-2xl bg-muted/80 text-foreground border border-border">
+                                            {getFileIcon(selectedFile.mime_type)}
+                                        </div>
+                                        <span className="font-semibold text-foreground text-xs">{selectedFile.filename}</span>
+                                        <span className="font-mono text-[10px] text-muted-foreground uppercase">{selectedFile.mime_type}</span>
                                     </div>
                                 )}
                             </div>
 
+                            {/* Trash Warning notice if in trash */}
+                            {selectedView === 'trash' && (
+                                <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive flex items-start gap-2.5">
+                                    <AlertTriangle className="size-4 shrink-0 mt-0.5" />
+                                    <div className="text-[11px] leading-relaxed">
+                                        <span className="font-bold block">Berkas ini berada di tempat sampah</span>
+                                        Anda dapat memulihkannya kembali ke ruang kerja atau menghapusnya secara permanen dari server database dan disk.
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Metadata Grid */}
-                            <div className="grid grid-cols-2 gap-2 p-3 rounded-xl bg-muted/40 font-mono text-[11px] border border-border">
+                            <div className="grid grid-cols-2 gap-2.5 p-3.5 rounded-xl bg-muted/40 font-mono text-[11px] border border-border">
                                 <div>
-                                    <span className="text-muted-foreground block uppercase text-[9px] font-bold">Ukuran</span>
+                                    <span className="text-muted-foreground block uppercase text-[9px] font-bold">Ukuran Berkas</span>
                                     <span className="font-semibold text-foreground">{selectedFile.size_formatted}</span>
                                 </div>
                                 <div>
@@ -596,19 +741,44 @@ export default function FileManagerPage({ organization, project, folders, files,
                         </div>
                     )}
 
-                    <DialogFooter className="flex justify-between items-center w-full">
-                        {selectedFile && (
+                    <DialogFooter className="shrink-0 pt-3 border-t border-border flex flex-col-reverse sm:flex-row justify-between items-center gap-2 w-full">
+                        {selectedFile && selectedView === 'trash' ? (
+                            <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
+                                <Button
+                                    type="button"
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={() => handleDeleteFile(selectedFile)}
+                                    className="text-xs font-semibold gap-1.5"
+                                    title="Hapus Permanen dari Database & Disk"
+                                >
+                                    <Trash2 className="size-3.5" />
+                                    <span>Hapus Permanen</span>
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleRestoreFile(selectedFile)}
+                                    className="text-xs font-semibold gap-1.5 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10"
+                                    title="Pulihkan Berkas ke Workspace"
+                                >
+                                    <RotateCcw className="size-3.5" />
+                                    <span>Pulihkan</span>
+                                </Button>
+                            </div>
+                        ) : selectedFile ? (
                             <button
                                 type="button"
                                 onClick={() => handleDeleteFile(selectedFile)}
                                 className="p-2 text-muted-foreground hover:text-red-400 rounded-lg hover:bg-red-500/10 transition-colors"
-                                title="Hapus Berkas"
+                                title="Pindahkan ke Tempat Sampah"
                             >
                                 <Trash2 className="size-4" />
                             </button>
-                        )}
+                        ) : null}
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                             <Button type="button" variant="outline" onClick={() => setSelectedFile(null)} className="text-xs">
                                 Tutup
                             </Button>

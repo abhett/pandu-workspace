@@ -1,9 +1,11 @@
+import React, { useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { NotificationDropdown } from '@/components/notifications/notification-dropdown';
+import { GlobalSearchDialog } from '@/components/global-search-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -69,6 +71,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
     const { auth } = page.props;
     const getInitials = useInitials();
     const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
+    const [searchOpen, setSearchOpen] = useState(false);
 
     return (
         <>
@@ -182,7 +185,9 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                             <Button
                                 variant="ghost"
                                 size="icon"
+                                onClick={() => setSearchOpen(true)}
                                 className="group h-9 w-9 cursor-pointer"
+                                title="Cari Global (Cmd+K)"
                             >
                                 <Search className="!size-5 opacity-80 group-hover:opacity-100" />
                             </Button>
@@ -247,6 +252,9 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                     </div>
                 </div>
             )}
+
+            {/* Global Spotlight Search Modal */}
+            <GlobalSearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
         </>
     );
 }

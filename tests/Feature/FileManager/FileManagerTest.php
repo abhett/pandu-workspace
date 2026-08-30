@@ -125,11 +125,68 @@ test('user can download and delete a file', function () {
 
     $downloadResponse->assertOk();
 
-    // Delete file
+    // Delete file (soft-delete to trash)
     $deleteResponse = $this->actingAs($this->user)
         ->withSession(['current_organization_id' => $this->org->id])
         ->deleteJson("/files/{$attachment->id}");
 
     $deleteResponse->assertOk();
     expect(Attachment::where('id', $attachment->id)->whereNull('deleted_at')->exists())->toBeFalse();
+    expect(Attachment::withTrashed()->where('id', $attachment->id)->exists())->toBeTrue();
+});
+
+test('user can access /trash, restore a file, and permanently hard delete from trash', function () {
+    $service = app(FileManagerService::class);
+    $file = UploadedFile::fake()->create('confidential-doc.pdf', 300, 'application/pdf');
+
+    $attachment = $service->uploadFile($this->org, $this->user, $file);
+
+    // 1. Check /trash redirect
+    $trashRouteResponse = $this->actingAs($this->user)
+        ->withSession(['current_organization_id' => $this->org->id])
+        ->get('/trash');
+
+    $trashRouteResponse->assertRedirect(route('files.index', ['view' => 'trash']));
+
+    // 2. Soft-delete file into trash
+    $service->deleteFile($attachment, false);
+    expect($attachment->fresh()->trashed())->toBeTrue();
+
+    // 3. Restore file
+    $restoreResponse = $this->actingAs($this->user)
+        ->withSession(['current_organization_id' => $this->org->id])
+        ->postJson("/files/{$attachment->id}/restore");
+
+    $restoreResponse->assertOk();
+    expect($attachment->fresh()->trashed())->toBeFalse();
+
+    // 4. Soft-delete again, then permanently delete from trash (force=1)
+    $service->deleteFile($attachment->fresh(), false);
+    expect($attachment->fresh()->trashed())->toBeTrue();
+
+    $forceDeleteResponse = $this->actingAs($this->user)
+        ->withSession(['current_organization_id' => $this->org->id])
+        ->deleteJson("/files/{$attachment->id}?force=1");
+
+    $forceDeleteResponse->assertOk();
+    expect(Attachment::withTrashed()->where('id', $attachment->id)->exists())->toBeFalse();
+    expect(Storage::disk('public')->exists($attachment->object_key))->toBeFalse();
+});
+
+test('user can empty entire trash permanently', function () {
+    $service = app(FileManagerService::class);
+    $file1 = $service->uploadFile($this->org, $this->user, UploadedFile::fake()->create('file1.pdf', 100));
+    $file2 = $service->uploadFile($this->org, $this->user, UploadedFile::fake()->create('file2.pdf', 100));
+
+    $service->deleteFile($file1, false);
+    $service->deleteFile($file2, false);
+
+    expect(Attachment::onlyTrashed()->where('organization_id', $this->org->id)->count())->toBe(2);
+
+    $emptyTrashResponse = $this->actingAs($this->user)
+        ->withSession(['current_organization_id' => $this->org->id])
+        ->deleteJson('/files/trash/empty');
+
+    $emptyTrashResponse->assertOk();
+    expect(Attachment::withTrashed()->where('organization_id', $this->org->id)->count())->toBe(0);
 });

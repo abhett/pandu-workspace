@@ -191,16 +191,51 @@ class FileManagerService
     }
 
     /**
-     * Delete an attachment.
+     * Delete an attachment (soft delete or permanent force delete).
      */
     public function deleteFile(Attachment $attachment, bool $force = false): void
     {
-        if ($force) {
-            Storage::disk($attachment->disk)->delete($attachment->object_key);
+        if ($force || $attachment->trashed()) {
+            if ($attachment->object_key && Storage::disk($attachment->disk)->exists($attachment->object_key)) {
+                Storage::disk($attachment->disk)->delete($attachment->object_key);
+            }
             $attachment->forceDelete();
         } else {
             $attachment->delete();
         }
+    }
+
+    /**
+     * Restore a soft-deleted attachment from trash.
+     */
+    public function restoreFile(Attachment $attachment): void
+    {
+        if ($attachment->trashed()) {
+            $attachment->restore();
+        }
+    }
+
+    /**
+     * Permanently empty all trashed attachments for an organization.
+     */
+    public function emptyTrash(Organization $organization, ?Project $project = null): int
+    {
+        $query = Attachment::onlyTrashed()->where('organization_id', $organization->id);
+        if ($project) {
+            $query->where('project_id', $project->id);
+        }
+
+        $trashedFiles = $query->get();
+        $count = $trashedFiles->count();
+
+        foreach ($trashedFiles as $file) {
+            if ($file->object_key && Storage::disk($file->disk)->exists($file->object_key)) {
+                Storage::disk($file->disk)->delete($file->object_key);
+            }
+            $file->forceDelete();
+        }
+
+        return $count;
     }
 
     /**

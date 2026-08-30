@@ -564,6 +564,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/organization/reports/boardroom/{briefing}', [ExecutiveBoardroomController::class, 'destroy'])->name('organization.reports.boardroom.destroy');
 
     // Unified Search & Global Command Palette (Spotlight ⌘K Studio)
+    Route::get('/search', fn () => redirect()->route('search.omnibar.index'))->name('search.index');
     Route::get('/search/omnibar', [OmniSearchController::class, 'index'])->name('search.omnibar.index');
     Route::get('/search/omnibar/query', [OmniSearchController::class, 'query'])->name('search.omnibar.query');
     Route::post('/search/omnibar/click', [OmniSearchController::class, 'recordClick'])->name('search.omnibar.click');
@@ -626,14 +627,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/organization/sre/rca/action-items/{actionItem}', [RootCauseAnalysisController::class, 'updateActionItem'])->name('organization.sre.rca.action-items.update');
     Route::delete('/organization/sre/rca/{rca}', [RootCauseAnalysisController::class, 'destroy'])->name('organization.sre.rca.destroy');
 
-    // Centralized File Manager & Digital Asset Management
+    // Centralized File Manager, Digital Asset Management & Trash
+    Route::get('/trash', fn () => redirect()->route('files.index', ['view' => 'trash']))->name('trash.index');
     Route::get('/files', [FileManagerController::class, 'index'])->name('files.index');
     Route::get('/projects/{project}/files', [FileManagerController::class, 'index'])->name('projects.files');
     Route::post('/files/upload', [FileManagerController::class, 'upload'])->name('files.upload');
     Route::post('/files/folders', [FileManagerController::class, 'storeFolder'])->name('files.folders.store');
-    Route::delete('/files/{file}', [FileManagerController::class, 'destroyFile'])->name('files.destroy');
+    Route::delete('/files/trash/empty', [FileManagerController::class, 'emptyTrash'])->name('files.trash.empty');
+    Route::delete('/files/{attachment}', [FileManagerController::class, 'destroyFile'])->name('files.destroy');
+    Route::post('/files/{attachment}/restore', [FileManagerController::class, 'restoreFile'])->name('files.restore');
     Route::delete('/files/folders/{folder}', [FileManagerController::class, 'destroyFolder'])->name('files.folders.destroy');
-    Route::get('/files/{file}/download', [FileManagerController::class, 'download'])->name('files.download');
+    Route::get('/files/{attachment}/download', [FileManagerController::class, 'download'])->name('files.download');
 
     // Personal Work Inbox & Notification Feed
     Route::get('/inbox', [InboxController::class, 'index'])->name('inbox.index');

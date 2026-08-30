@@ -125,10 +125,11 @@ class FileManagerController extends Controller
     }
 
     /**
-     * Delete a file.
+     * Delete a file (soft delete or permanent delete).
      */
-    public function destroyFile(Request $request, Attachment $file): JsonResponse|RedirectResponse
+    public function destroyFile(Request $request, string $attachment): JsonResponse|RedirectResponse
     {
+        $file = Attachment::withTrashed()->where('id', $attachment)->firstOrFail();
         $this->fileManagerService->deleteFile($file, $request->boolean('force', false));
 
         if ($request->wantsJson()) {
@@ -139,6 +140,45 @@ class FileManagerController extends Controller
         }
 
         return back()->with('success', 'Berkas berhasil dihapus.');
+    }
+
+    /**
+     * Restore a file from trash.
+     */
+    public function restoreFile(Request $request, string $attachment): JsonResponse|RedirectResponse
+    {
+        $file = Attachment::withTrashed()->where('id', $attachment)->firstOrFail();
+        $this->fileManagerService->restoreFile($file);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Berkas berhasil dipulihkan dari tempat sampah.',
+            ]);
+        }
+
+        return back()->with('success', 'Berkas berhasil dipulihkan dari tempat sampah.');
+    }
+
+    /**
+     * Empty entire trash for organization.
+     */
+    public function emptyTrash(Request $request): JsonResponse|RedirectResponse
+    {
+        $user = $request->user();
+        $orgId = session('current_organization_id') ?? $user->memberships()->value('organization_id');
+        $organization = Organization::where('id', (string) $orgId)->firstOrFail();
+
+        $count = $this->fileManagerService->emptyTrash($organization);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Sebanyak {$count} berkas berhasil dihapus permanen dari tempat sampah.",
+            ]);
+        }
+
+        return back()->with('success', "Sebanyak {$count} berkas berhasil dihapus permanen dari tempat sampah.");
     }
 
     /**
@@ -161,8 +201,10 @@ class FileManagerController extends Controller
     /**
      * Download an attachment file.
      */
-    public function download(Request $request, Attachment $file): StreamedResponse
+    public function download(Request $request, string $attachment): StreamedResponse
     {
+        $file = Attachment::withTrashed()->where('id', $attachment)->firstOrFail();
+
         return Storage::disk($file->disk)->download($file->object_key, $file->filename);
     }
 }
